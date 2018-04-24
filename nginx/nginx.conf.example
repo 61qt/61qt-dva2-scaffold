@@ -2,19 +2,19 @@
 # 需要把 ${devRoot} 替换成仓库目录。
 # 需要把 ${moduleName} 替换成模块的名称。
 # 需要把 ${modulePort} 替换成模块开启运行时候的端口。
-# 打包之后访问的时候，直接访问 ${moduleName}.example.cn
-# 打包之前的访问，直接访问 ${moduleName}-dev.example.cn
+# 打包之后访问的时候，直接访问 ${moduleName}.61qt.cn
+# 打包之前的访问，直接访问 ${moduleName}-dev.61qt.cn
 # 证书制作参考 http://blog.sina.com.cn/s/blog_870c35680101bws1.html ，所以访问的时候会有警告处理，记得点击确认。
 
 server {
   listen       80;
-  server_name  ${moduleName}.example.cn ${moduleName}-dev.example.cn;
+  server_name  ${moduleName}.61qt.cn ${moduleName}-dev.61qt.cn;
   rewrite ^(.*)$ https://$http_host/ break;
 }
 
 server {
   listen       443;
-  server_name  ${moduleName}-dev.example.cn;
+  server_name  ${moduleName}-dev.61qt.cn;
 
   ssl on;
   ssl_certificate ${devRoot}/nginx/ssl.crt;
@@ -54,7 +54,7 @@ server {
 
 server {
   listen       443;
-  server_name  ${modulePort}-cdn.example.cn ${modulePort}.example.cn;
+  server_name  ${modulePort}-cdn.61qt.cn ${modulePort}.61qt.cn;
 
   ssl on;
   ssl_certificate ${devRoot}/nginx/ssl.crt;
