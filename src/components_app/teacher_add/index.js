@@ -393,11 +393,11 @@ class Component extends React.Component {
       payload: [
         {
           name: '教师管理',
-          url: 'teacher',
+          url: Filters.path('teacher', {}),
         },
         {
           name: `${paramsId ? '编辑' : '新增'}教师`,
-          url: paramsId ? `teacher/${paramsId}/edit` : 'teacher/add',
+          url: paramsId ? Filters.path('teacher_edit', { id: paramsId }) : Filters.path('teacher_add', { id: paramsId }),
         },
       ],
     });
@@ -520,7 +520,7 @@ class Component extends React.Component {
     promise.then(() => {
       message.success(`${this.editInfo.text}教师成功`);
       this.successCallback();
-      this.props.history.push('/app/teacher');
+      this.props.history.push(Filters.path('teacher', {}));
     }).catch((rej) => {
       formErrorMessageShow(rej);
       this.errorCallback(rej.data);

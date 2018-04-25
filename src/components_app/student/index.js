@@ -31,7 +31,7 @@ class Component extends React.Component {
         render: (text, record) => {
           return (<span>
             <Access auth="student.show">
-              <NavLink to={`/app/student/${record.id}`} activeClassName="link-active">{text}</NavLink>
+              <NavLink to={Filters.path('student_detail', { id: record.id })} activeClassName="link-active">{text}</NavLink>
             </Access>
             <Access auth="!student.show">
               <span>{text}</span>
@@ -89,7 +89,7 @@ class Component extends React.Component {
         render: (text, record) => {
           return (<span className={styles.operation}>
             <Access auth="student.update">
-              <NavLink to={`/app/student/${record.id}/edit`} activeClassName="link-active">编辑</NavLink>
+              <NavLink to={Filters.path('student_edit', { id: record.id })} activeClassName="link-active">编辑</NavLink>
             </Access>
           </span>);
         },
@@ -104,7 +104,7 @@ class Component extends React.Component {
       payload: [
         {
           name: '学生管理',
-          url: 'student',
+          url: Filters.path('student', {}),
         },
       ],
     });
@@ -118,35 +118,11 @@ class Component extends React.Component {
     });
   }
 
-  deleteHandler = (id) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'student/remove',
-      payload: id,
-    });
-  }
-
   pageChangeHandler = (page = this.props.page) => {
     const { dispatch, listState } = this.props;
     dispatch({
       type: 'student/list',
       payload: { page, filters: listState.filters },
-    });
-  }
-
-  editHandler = (id, values) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'student/update',
-      payload: { id, values },
-    });
-  }
-
-  createHandler = (values) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'student/create',
-      payload: values,
     });
   }
 
@@ -164,11 +140,6 @@ class Component extends React.Component {
 
   title = () => {
     const { total, listState } = this.props;
-    // <Access auth="student.store">
-    //   <EditModal record={{}} onOk={this.createHandler}>
-    //     <Button size="small" type="primary">弹窗新增学生</Button>
-    //   </EditModal>
-    // </Access>
     return (
       <div className="clearfix">
         <h3 className={styles.tableTitle} >
@@ -181,7 +152,7 @@ class Component extends React.Component {
             <Download size="small" path="student/export" query={{ filter: listState.filters }}>导出列表</Download>
           </Access>
           <Access auth="student.store">
-            <NavLink to="/app/student/add" activeClassName="link-active">
+            <NavLink to={Filters.path('student_add', {})} activeClassName="link-active">
               <Button size="small" type="primary" ghost>新增学生</Button>
             </NavLink>
           </Access>

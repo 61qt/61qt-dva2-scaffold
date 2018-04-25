@@ -32,7 +32,7 @@ class Component extends React.Component {
         render: (text, record) => {
           return (<span>
             <Access auth="teacher.show">
-              <NavLink to={`/app/teacher/${record.id}`} activeClassName="link-active">{text}</NavLink>
+              <NavLink to={`#id=${record.id}`} activeClassName="link-active">{text}</NavLink>
             </Access>
             <Access auth="!teacher.show">
               <span>{text}</span>
@@ -75,7 +75,7 @@ class Component extends React.Component {
         render: (text, record) => {
           return (<span className={styles.operation}>
             <Access auth="teacher.update">
-              <NavLink to={`/app/teacher/${record.id}/edit`} activeClassName="link-active">编辑</NavLink>
+              <NavLink to={Filters.path('teacher_edit', { id: record.id })} activeClassName="link-active">编辑</NavLink>
             </Access>
           </span>);
         },
@@ -85,6 +85,15 @@ class Component extends React.Component {
 
   componentDidMount = () => {
     const { dispatch } = this.props;
+    dispatch({
+      type: 'breadcrumb/current',
+      payload: [
+        {
+          name: '教师管理',
+          url: Filters.path('teacher', {}),
+        },
+      ],
+    });
     dispatch({
       type: 'teacher/listState',
       payload: { },
@@ -134,7 +143,7 @@ class Component extends React.Component {
 
         <div className={styles.tableTitleAction}>
           <Access auth="teacher.store">
-            <NavLink to="/app/teacher/add" activeClassName="link-active">
+            <NavLink to={Filters.path('teacher_add', {})} activeClassName="link-active">
               <Button size="small" type="primary" ghost>新增教师</Button>
             </NavLink>
           </Access>

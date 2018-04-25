@@ -164,11 +164,11 @@ class Component extends React.Component {
       payload: [
         {
           name: '学生管理',
-          url: 'student',
+          url: Filters.path('student', {}),
         },
         {
           name: '学生详情',
-          url: `student/${_.get(this.props, 'match.params.id')}`,
+          url: Filters.path('student_detail', { id: _.get(this.props, 'match.params.id') }),
         },
       ],
     });
@@ -187,7 +187,7 @@ class Component extends React.Component {
       <span>{ `学生 （${studentDetail.name || ''}） 详情` }</span>
       <span className="float-right">
         <Access auth="student.update">
-          <NavLink to={`/admin/student/${studentDetail.id}/edit`} activeClassName="link-active">编辑</NavLink>
+          <NavLink to={Filters.path('student_edit', { id: _.get(this.props, 'match.params.id') })} activeClassName="link-active">编辑</NavLink>
         </Access>
       </span>
     </div>);
