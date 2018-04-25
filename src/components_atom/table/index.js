@@ -4,6 +4,8 @@ import { Table } from 'antd';
 import jQuery from 'jquery';
 import './index.less';
 
+let headerHeight = jQuery('.globalHeader').outerHeight() || 52;
+
 class Component extends React.Component {
   static defaultProps = {
     scrollWarpper: '.ant-layout',
@@ -12,6 +14,7 @@ class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    headerHeight = jQuery('.globalHeader').outerHeight() || 52;
     debugAdd('table', this);
     if (!this.isMobile) {
       if (window.navigator && window.navigator.userAgent) {
@@ -23,7 +26,9 @@ class Component extends React.Component {
     }
   }
 
-  componentWillMount = () => {}
+  componentWillMount = () => {
+    headerHeight = jQuery('.globalHeader').outerHeight() || 52;
+  }
 
   componentDidMount() {
     debugAdd('table', this);
@@ -95,7 +100,7 @@ class Component extends React.Component {
       });
     }
 
-    const topEdge = table.wrapper.offset().top - 64;
+    const topEdge = table.wrapper.offset().top - headerHeight;
     // const bottomEdge = (table.footer.outerHeight() * 2) + (topEdge + table.wrapper.outerHeight()) + table.header.outerHeight();
     // const scrollTop = jQuery(e.target).scrollTop();
 
@@ -132,7 +137,7 @@ class Component extends React.Component {
 
       table.header.addClass('sticky-header').css({
         position: 'fixed',
-        top: 64,
+        top: headerHeight,
         zIndex: 1000,
       });
 

@@ -14,7 +14,7 @@ class Component extends React.Component {
 
   render() {
     return (
-      <Layout.Header className={styles.normal}>
+      <Layout.Header className={`globalHeader ${styles.normal}`}>
         <div className={`mainLayoutHeaderLogoContainer ${styles.headerLogoContainer} clearfix`}>
           <div className={styles.headerCenter}>
             <img className={styles.headerLogoImg} src={CONSTANTS.LOGO.LOGO} alt="智慧教育云平台 logo" />
