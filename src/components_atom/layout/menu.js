@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import jQuery from 'jquery';
-import { Menu, Icon } from 'antd';
+import { Menu } from 'antd';
+// Icon
 import { connect } from 'dva';
 import { NavLink } from 'dva/router';
 import pluralize from 'pluralize';
@@ -196,15 +197,19 @@ class Component extends React.Component {
           );
         });
 
+        // <Icon type={elem.icon} />
         return (
-          <Menu.SubMenu onMouseEnter={this.onSubMenuMouseEnter} onTitleClick={this.handleTitleClick} className={`${elemIsShow ? '' : accessStyles.accessHidden}`} key={elem.key} title={<span><Icon type={elem.icon} /><span className="" title={elem.name}>{elem.name}</span></span>}>
+          <Menu.SubMenu onMouseEnter={this.onSubMenuMouseEnter} onTitleClick={this.handleTitleClick} className={`${elemIsShow ? '' : accessStyles.accessHidden}`} key={elem.key} title={<span><span className="" title={elem.name}>{elem.name}</span></span>}>
             {child}
           </Menu.SubMenu>
         );
       }
+      // <Icon type={elem.icon} />
       return (
         <Menu.Item key={elem.key} className={`${elemIsShow ? '' : accessStyles.accessHidden}`}>
-          <NavLink to={`/app/${elem.url}`} title={elem.name}><Icon type={elem.icon} /><span className="">{elem.name}</span></NavLink>
+          <NavLink to={`/app/${elem.url}`} title={elem.name}>
+            <span className="">{elem.name}</span>
+          </NavLink>
         </Menu.Item>
       );
     });
