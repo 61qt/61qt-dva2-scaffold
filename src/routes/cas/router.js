@@ -1,4 +1,5 @@
 import React from 'react';
+
 import _ from 'lodash';
 import { connect } from 'dva';
 import { Switch, Route } from 'dva/router';
@@ -36,8 +37,10 @@ routeArr.push({
 routeArr.forEach((elem) => {
   // eslint-disable-next-line no-param-reassign
   elem.url = `${baseUrl}${elem.path}`;
+
   routeObj[elem.name] = elem;
 });
+window.casRouteObj = routeObj;
 /* eslint-enable */
 
 class Component extends React.Component {
