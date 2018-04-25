@@ -59,13 +59,13 @@ function buildColumnFormItem({
       elemRender = elem.render(defaultValue, defaultValueSet, { form, text: defaultValue, dataSource: defaultValueSet });
     }
     else if (elem.inputNumberOptions) {
-      elemRender = (<InputNumber {...elem.props} {...elem.inputNumberOptions} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
+      elemRender = (<InputNumber autoComplete="true" {...elem.props} {...elem.inputNumberOptions} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
     }
     else if (elem.isInputTexteara) {
-      elemRender = (<Input.TextArea size="default" {...elem.props} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
+      elemRender = (<Input.TextArea autoComplete="true" size="default" {...elem.props} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
     }
     else {
-      elemRender = (<Input size="default" {...elem.props} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
+      elemRender = (<Input autoComplete="true" size="default" {...elem.props} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
     }
 
     // getFieldDecorator options
