@@ -98,7 +98,7 @@ class Component extends React.Component {
       payload: [
         {
           name: '文章管理',
-          url: 'news',
+          url: Filters.path('news', {}),
         },
       ],
     });

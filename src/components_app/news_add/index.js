@@ -10,6 +10,7 @@ import QRCode from '../../components_atom/qrcode';
 import buildColumnFormItem from '../../utils/build_column_form_item';
 import Services from '../../services';
 import formErrorMessageShow from '../../utils/form_error_message_show';
+import Filters from '../../filters';
 
 const formItemLayout = {
   labelCol: {
@@ -37,7 +38,7 @@ class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('news_add', this);
-    const paramsId = _.get(props, 'match.params.id') || false;
+    const paramsId = _.get(props, 'match.params.id') * 1 || false;
     this.editInfo = {
       paramsId,
       text: false === paramsId ? '新增' : '编辑',
@@ -124,11 +125,11 @@ class Component extends React.Component {
       payload: [
         {
           name: '文章管理',
-          url: 'news',
+          url: Filters.path('news', {}),
         },
         {
           name: `${paramsId ? '编辑' : '新增'}文章`,
-          url: paramsId ? `news/${paramsId}/edit` : 'news/add',
+          url: paramsId ? Filters.path('news_edit', { id: paramsId }) : Filters.path('news_add', {}),
         },
       ],
     });
@@ -280,7 +281,7 @@ class Component extends React.Component {
         },
       });
       if (!preview) {
-        this.props.history.push('/app/news');
+        this.props.history.push(Filters.path('news', {}));
       }
     }).catch((rej) => {
       const data = rej.data;

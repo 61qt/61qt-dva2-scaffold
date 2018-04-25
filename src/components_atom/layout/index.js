@@ -50,7 +50,7 @@ class Component extends React.Component {
             {
               _.map(breadcrumbCurrent || [], (elem) => {
                 return (<Breadcrumb.Item key={elem.url}>
-                  <NavLink to={`/app/${elem.url.replace(/^\/+/, '').replace(/\/+$/, '')}`} activeClassName="link-active">{elem.name}</NavLink>
+                  <NavLink to={`${elem.url.replace(/^\/+/, '').replace(/\/+$/, '')}`} activeClassName="link-active">{elem.name}</NavLink>
                 </Breadcrumb.Item>);
               })
             }
