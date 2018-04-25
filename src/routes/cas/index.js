@@ -73,11 +73,11 @@ class Component extends React.Component {
     return (
       <div className={styles.normal}>
         <div className={styles.header}>
-          <img alt="logo" className={styles.logoImage} src={CONSTANTS.LOGO} />
+          <img alt="logo" className={styles.logoImage} src={CONSTANTS.LOGO.LOGO} />
           <br /><br />
-          <h1 className={styles.title}>管理系统</h1>
+          <h1 className={styles.title}>智慧教育云平台</h1>
           <div className={styles.desc}>
-            <div>智慧教育统一管理系统</div>
+            <div>智慧教育云平台统一登录系统</div>
           </div>
         </div>
 
