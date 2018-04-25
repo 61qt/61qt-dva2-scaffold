@@ -38,7 +38,11 @@ const columns = [
       if (undefined === text) {
         return '';
       }
-      return <span>{Filters.dict(['student', 'gender'], 1 * text)}</span>;
+      const label = Filters.dict(['student', 'gender'], 1 * text);
+      if (label * 1 === text * 1) {
+        return '未设置';
+      }
+      return <span>{label}</span>;
     },
   },
   {
