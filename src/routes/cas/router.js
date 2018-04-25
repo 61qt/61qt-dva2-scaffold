@@ -13,19 +13,19 @@ const baseUrl = '/cas/';
 routeArr.push({
   name: 'forget',
   path: 'forget',
-  extra: true,
+  exact: true,
   component: require('../../components_cas/forget').default,
 });
 routeArr.push({
   name: 'reg',
   path: 'reg',
-  extra: true,
+  exact: true,
   component: require('../../components_cas/reg').default,
 });
 routeArr.push({
   name: 'auto',
   path: 'auto',
-  extra: true,
+  exact: true,
   component: require('../../components_cas/auto').default,
 });
 routeArr.push({
@@ -33,11 +33,15 @@ routeArr.push({
   path: '',
   component: require('../../components_cas/login').default,
 });
+routeArr.push({
+  name: 'home',
+  path: '',
+  component: require('../../components_cas/login').default,
+});
 
 routeArr.forEach((elem) => {
   // eslint-disable-next-line no-param-reassign
   elem.url = `${baseUrl}${elem.path}`;
-
   routeObj[elem.name] = elem;
 });
 /* eslint-enable */
@@ -52,7 +56,7 @@ class Component extends React.Component {
     return (<Switch>
       {
         _.map(routeArr, (elem) => {
-          return (<Route key={elem.path} path={`${elem.url}`} extra={elem.extra} component={elem.component} />);
+          return (<Route key={elem.path} path={`${elem.url}`} exact={elem.exact} component={elem.component} />);
         })
       }
     </Switch>);

@@ -3,84 +3,86 @@ import _ from 'lodash';
 import { connect } from 'dva';
 import { Switch, Route } from 'dva/router';
 
-const routeArr = [];
+let routeArr = [];
 const routeObj = {};
 
-const baseUrl = '/app/';
+const baseUrl = '/app';
 
 /* eslint-disable import/first, import/newline-after-import */
 routeArr.push({
   name: 'news_edit',
-  path: 'news/:id/edit',
-  extra: true,
+  path: '/news/:id/edit',
+  exact: true,
   component: require('../../components_app/news_add').default,
 });
 routeArr.push({
   name: 'news_add',
-  path: 'news/add',
-  extra: true,
+  path: '/news/add',
+  exact: true,
   component: require('../../components_app/news_add').default,
 });
 routeArr.push({
   name: 'news',
-  path: 'news',
-  extra: true,
+  path: '/news',
+  exact: true,
   component: require('../../components_app/news').default,
 });
 
 routeArr.push({
   name: 'student_edit',
-  path: 'student/:id/edit',
-  extra: true,
+  path: '/student/:id/edit',
+  exact: true,
   component: require('../../components_app/student_add').default,
 });
 routeArr.push({
   name: 'student_detail',
-  path: 'student/:id',
-  extra: true,
+  path: '/student/:id',
+  exact: true,
   component: require('../../components_app/student_detail').default,
 });
 routeArr.push({
   name: 'student_add',
-  path: 'student/add',
-  extra: true,
+  path: '/student/add',
+  exact: true,
   component: require('../../components_app/student_add').default,
 });
 routeArr.push({
   name: 'student',
-  path: 'student',
+  path: '/student',
   component: require('../../components_app/student').default,
 });
 
 routeArr.push({
   name: 'teacher_edit',
-  path: 'teacher/:id/edit',
-  extra: true,
+  path: '/teacher/:id/edit',
+  exact: true,
   component: require('../../components_app/teacher_add').default,
 });
 routeArr.push({
   name: 'teacher_add',
-  path: 'teacher/add',
-  extra: true,
+  path: '/teacher/add',
+  exact: true,
   component: require('../../components_app/teacher_add').default,
 });
 routeArr.push({
   name: 'teacher',
-  path: 'teacher',
+  path: '/teacher',
   component: require('../../components_app/teacher').default,
 });
 
 routeArr.push({
   name: 'home',
-  path: '',
-  extra: true,
+  path: '/',
+  exact: true,
   component: require('../../components_app/home').default,
 });
+
+import exceptionRouteArr from '../../components_common/exception/route';
+routeArr = [].concat(routeArr).concat(exceptionRouteArr);
 
 routeArr.forEach((elem) => {
   // eslint-disable-next-line no-param-reassign
   elem.url = `${baseUrl}${elem.path}`;
-
   routeObj[elem.name] = elem;
 });
 /* eslint-enable */
@@ -95,7 +97,16 @@ class Component extends React.Component {
     return (<Switch>
       {
         _.map(routeArr, (elem) => {
-          return (<Route key={elem.path} path={`${elem.url}`} extra={elem.extra} component={elem.component} />);
+          const props = {
+            key: elem.path,
+            exact: elem.exact || false,
+            strict: elem.strict || false,
+            component: elem.component,
+          };
+          if (404 !== elem.name) {
+            props.path = elem.url;
+          }
+          return (<Route {...props} />);
         })
       }
     </Switch>);
