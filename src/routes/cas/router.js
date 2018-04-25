@@ -6,6 +6,8 @@ import { Switch, Route } from 'dva/router';
 const routeArr = [];
 const routeObj = {};
 
+const baseUrl = '/cas/';
+
 /* eslint-disable import/first, import/newline-after-import */
 routeArr.push({
   name: 'forget',
@@ -33,7 +35,7 @@ routeArr.push({
 
 routeArr.forEach((elem) => {
   // eslint-disable-next-line no-param-reassign
-  elem.url = `/cas/${elem.path}`;
+  elem.url = `${baseUrl}${elem.path}`;
   routeObj[elem.name] = elem;
 });
 /* eslint-enable */
@@ -48,7 +50,7 @@ class Component extends React.Component {
     return (<Switch>
       {
         _.map(routeArr, (elem) => {
-          return (<Route key={elem.path} path={`/cas/${elem.path}`} extra={elem.extra} component={elem.component} />);
+          return (<Route key={elem.path} path={`${elem.url}`} extra={elem.extra} component={elem.component} />);
         })
       }
     </Switch>);
