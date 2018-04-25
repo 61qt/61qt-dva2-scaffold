@@ -8,6 +8,7 @@ const routeObj = {
   app: appRouteObj,
   cas: casRouteObj,
 };
+window.routeObj = routeObj;
 
 const buildModule = `${DEFINE_MODULE || 'app'}`;
 
@@ -23,6 +24,7 @@ export default function (name, options, module = buildModule) {
   }
   else {
     if (window.console && window.console.error) {
+      window.console.log('elem', elem, elem.url);
       window.console.error(`[filters path] build path error, please check name: ${name}, options: ${options}, module: ${module}`);
     }
     return '';
