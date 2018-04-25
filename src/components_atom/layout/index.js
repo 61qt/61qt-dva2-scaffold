@@ -8,6 +8,7 @@ import Header from './header';
 import AppMenu from './menu';
 import styles from './index.less';
 import User from '../../utils/user';
+import Filters from '../../filters';
 import CONSTANTS from '../../constants';
 
 class Component extends React.Component {
@@ -45,7 +46,7 @@ class Component extends React.Component {
         <div className={`${styles.breadcrumbContainer} ${isHome ? 'ant-hide' : ''}`}>
           <Breadcrumb>
             <Breadcrumb.Item>
-              <NavLink to="/app" activeClassName="link-active">首页</NavLink>
+              <NavLink to={Filters.path('home', {})} activeClassName="link-active">首页</NavLink>
             </Breadcrumb.Item>
             {
               _.map(breadcrumbCurrent || [], (elem) => {
