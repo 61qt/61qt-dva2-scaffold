@@ -30,7 +30,7 @@ class Component extends React.Component {
   render() {
     return (
       <div className={styles.normal}>
-        <h1 className={styles.title}>欢迎来到关系系统</h1>
+        <h1 className={styles.title}>欢迎来到智慧教育云平台</h1>
         <div className={styles.welcome} />
         <ul className={styles.list}>
           <li>这里是管理系统。</li>
