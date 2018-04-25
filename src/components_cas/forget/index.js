@@ -5,11 +5,11 @@ import { message, Spin, Form, Input, Icon, Button } from 'antd';
 import { NavLink } from 'dva/router';
 import styles from '../login/index.less';
 import Services from '../../services';
+import Filters from '../../filters';
 import formErrorMessageShow from '../../utils/form_error_message_show';
 import buildColumnFormItem from '../../utils/build_column_form_item';
 import User from '../../utils/user';
 // import CONSTANTS from '../../constants';
-import { routeObj } from '../../routes/cas/router';
 
 class Component extends React.Component {
   constructor(props) {
@@ -109,7 +109,7 @@ class Component extends React.Component {
       this.setState({
         submitting: false,
       });
-      return window.location.replcae(`/${window.location.search}`);
+      return window.location.replcae(Filters.path('login', {}));
       // return jQuery(window).trigger(CONSTANTS.EVENT.CAS_CALLBACK, {
       //   ticket: data.token,
       // });
@@ -184,8 +184,8 @@ class Component extends React.Component {
                 </Button>
               </Form.Item>
               <Form.Item className={`${styles.actionLine}`}>
-                <NavLink to={routeObj.login.url}>直接登录</NavLink>
-                <NavLink className="float-right" to={routeObj.reg.url}>注册新用户</NavLink>
+                <NavLink to={Filters.path('login', {})}>直接登录</NavLink>
+                <NavLink className="float-right" to={Filters.path('reg', {})}>注册新用户</NavLink>
               </Form.Item>
             </Form>
           </div>

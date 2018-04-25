@@ -11,7 +11,6 @@ import Services from '../../services';
 import formErrorMessageShow from '../../utils/form_error_message_show';
 import Filters from '../../filters';
 import User from '../../utils/user';
-import { routeObj } from '../../routes/cas/router';
 import buildColumnFormItem from '../../utils/build_column_form_item';
 
 class Component extends React.Component {
@@ -199,7 +198,7 @@ class Component extends React.Component {
       this.setState({
         submitting: false,
       });
-      return window.location.replace(`/${window.location.search}`);
+      return window.location.replace(Filters.path('login', {}));
       // return jQuery(window).trigger('CONSTANTS.EVENT.CAS_CALLBACK', {
       //   ticket: data.token,
       // });
@@ -245,8 +244,8 @@ class Component extends React.Component {
                 </Button>
               </Form.Item>
               <Form.Item className={`${styles.actionLine}`}>
-                <NavLink to={routeObj.forget.url}>忘记密码</NavLink>
-                <NavLink className="float-right" to={routeObj.login.url}>直接登录</NavLink>
+                <NavLink to={Filters.path('forget', {})}>忘记密码</NavLink>
+                <NavLink className="float-right" to={Filters.path('login', {})}>直接登录</NavLink>
               </Form.Item>
             </Form>
           </div>

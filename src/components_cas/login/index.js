@@ -10,7 +10,7 @@ import formErrorMessageShow from '../../utils/form_error_message_show';
 import buildColumnFormItem from '../../utils/build_column_form_item';
 import User from '../../utils/user';
 import CONSTANTS from '../../constants';
-import { routeObj } from '../../routes/cas/router';
+import Filters from '../../filters';
 
 class Component extends React.Component {
   constructor(props) {
@@ -155,8 +155,8 @@ class Component extends React.Component {
                 </Button>
               </Form.Item>
               <Form.Item className={styles.actionLine}>
-                <NavLink to={routeObj.forget.url}>忘记密码</NavLink>
-                <NavLink className="float-right" to={routeObj.reg.url}>注册新用户</NavLink>
+                <NavLink to={Filters.path('forget', {})}>忘记密码</NavLink>
+                <NavLink className="float-right" to={Filters.path('reg', {})}>注册新用户</NavLink>
               </Form.Item>
               <Form.Item className={`${styles.actionLine} ant-hide`}>
                 <Divider>社交账号登录</Divider>

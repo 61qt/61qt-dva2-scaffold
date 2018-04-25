@@ -22,7 +22,9 @@ export default function (name, options, module = buildModule) {
     return buildUrl(elem, options);
   }
   else {
-    window.console.error('[filters path] build path error, please check', 'name', name, 'options', options, 'module', module);
+    if (window.console && window.console.error) {
+      window.console.error(`[filters path] build path error, please check name: ${name}, options: ${options}, module: ${module}`);
+    }
     return '';
   }
 }

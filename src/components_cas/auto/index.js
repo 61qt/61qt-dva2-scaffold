@@ -7,6 +7,7 @@ import styles from '../login/index.less';
 import Services from '../../services';
 import CONSTANTS from '../../constants';
 import User from '../../utils/user';
+import Filters from '../../filters';
 
 class Component extends React.Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class Component extends React.Component {
     if (!ticket) {
       message.success('没有 ticket ，不能自动登录');
       setTimeout(() => {
-        window.location.replace(`/${location.search}`);
+        window.location.replace(Filters.path('login', {}));
       }, 10);
       return false;
     }
@@ -43,7 +44,7 @@ class Component extends React.Component {
     }).catch(() => {
       message.error('自动登录失败，请使用密码登录');
       setTimeout(() => {
-        window.location.replace(`/${location.search}`);
+        window.location.replace(Filters.path('login', {}));
       }, 2000);
     });
   }
