@@ -16,7 +16,7 @@ class Component extends React.Component {
     super(props);
     debugAdd('layout', this);
     this.state = {
-      collapsed: true,
+      collapsed: false,
       modalVisible: false,
       innerWidth: window.innerWidth,
       innerHeight: window.innerHeight,
@@ -166,20 +166,24 @@ class Component extends React.Component {
     }
 
     const key = `${User.id}`;
+    // Layout.Sider collapsed & trigger 相关
+    // data-bak-collapsedWidth="50"
+    // data-bak-breakpoint="md"
+    // data-bak-collapsed={this.state.collapsed}
+    // data-bak-collapsible
+    // data-bak-onCollapse={this.handleCollapse}
+    // data-bak-trigger={this.getTrigger()}
     return (
       <Layout key={key} data-key={key} onClick={this.handleGlobalClick} className={styles.layout} data-antd-version={version} style={layoutStyle}>
         <style>{globalStyle}</style>
+        <Header {...this.props} {...this.state} className="header" />
         <Layout>
-          <Layout.Sider collapsedWidth="50" breakpoint="md" bak-breakpoint="xl" width={200} className={styles.sider} collapsed={this.state.collapsed} collapsible onCollapse={this.handleCollapse} trigger={this.getTrigger()}>
-            <div className={`mainLayoutHeaderLogoContainer ${styles.headerLogoContainer} clearfix`}>
-              <div className={styles.headerCenter}>
-                <img className={styles.headerLogoImg} src={CONSTANTS.LOGO} alt="管理系统logo" /><span className={styles.headerName}>管理系统</span>
-              </div>
-            </div>
+          <Layout.Sider
+            width={200}
+            className={styles.sider}>
             <AppMenu collapsed={this.state.collapsed} location={location} history={history} />
           </Layout.Sider>
           <Layout>
-            <Header {...this.props} {...this.state} className="header" />
             { RightLayout }
             <Modal title="错误提示" visible={this.state.modalVisible} onOk={this.handleModelOk} onCancel={this.handleModelClose} cancelText="关闭" okText="跳转至登陆页面">
               <div>

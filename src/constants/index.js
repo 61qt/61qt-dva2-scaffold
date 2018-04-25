@@ -31,7 +31,10 @@ const CONSTANTS = {
   API_URL_BASE: DEFINE_API_URL_BASE,
   QINIU_IMG_CDN_URL: 'https://sng-cdn.61qt.cn/',
   NOTIFICATION_DURATION: 10,
-  LOGO: 'https://camo.githubusercontent.com/828120a31c5cb85246f2ff2810d2da967d9739a5/68747470733a2f2f67772e616c697061796f626a656374732e636f6d2f7a6f732f726d73706f7274616c2f6e6e75755346684446554f6676595352797642682e706e67',
+  LOGO: {
+    LOGO: require('../assets/logo/logo.png'),
+    TEXT: require('../assets/logo/logo_text.png'),
+  },
 };
 
 export { DICT };
