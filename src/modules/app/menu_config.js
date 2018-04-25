@@ -40,7 +40,6 @@ export default [
         // resourceKey: '县级管理员',
       },
       {
-        url: 'student',
         name: '学校管理员',
         key: 'admin_school',
         url: 'admin_school',
