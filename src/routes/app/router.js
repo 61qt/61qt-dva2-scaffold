@@ -83,7 +83,6 @@ routeArr.forEach((elem) => {
 
   routeObj[elem.name] = elem;
 });
-window.appRouteObj = routeObj;
 /* eslint-enable */
 
 class Component extends React.Component {

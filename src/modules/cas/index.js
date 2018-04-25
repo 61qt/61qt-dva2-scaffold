@@ -4,6 +4,8 @@ import createHistory from 'history/createBrowserHistory';
 import createLoading from 'dva-loading';
 import 'blueimp-canvas-to-blob';
 
+import menuConfig from './menu_config';
+import modelFactory from '../../models/_factory';
 import '../../index';
 import models from '../../models';
 
@@ -21,7 +23,16 @@ app.use(createLoading({
 }));
 
 // 3. Model
-models.forEach((model) => {
+// 创建个 menu 的 model
+const menuModel = modelFactory({
+  modelName: 'menu_config',
+  modelExtend: {
+    state: {
+      menu: menuConfig,
+    },
+  },
+});
+[].concat(models).concat(menuModel).forEach((model) => {
   app.model(model);
 });
 
