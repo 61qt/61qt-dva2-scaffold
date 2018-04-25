@@ -237,8 +237,7 @@ class Component extends React.Component {
         onOpenChange={this.onOpenChange}
         onClick={this.handleClick}
         className={`${styles.normal || ''}`}
-        style={menuStyle}
-      >
+        style={menuStyle} >
         { menu }
       </Menu>
     </div>);

@@ -149,7 +149,7 @@ class Component extends React.Component {
 
         <div className={styles.tableTitleAction}>
           <Access auth="student.export">
-            <Download size="small" path="student/export" query={{ filter: listState.filters }}>导出列表</Download>
+            <Download selectRow={this.columns} size="small" path="student/export" query={{ filter: listState.filters }}>导出列表</Download>
           </Access>
           <Access auth="student.store">
             <NavLink to={Filters.path('student_add', {})} activeClassName="link-active">
