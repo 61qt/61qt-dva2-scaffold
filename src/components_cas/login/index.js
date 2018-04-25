@@ -83,7 +83,7 @@ class Component extends React.Component {
       this.setState({
         submitting: false,
       });
-      return jQuery(window).trigger(CONSTANTS.EVENT.CAS.CALLBACK, {
+      return jQuery(window).trigger(CONSTANTS.EVENT.CAS_CALLBACK, {
         ticket: data.token,
       });
     }).catch((rej) => {

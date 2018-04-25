@@ -58,7 +58,7 @@ class Component extends React.Component {
         window.console.log('没有输入路径，将自动跳转到统一管理平台');
       }
 
-      dt = encodeURIComponent(CONSTANTS.URL_CONFIG.APP);
+      dt = encodeURIComponent(CONSTANTS.SYSTEM_CONFIG.CONFIG.APP.DOMAIN);
       window.location.replace(`${url}${window.location.search}${window.location.search ? '&' : '?'}dt=${dt}`);
     }
     else if (!query.dt && referrer) {
@@ -66,7 +66,7 @@ class Component extends React.Component {
       window.location.replace(`${url}${window.location.search}${window.location.search ? '&' : '?'}dt=${dt}`);
     }
 
-    Cookies.set(CONSTANTS.CAS.CALLBACK_URL, dt);
+    Cookies.set(CONSTANTS.SYSTEM_CONFIG.CONFIG.CAS.CALLBACK_URL, dt);
   }
 
   render() {
@@ -84,7 +84,7 @@ class Component extends React.Component {
         <Router {...this.props} />
 
         <p className={styles.copyright}>
-          Copyright © { moment().format('YYYY') } <a href="http://www.example.cn" target="_blank" rel="noopener noreferrer">XX网</a> • <a href="http://www.example.cn" target="_blank" rel="noopener noreferrer">XX网</a>
+          Copyright © { moment().format('YYYY') } <a href="http://www.61qt.cn" target="_blank" rel="noopener noreferrer">XX网</a> • <a href="http://www.61qt.cn" target="_blank" rel="noopener noreferrer">XX网</a>
         </p>
       </div>
     );

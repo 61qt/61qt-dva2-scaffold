@@ -68,6 +68,7 @@
     "require": true,
     "localStorage": true,
     "document": true,
+    "DEFINE_MODULE": true,
     "DEFINE_SENTRY_PROJECT_TOKEN": true,
     "DEFINE_SENTRY_PEOJECT_ID": true,
     "DEFINE_API_URL_BASE": true,

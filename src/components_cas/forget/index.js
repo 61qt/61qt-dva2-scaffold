@@ -110,7 +110,7 @@ class Component extends React.Component {
         submitting: false,
       });
       return window.location.replcae(`/${window.location.search}`);
-      // return jQuery(window).trigger(CONSTANTS.EVENT.CAS.CALLBACK, {
+      // return jQuery(window).trigger(CONSTANTS.EVENT.CAS_CALLBACK, {
       //   ticket: data.token,
       // });
     }).catch((rej) => {

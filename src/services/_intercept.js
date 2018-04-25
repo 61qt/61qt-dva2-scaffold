@@ -300,7 +300,7 @@ export function requestInterceptor(config) {
       formErrorMessageShow(rej);
       // 切换回登录页面。
       setTimeout(() => {
-        jQuery(window).trigger(CONSTANTS.EVENT.CAS.JUMP_AUTH);
+        jQuery(window).trigger(CONSTANTS.EVENT.CAS_JUMP_AUTH);
       }, 2000);
       return rej;
     });

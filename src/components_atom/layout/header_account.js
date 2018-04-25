@@ -41,7 +41,7 @@ class Component extends React.Component {
 
   handleMenuClick = (e) => {
     if ('logout' === e.key) {
-      jQuery(window).trigger(CONSTANTS.EVENT.CAS.JUMP_AUTH);
+      jQuery(window).trigger(CONSTANTS.EVENT.CAS_JUMP_AUTH);
 
       User.clean();
       notification.success({

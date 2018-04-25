@@ -55,6 +55,7 @@ let config = {
   ],
   extraBabelPlugins: [],
   define: {
+    DEFINE_MODULE: buildModule,
     DEFINE_SENTRY_PROJECT_TOKEN: '自己的 sentry 统计 token', // 'c20ad4d76fe97759aa27a0c99bff6710'
     DEFINE_SENTRY_PEOJECT_ID: '自己的 sentry 统计 id', // '3'
     DEFINE_API_URL_BASE: '自己的后端 api url', // '//api.example.com'

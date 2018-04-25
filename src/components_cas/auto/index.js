@@ -37,7 +37,7 @@ class Component extends React.Component {
       const data = res.data || {};
       User.token = data.token;
       message.success('自动登录成功');
-      return jQuery(window).trigger(CONSTANTS.EVENT.CAS.CALLBACK, {
+      return jQuery(window).trigger(CONSTANTS.EVENT.CAS_CALLBACK, {
         ticket: data.token,
       });
     }).catch(() => {

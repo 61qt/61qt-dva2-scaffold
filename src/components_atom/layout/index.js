@@ -93,7 +93,7 @@ class Component extends React.Component {
       modalVisible: false,
     }, () => {
       setTimeout(() => {
-        jQuery(window).trigger(CONSTANTS.EVENT.CAS.JUMP_AUTH);
+        jQuery(window).trigger(CONSTANTS.EVENT.CAS_JUMP_AUTH);
       }, 1000);
     });
   }
