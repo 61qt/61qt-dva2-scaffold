@@ -24,7 +24,7 @@
 # 开发指南
 
 ## clone
-git cline git@github.com:shenqihui/dva2-scaffold.git
+git cline git@gitlab.61qt.cn:edu/zhangye-smart-edu-pc.git
 
 ## 安装依赖
 
@@ -36,7 +36,7 @@ git cline git@github.com:shenqihui/dva2-scaffold.git
 配置里面的 ${devRoot} ， ${moduleName} ， ${modulePort}
 
 - ${devRoot} 为 项目根目录
-- ${moduleName} 为某个系统的模块名称，如目前的 [cas, app, example] 三个模块
+- ${moduleName} 为某个系统的模块名称，如目前的 [cas, app] 模块
 - ${modulePort} 为开启指令之后的端口，开发时候有效。
 
 1、 打开 nginx 文件夹，复制 `nginx.conf.example` 为 `${moduleName}.conf`，更改上面的三个变量直接替换。
@@ -54,7 +54,6 @@ http{
 ## 运行
 - yarn run startApp
 - yarn run startCas
-- yarn run startExample
 
 本地绑定 host (nginx 中定义的文件)
 然后打开 nginx 中对应的域名即可。
