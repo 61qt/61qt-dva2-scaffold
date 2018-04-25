@@ -2,12 +2,13 @@ import React from 'react';
 // import _ from 'lodash';
 import { connect } from 'dva';
 import { Modal, Pagination, Button } from 'antd';
-import { Link, NavLink } from 'dva/router';
+import { NavLink } from 'dva/router';
 import styles from './index.less';
 import SearchForm from './search_form';
 import Access from '../../components_atom/access';
 import QRCode from '../../components_atom/qrcode';
 import Table from '../../components_atom/table';
+import Filters from '../../filters';
 
 class Component extends React.Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class Component extends React.Component {
         dataIndex: 'link',
         key: 'link',
         render: (text, record) => {
-          return (<a href={`/news/${record.id}/`} rel="noopener noreferrer" target="_blank">打开</a>);
+          return (<a href={`#id=${record.id}`} rel="noopener noreferrer" target="_blank">打开</a>);
         },
         width: 60,
       },
@@ -60,7 +61,7 @@ class Component extends React.Component {
         dataIndex: 'qrcode',
         key: 'qrcode',
         render: (text, record) => {
-          return (<Link to="#" onClick={this.handleModelOpen.bind(this, { record })}>二维码</Link>);
+          return (<a onClick={this.handleModelOpen.bind(this, { record })}>二维码</a>);
         },
         width: 70,
       },
@@ -78,7 +79,7 @@ class Component extends React.Component {
         render: (text, record) => (
           <span className={styles.operation}>
             <Access auth="mobile.post.update">
-              <NavLink to={`/app/news/${record.id}/edit`} activeClassName="link-active">编辑</NavLink>
+              <NavLink to={Filters.path('news_edit', { id: record.id })} activeClassName="link-active">编辑</NavLink>
             </Access>
           </span>
         ),
@@ -155,7 +156,7 @@ class Component extends React.Component {
 
         <div className={styles.tableTitleAction}>
           <Access auth="mobile.post.store">
-            <NavLink to="/app/news/add" activeClassName="link-active">
+            <NavLink to={Filters.path('news_add', {})} activeClassName="link-active">
               <Button size="small" type="primary" ghost>新增文章</Button>
             </NavLink>
           </Access>
