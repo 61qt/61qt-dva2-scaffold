@@ -3,13 +3,11 @@
   "scripts": {
     "watch": "TSLINT=none ESLINT=none BROWSER=none RELEASE_ENV=DEV roadhog dev",
     "build": "TSLINT=none ESLINT=none BROWSER=none RELEASE_ENV=RELEASE roadhog build",
-    "startExample": "export PORT=9100 RELEASE_MODULE=example && npm run watch",
     "startApp": "export PORT=9101 RELEASE_MODULE=app && npm run watch",
     "startCas": "export PORT=9102 RELEASE_MODULE=cas && npm run watch",
     "releaseApp": "export RELEASE_MODULE=app && npm run build",
     "releaseCas": "export RELEASE_MODULE=cas && npm run build",
-    "releaseExample": "export RELEASE_MODULE=example && npm run build",
-    "release": "rimraf dist/* && rimraf prod_*/** &&yarn run releaseApp && yarn run releaseCas && yarn run releaseExample",
+    "release": "rimraf prod_*/** && yarn run releaseApp && yarn run releaseCas",
     "lint": "eslint --ext .js --fix src test",
     "precommit": "npm run lint"
   },
