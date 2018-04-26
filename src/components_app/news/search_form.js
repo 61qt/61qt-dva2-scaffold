@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'dva';
 import { Button, Form, Input, Col, Row, Icon } from 'antd';
 import buildListSearchFilters from '../../utils/build_list_search_filters';
@@ -41,9 +42,18 @@ export default class Component extends React.Component {
       expand: false,
       col: 8,
     };
+    this.triggerHandleSubmit = _.debounce(this.triggerHandleSubmit, 200);
   }
 
   componentWillMount = () => {}
+
+  componentDidMount = () => {
+    this.triggerHandleSubmit();
+  }
+
+  triggerHandleSubmit = () => {
+    this.handleSubmit();
+  }
 
   handleSubmit = (e) => {
     if (e && e.preventDefault) {

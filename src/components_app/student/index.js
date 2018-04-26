@@ -114,14 +114,6 @@ export default class Component extends React.Component {
         },
       ],
     });
-    dispatch({
-      type: 'student/listState',
-      payload: { },
-    });
-    dispatch({
-      type: 'student/list',
-      payload: { page: 1, filter: '' },
-    });
   }
 
   pageChangeHandler = (page = this.props.page) => {

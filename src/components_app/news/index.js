@@ -107,14 +107,6 @@ export default class Component extends React.Component {
         },
       ],
     });
-    dispatch({
-      type: 'post/listState',
-      payload: { },
-    });
-    dispatch({
-      type: 'post/list',
-      payload: { page: 1, filter: '' },
-    });
   }
 
   pageChangeHandler = (page = this.props.page) => {

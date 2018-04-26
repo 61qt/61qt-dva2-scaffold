@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import moment from 'moment';
 import { connect } from 'dva';
 import { Button, Form, Input, Col, Row, Icon, Select } from 'antd';
@@ -64,17 +65,27 @@ export default class Component extends React.Component {
       expand: false,
       col: 12,
     };
+    this.triggerHandleSubmit = _.debounce(this.triggerHandleSubmit, 200);
   }
 
   componentWillMount = () => {}
 
+  componentDidMount = () => {
+    this.triggerHandleSubmit();
+  }
+
+  triggerHandleSubmit = () => {
+    this.handleSubmit();
+  }
+
   handleSubmit = (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const { handleSubmit } = this.props;
-        if ('function' === typeof handleSubmit) {
-          handleSubmit({
+        if ('function' === typeof this.props.handleSubmit) {
+          this.props.handleSubmit({
             values,
             form: this.props.form,
             filter: getFilter(values),
