@@ -17,8 +17,7 @@ const formItemLayout = {
   },
 };
 
-
-function getFilters(values) {
+function getFilter(values) {
   return buildListSearchFilters({
     values,
     formFilterMethod: {
@@ -53,7 +52,11 @@ function getFilters(values) {
   });
 }
 
-class Component extends React.Component {
+@Form.create()
+@connect(() => {
+  return {};
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('student_search_from', this);
@@ -74,7 +77,7 @@ class Component extends React.Component {
           handleSubmit({
             values,
             form: this.props.form,
-            filters: getFilters(values),
+            filter: getFilter(values),
             e,
           });
         }
@@ -230,9 +233,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps() {
-  return {};
-}
-
-export default Form.create()(connect(mapStateToProps)(Component));

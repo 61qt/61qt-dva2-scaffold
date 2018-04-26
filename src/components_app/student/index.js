@@ -10,7 +10,13 @@ import Download from '../../components_atom/download';
 import Access from '../../components_atom/access';
 import Table from '../../components_atom/table';
 
-class Component extends React.Component {
+@connect((state) => {
+  return {
+    loading: !!state.loading.models.student,
+    studentState: state.student,
+  };
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('student', this);
@@ -114,42 +120,42 @@ class Component extends React.Component {
     });
     dispatch({
       type: 'student/list',
-      payload: { page: 1, filters: '' },
+      payload: { page: 1, filter: '' },
     });
   }
 
   pageChangeHandler = (page = this.props.page) => {
-    const { dispatch, listState } = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'student/list',
-      payload: { page, filters: listState.filters },
+      payload: { page, filter: this.props.studentState.listState.filter },
     });
   }
 
-  handleSubmit = ({ filters, values }) => {
+  handleSubmit = ({ filter, values }) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'student/listState',
-      payload: { filters, searchValues: values },
+      payload: { filter, searchValues: values },
     });
     dispatch({
       type: 'student/list',
-      payload: { page: 1, filters },
+      payload: { page: 1, filter },
     });
   }
 
   title = () => {
-    const { total, listState } = this.props;
+    const { studentState } = this.props;
     return (
       <div className="clearfix">
         <h3 className={styles.tableTitle} >
           学生列表
-          { total ? <small>（共{total}条）</small> : null }
+          { studentState.total ? <small>（共{studentState.total}条）</small> : null }
         </h3>
 
         <div className={styles.tableTitleAction}>
           <Access auth="student.export">
-            <Download selectRow={this.columns} size="small" path="student/export" query={{ filter: listState.filters }}>导出列表</Download>
+            <Download selectRow={this.columns} size="small" path="student/export" query={{ filter: studentState.listState.filter }}>导出列表</Download>
           </Access>
           <Access auth="student.store">
             <NavLink to={Filters.path('student_add', {})} activeClassName="link-active">
@@ -163,14 +169,15 @@ class Component extends React.Component {
   }
 
   footer = () => {
-    const { total, page: current, pageSize } = this.props;
+    const { studentState } = this.props;
     return (
       <div className="clearfix">
+        <div className="ant-table-pagination-info">当前显示{studentState.start} - {studentState.end}条记录，共 {studentState.total} 条数据</div>
         <Pagination
           className="ant-table-pagination ant-table-pagination-hide-last"
-          total={total}
-          current={current}
-          pageSize={pageSize}
+          total={studentState.total}
+          current={studentState.page}
+          pageSize={studentState.pageSize}
           showQuickJumper={false}
           size="small"
           onChange={this.pageChangeHandler}
@@ -180,11 +187,6 @@ class Component extends React.Component {
   }
 
   render() {
-    const {
-      list: dataSource,
-      loading,
-    } = this.props;
-
     return (
       <div className={styles.normal}>
         <SearchForm handleSubmit={this.handleSubmit} />
@@ -195,8 +197,8 @@ class Component extends React.Component {
             size="small"
             bordered
             columns={this.columns}
-            dataSource={dataSource}
-            loading={loading}
+            dataSource={this.props.studentState.list}
+            loading={this.props.loading}
             scroll={{ x: this.columns.reduce((a, b) => (a.width || a.minWidth || a || 0) + (b.width || b.minWidth || 0), 0), y: 300 > window.innerHeight - 310 ? 300 : window.innerHeight - 310 }}
             rowKey={record => record.id}
             pagination={false}
@@ -208,17 +210,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  const { list, total, page, listState, pageSize } = state.student;
-  return {
-    loading: !!state.loading.models.student,
-    list,
-    listState,
-    pageSize,
-    total,
-    page,
-  };
-}
-
-export default connect(mapStateToProps)(Component);
