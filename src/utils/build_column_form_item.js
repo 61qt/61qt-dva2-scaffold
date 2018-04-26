@@ -12,6 +12,7 @@ function buildColumnFormItem({
   col = 24,
   warpCol = true,
   label = true,
+  size = 'default',
 }) {
   const children = [];
   columns.forEach((elem) => {
@@ -59,13 +60,13 @@ function buildColumnFormItem({
       elemRender = elem.render(defaultValue, defaultValueSet, { form, text: defaultValue, dataSource: defaultValueSet });
     }
     else if (elem.inputNumberOptions) {
-      elemRender = (<InputNumber autoComplete="true" {...elem.props} {...elem.inputNumberOptions} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
+      elemRender = (<InputNumber size={size} autoComplete="true" {...elem.props} {...elem.inputNumberOptions} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
     }
     else if (elem.isInputTexteara) {
-      elemRender = (<Input.TextArea autoComplete="true" size="default" {...elem.props} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
+      elemRender = (<Input.TextArea autoComplete="true" size={size} {...elem.props} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
     }
     else {
-      elemRender = (<Input autoComplete="true" size="default" {...elem.props} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
+      elemRender = (<Input autoComplete="true" size={size} {...elem.props} disabled={elem.hidden} hidden={elem.hidden} placeholder={elem.placeholder || `请输入${elemTitle}`} />);
     }
 
     // getFieldDecorator options
