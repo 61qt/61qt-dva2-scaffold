@@ -25,6 +25,7 @@ const CONSTANTS = {
   EVENT,
   SYSTEM_CONFIG,
   DICT,
+  STORE_SAVE_KEY: 'STORE_SAVE_KEY',
   PAGE_SIZE: 15,
   // 直接获取全部数据，会使用到。
   PAGE_SIZE_MAX: 9999,

@@ -2,6 +2,14 @@ import _ from 'lodash';
 import CONSTANTS from '../constants';
 import defaultService from '../services/common';
 
+let initialState = {};
+try {
+  initialState = JSON.parse(localStorage.getItem(CONSTANTS.STORE_SAVE_KEY));
+}
+catch (e) {
+  initialState = {};
+}
+
 export default function modelFactory({
   Service = defaultService,
   PAGE_SIZE = CONSTANTS.PAGE_SIZE,
@@ -9,24 +17,31 @@ export default function modelFactory({
   modelName = 'model',
   modelExtend = {},
 }) {
+  const defaultListState = {
+    query: '',
+    expand: false,
+    searchValues: {},
+    filter: '',
+  };
+
+  let savedState = _.get(initialState, `${modelName}`) || {};
+  if (!_.isPlainObject(savedState)) {
+    savedState = {};
+  }
+
   const initState = {
-    start: 0,
-    end: 0,
+    start: savedState.start || 0,
+    end: savedState.end || 0,
     list: [],
     data: [],
     detail: {},
     total: null,
     all: [],
     allLoaded: false,
-    page: 1,
+    page: savedState.page || 1,
     pageSize: PAGE_SIZE,
     pageMaxSize: PAGE_SIZE_MAX,
-    listState: {
-      query: '',
-      expand: false,
-      searchValues: {},
-      filter: '',
-    },
+    listState: savedState.listState || defaultListState,
     summary: {},
   };
 
