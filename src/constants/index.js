@@ -25,7 +25,7 @@ const CONSTANTS = {
   EVENT,
   SYSTEM_CONFIG,
   DICT,
-  PAGE_SIZE: 30,
+  PAGE_SIZE: 15,
   // 直接获取全部数据，会使用到。
   PAGE_SIZE_MAX: 9999,
   API_URL_BASE: DEFINE_API_URL_BASE,
