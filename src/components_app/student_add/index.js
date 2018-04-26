@@ -12,7 +12,11 @@ import buildColumnFormItem from '../../utils/build_column_form_item';
 import formatFormValue from '../../utils/format_form_value';
 import DetailView from '../../components_atom/detail_view';
 
-class Component extends React.Component {
+@Form.create()
+@connect(() => {
+  return {};
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('student_add', this);
@@ -450,10 +454,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps() {
-  return {
-  };
-}
-
-export default connect(mapStateToProps)(Form.create()(Component));
