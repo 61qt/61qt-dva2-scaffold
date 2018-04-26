@@ -9,7 +9,11 @@ import CONSTANTS from '../../constants';
 import { modelReset } from '../../models';
 import Router from './router';
 
-class Component extends React.Component {
+@connect((state) => {
+  debugAdd('state', state);
+  return {};
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('cas', this);
@@ -90,11 +94,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    state,
-  };
-}
-
-export default connect(mapStateToProps)(Component);

@@ -85,9 +85,17 @@ routeArr.forEach((elem) => {
   elem.url = `${baseUrl}${elem.path}`;
   routeObj[elem.name] = elem;
 });
+
+export {
+  routeObj,
+};
+
 /* eslint-enable */
 
-class Component extends React.Component {
+@connect(() => {
+  return {};
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('app_router', this);
@@ -112,14 +120,3 @@ class Component extends React.Component {
     </Switch>);
   }
 }
-
-function mapStateToProps() {
-  return {};
-}
-
-
-export {
-  routeObj,
-};
-
-export default connect(mapStateToProps)(Component);

@@ -16,7 +16,12 @@ import styles from './index.less';
 import Router from './router';
 
 let prolongingInterval = '';
-class Component extends React.Component {
+
+@connect((state) => {
+  debugAdd('state', state);
+  return {};
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('app', this);
@@ -150,7 +155,7 @@ class Component extends React.Component {
     });
     this.props.dispatch({
       type: 'all_resource/list',
-      payload: { page: 1, filters: '' },
+      payload: { page: 1, filter: '' },
     });
     this.setState({
       pending: false,
@@ -211,11 +216,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    state,
-  };
-}
-
-export default connect(mapStateToProps)(Component);
