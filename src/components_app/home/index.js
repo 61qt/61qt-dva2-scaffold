@@ -5,7 +5,13 @@ import { Icon } from 'antd';
 import styles from './index.less';
 import Svg from '../../components_atom/svg';
 
-class Component extends React.Component {
+@connect((state) => {
+  debugAdd('state', state);
+  return {};
+})
+export default class Component extends React.Component {
+  static defaultProps = {
+  }
   constructor(props) {
     super(props);
     debugAdd('home', this);
@@ -55,13 +61,3 @@ class Component extends React.Component {
     );
   }
 }
-
-Component.propTypes = {
-};
-
-function mapStateToProps(state) {
-  debugAdd('state', state);
-  return {};
-}
-
-export default connect(mapStateToProps)(Component);
