@@ -42,7 +42,7 @@ class Component extends React.Component {
     const isHome = -1 < ['/app/', '/app'].indexOf(pathname);
     const breadcrumbCurrent = _.get(this, 'props.breadcrumb.current') || [];
     return (
-      <Layout className={`rightLayout ${styles.rightLayout}`}>
+      <Layout.Content className={`rightLayout ${styles.rightLayout}`}>
         <div className={`${styles.breadcrumbContainer} ${isHome ? 'ant-hide' : ''}`}>
           <Breadcrumb>
             <Breadcrumb.Item>
@@ -58,12 +58,12 @@ class Component extends React.Component {
             }
           </Breadcrumb>
         </div>
-        <Layout.Content className={styles.content}>
+        <div className={styles.content}>
           <div className={styles.main}>
             { this.props.children }
           </div>
-        </Layout.Content>
-      </Layout>
+        </div>
+      </Layout.Content>
     );
   }
 
