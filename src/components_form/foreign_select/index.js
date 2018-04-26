@@ -164,7 +164,12 @@ function fetch({ value, query, url, props, force = false, dispatch }, callback, 
   timeout[timeoutSaveKey] = setTimeout(fake, 300);
 }
 
-class Component extends React.Component {
+@connect((state) => {
+  return {
+    foreignSelectInfoState: state.foreign_select.info,
+  };
+})
+export default class Component extends React.Component {
   // static defaultProps = {
   //   // append: true,
   //   force: false,
@@ -467,12 +472,3 @@ class Component extends React.Component {
     );
   }
 }
-
-
-function mapStateToProps(state) {
-  return {
-    foreignSelectInfoState: state.foreign_select.info,
-  };
-}
-
-export default connect(mapStateToProps)(Component);

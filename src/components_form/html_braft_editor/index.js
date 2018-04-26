@@ -5,7 +5,6 @@ import styles from './index.less';
 import Services from '../../services';
 import Filters from '../../filters';
 
-
 export default class Component extends React.Component {
   constructor(props) {
     super(props);

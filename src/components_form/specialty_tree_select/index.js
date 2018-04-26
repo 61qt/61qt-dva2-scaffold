@@ -3,7 +3,13 @@ import _ from 'lodash';
 import { connect } from 'dva';
 import styles from './index.less';
 
-class Component extends React.Component {
+@connect((state) => {
+  return {
+    tree: state.specialty.tree,
+    all: state.specialty.all,
+  };
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -202,12 +208,3 @@ class Component extends React.Component {
     </Spin>);
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    tree: state.specialty.tree,
-    all: state.specialty.all,
-  };
-}
-
-export default connect(mapStateToProps)(Component);
