@@ -4,6 +4,9 @@ import jQuery from 'jquery';
 import moment from 'moment';
 import store from 'store';
 import queryString from 'query-string';
+import dva from 'dva';
+import createHistory from 'history/createBrowserHistory';
+import createLoading from 'dva-loading';
 
 import 'blueimp-canvas-to-blob';
 
@@ -20,6 +23,42 @@ import './utils/debug_add';
 import './utils/system_event_listener';
 
 import './index.less';
+
+export default function appFactory() {
+  const browserHistory = createHistory();
+  window.browserHistory = browserHistory;
+
+  // 1. Initialize
+  const app = dva({
+    history: browserHistory,
+    onStateChange: () => {
+      // eslint-disable-next-line no-underscore-dangle
+      const state = app._store.getState();
+      const searchValuesStoreSave = {};
+      if (window.localStorage && localStorage.setItem) {
+        for (const [key, value] of Object.entries(state)) {
+          if (_.isPlainObject(value) && 'listState' in value) {
+            searchValuesStoreSave[key] = {
+              listState: value.listState || {},
+              page: value.page || 1,
+              start: value.start || 0,
+              end: value.end || 0,
+            };
+          }
+        }
+        localStorage.setItem(CONSTANTS.STORE_SAVE_KEY, JSON.stringify(searchValuesStoreSave));
+      }
+    },
+  });
+
+  // 2. Plugins
+  app.use(createLoading({
+    effects: true,
+  }));
+
+  window.app = app;
+  return app;
+}
 
 // 全局变量挂载，方便调试使用。
 // eslint-disable-next-line no-underscore-dangle
