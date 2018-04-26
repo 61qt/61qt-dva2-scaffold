@@ -106,10 +106,11 @@ export default class Component extends React.Component {
       onOpenChange: this.handleEndOpenChange,
       showTime: this.props.showTime,
     };
+    const size = this.props.size || 'default';
     return (
       <div className={styles.dateranger} >
-        <DatePicker {...startOption} showTime={this.props.showTime} />
-        <DatePicker {...endOption} showTime={this.props.showTime} />
+        <DatePicker size={size} {...startOption} showTime={this.props.showTime} />
+        <DatePicker size={size} {...endOption} showTime={this.props.showTime} />
       </div>
     );
   }

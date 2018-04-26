@@ -95,7 +95,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="name">
         <Form.Item {...formItemLayout} label="教师姓名">
           {
-            getFieldDecorator('name')(<Input placeholder="姓名搜索" />)
+            getFieldDecorator('name')(<Input size="small" placeholder="姓名搜索" />)
           }
         </Form.Item>
       </Col>
@@ -105,7 +105,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="alias">
         <Form.Item {...formItemLayout} label="对外尊称">
           {
-            getFieldDecorator('alias')(<Input placeholder="对外尊称搜索" />)
+            getFieldDecorator('alias')(<Input size="small" placeholder="对外尊称搜索" />)
           }
         </Form.Item>
       </Col>
@@ -115,7 +115,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="phone">
         <Form.Item {...formItemLayout} label="联系电话">
           {
-            getFieldDecorator('phone')(<Input placeholder="联系电话" />)
+            getFieldDecorator('phone')(<Input size="small" placeholder="联系电话" />)
           }
         </Form.Item>
       </Col>
@@ -125,7 +125,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="department_id">
         <Form.Item {...formItemLayout} label="所属部门">
           {
-            getFieldDecorator('department_id')(<ComponentsForm.ForeignSelect placeholder="所属部门" url="department" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat />)
+            getFieldDecorator('department_id')(<ComponentsForm.ForeignSelect size="small" placeholder="所属部门" url="department" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat />)
           }
         </Form.Item>
       </Col>
@@ -135,7 +135,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="gender">
         <Form.Item {...formItemLayout} label="性别">
           {
-            getFieldDecorator('gender')(<Select allowClear placeholder="选择">
+            getFieldDecorator('gender')(<Select size="small" allowClear placeholder="选择">
               {
                 Filters.dict(['teacher', 'gender']).map((elem) => {
                   return (<Select.Option value={`${elem.value}`} key={`gender_${elem.value}`}>{elem.label}</Select.Option>);
@@ -151,7 +151,7 @@ export default class Component extends React.Component {
     const shownCount = 2;
     return (
       <Form
-        className={`ant-advanced-search-form ${expand ? '' : 'is-close'}`}
+        className={`ant-advanced-search-form ant-advanced-search-form-small ${expand ? '' : 'is-close'}`}
         onSubmit={this.handleSubmit}
       >
         <Row gutter={40}>
@@ -162,8 +162,8 @@ export default class Component extends React.Component {
         </Row>
         <Row>
           <Col span={24} style={{ textAlign: 'right' }}>
-            <Button type="primary" ghost htmlType="submit">搜索</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+            <Button size="small" type="primary" ghost htmlType="submit">搜索</Button>
+            <Button size="small" style={{ marginLeft: 8 }} onClick={this.handleReset}>
               重置
             </Button>
             <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>

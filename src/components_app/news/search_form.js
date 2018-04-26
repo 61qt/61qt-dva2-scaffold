@@ -96,7 +96,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="title">
         <Form.Item {...formItemLayout} label="文章标题">
           {
-            getFieldDecorator('title')(<Input placeholder="文章标题搜索" />)
+            getFieldDecorator('title')(<Input size="small" placeholder="文章标题搜索" />)
           }
         </Form.Item>
       </Col>
@@ -105,7 +105,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="source">
         <Form.Item {...formItemLayout} label="文章来源">
           {
-            getFieldDecorator('source')(<Input placeholder="文章来源搜索" />)
+            getFieldDecorator('source')(<Input size="small" placeholder="文章来源搜索" />)
           }
         </Form.Item>
       </Col>
@@ -115,7 +115,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="author">
         <Form.Item {...formItemLayout} label="作者">
           {
-            getFieldDecorator('author')(<Input placeholder="作者搜索" />)
+            getFieldDecorator('author')(<Input size="small" placeholder="作者搜索" />)
           }
         </Form.Item>
       </Col>
@@ -125,7 +125,7 @@ export default class Component extends React.Component {
     const shownCount = 3;
     return (
       <Form
-        className={`ant-advanced-search-form ${expand ? '' : 'is-close'}`}
+        className={`ant-advanced-search-form ant-advanced-search-form-small ${expand ? '' : 'is-close'}`}
         onSubmit={this.handleSubmit}
       >
         <Row gutter={40}>
@@ -136,8 +136,8 @@ export default class Component extends React.Component {
         </Row>
         <Row>
           <Col span={24} style={{ textAlign: 'right' }}>
-            <Button type="primary" ghost htmlType="submit">搜索</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+            <Button size="small" type="primary" ghost htmlType="submit">搜索</Button>
+            <Button size="small" style={{ marginLeft: 8 }} onClick={this.handleReset}>
               重置
             </Button>
             <a className="ant-hide" style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>

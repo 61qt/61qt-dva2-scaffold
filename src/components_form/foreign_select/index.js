@@ -419,8 +419,10 @@ export default class Component extends React.Component {
       return `${elem.value}`;
     };
 
+    const size = this.props.size || 'default';
     return (
       <Select
+        size={size}
         showSearch={this.props.showSearch || true}
         value={formatValue}
         mode={this.props.mode || ''}

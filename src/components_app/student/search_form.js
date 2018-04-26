@@ -119,7 +119,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="name">
         <Form.Item {...formItemLayout} label="姓名">
           {
-            getFieldDecorator('name')(<Input placeholder="姓名搜索" />)
+            getFieldDecorator('name')(<Input size="small" placeholder="姓名搜索" />)
           }
         </Form.Item>
       </Col>
@@ -129,7 +129,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="id">
         <Form.Item {...formItemLayout} label="学号">
           {
-            getFieldDecorator('id')(<Input placeholder="学号搜索" />)
+            getFieldDecorator('id')(<Input size="small" placeholder="学号搜索" />)
           }
         </Form.Item>
       </Col>
@@ -139,7 +139,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="sng_admin_id">
         <Form.Item {...formItemLayout} label="课程顾问">
           {
-            getFieldDecorator('sng_admin_id')(<ComponentsForm.ForeignSelect placeholder="课程顾问" url="admin" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat />)
+            getFieldDecorator('sng_admin_id')(<ComponentsForm.ForeignSelect size="small" placeholder="课程顾问" url="admin" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat />)
           }
         </Form.Item>
       </Col>
@@ -149,7 +149,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="gender">
         <Form.Item {...formItemLayout} label="选择性别">
           {
-            getFieldDecorator('gender')(<Select allowClear placeholder="选择">
+            getFieldDecorator('gender')(<Select size="small" allowClear placeholder="选择">
               {
                 Filters.dict(['student', 'gender']).map((elem) => {
                   return (<Select.Option value={`${elem.value}`} key={`gender_${elem.value}`}>{elem.label}</Select.Option>);
@@ -165,7 +165,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="primary_name">
         <Form.Item {...formItemLayout} label="主要联系人姓名">
           {
-            getFieldDecorator('primary_name')(<Input placeholder="主要联系人姓名" />)
+            getFieldDecorator('primary_name')(<Input size="small" placeholder="主要联系人姓名" />)
           }
         </Form.Item>
       </Col>
@@ -175,7 +175,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="primary_phone">
         <Form.Item {...formItemLayout} label="主要联系人电话">
           {
-            getFieldDecorator('primary_phone')(<Input placeholder="主要联系人电话" />)
+            getFieldDecorator('primary_phone')(<Input size="small" placeholder="主要联系人电话" />)
           }
         </Form.Item>
       </Col>
@@ -185,7 +185,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="secondary_name">
         <Form.Item {...formItemLayout} label="次要联系人姓名">
           {
-            getFieldDecorator('secondary_name')(<Input placeholder="次要联系人姓名" />)
+            getFieldDecorator('secondary_name')(<Input size="small" placeholder="次要联系人姓名" />)
           }
         </Form.Item>
       </Col>
@@ -195,7 +195,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="secondary_phone">
         <Form.Item {...formItemLayout} label="次要联系人手机">
           {
-            getFieldDecorator('secondary_phone')(<Input placeholder="次要联系人手机" />)
+            getFieldDecorator('secondary_phone')(<Input size="small" placeholder="次要联系人手机" />)
           }
         </Form.Item>
       </Col>
@@ -205,7 +205,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="phone">
         <Form.Item {...formItemLayout} label="学生手机">
           {
-            getFieldDecorator('phone')(<Input placeholder="学生手机" />)
+            getFieldDecorator('phone')(<Input size="small" placeholder="学生手机" />)
           }
         </Form.Item>
       </Col>
@@ -215,7 +215,7 @@ export default class Component extends React.Component {
       <Col span={this.state.col} key="start_end_time">
         <Form.Item {...formItemLayout} label="出生日期">
           {
-            getFieldDecorator('start_end_time')(<ComponentsForm.DateRange format="YYYY-MM-DD" />)
+            getFieldDecorator('start_end_time')(<ComponentsForm.DateRange size="small" format="YYYY-MM-DD" />)
           }
         </Form.Item>
       </Col>
@@ -225,7 +225,7 @@ export default class Component extends React.Component {
     const shownCount = 2;
     return (
       <Form
-        className={`ant-advanced-search-form ${expand ? '' : 'is-close'}`}
+        className={`ant-advanced-search-form ant-advanced-search-form-small ${expand ? '' : 'is-close'}`}
         onSubmit={this.handleSubmit}
       >
         <Row gutter={40}>
@@ -236,8 +236,8 @@ export default class Component extends React.Component {
         </Row>
         <Row>
           <Col span={24} style={{ textAlign: 'right' }}>
-            <Button type="primary" ghost htmlType="submit">搜索</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+            <Button size="small" type="primary" ghost htmlType="submit">搜索</Button>
+            <Button size="small" style={{ marginLeft: 8 }} onClick={this.handleReset}>
               重置
             </Button>
             <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
