@@ -1,11 +1,18 @@
 :global {
   .ant-advanced-search-form {
     transition: all 1s;
-    padding: 24px;
+    padding: 12px 24px;
     background: #fbfbfb;
     border: 1px solid #e8e8e8;
     border-radius: 3px;
     position: relative;
+    &, .ant-form-item, .ant-form-item-label, .ant-form-item-label label {
+      font-size: 13px;
+    }
+
+    .ant-form-item {
+      margin-bottom: 12px;
+    }
 
     @media (max-width: 600px) {
       .ant-row {
