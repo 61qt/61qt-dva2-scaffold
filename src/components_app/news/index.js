@@ -10,7 +10,12 @@ import QRCode from '../../components_atom/qrcode';
 import Table from '../../components_atom/table';
 import Filters from '../../filters';
 
-class Component extends React.Component {
+@connect((state) => {
+  return {
+    postState: state.post,
+  };
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('news', this);
@@ -108,15 +113,15 @@ class Component extends React.Component {
     });
     dispatch({
       type: 'post/list',
-      payload: { page: 1, filters: '' },
+      payload: { page: 1, filter: '' },
     });
   }
 
   pageChangeHandler = (page = this.props.page) => {
-    const { dispatch, listState } = this.props;
+    const { dispatch, postState } = this.props;
     dispatch({
       type: 'post/list',
-      payload: { page, filters: listState.filters },
+      payload: { page, filter: postState.listState.filter },
     });
   }
 
@@ -133,25 +138,25 @@ class Component extends React.Component {
     });
   }
 
-  handleSubmit = ({ filters, values }) => {
+  handleSubmit = ({ filter, values }) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'post/listState',
-      payload: { filters, searchValues: values },
+      payload: { filter, searchValues: values },
     });
     dispatch({
       type: 'post/list',
-      payload: { page: 1, filters },
+      payload: { page: 1, filter },
     });
   }
 
   title = () => {
-    const { total } = this.props;
+    const { postState } = this.props;
     return (
       <div className="clearfix">
         <h3 className={styles.tableTitle} >
           文章列表
-          { total ? <small>（共{total}条）</small> : null }
+          { postState.total ? <small>（共{postState.total}条）</small> : null }
         </h3>
 
         <div className={styles.tableTitleAction}>
@@ -167,15 +172,15 @@ class Component extends React.Component {
   }
 
   footer = () => {
-    const { total, page: current, pageSize } = this.props;
+    const { postState } = this.props;
     return (
       <div className="clearfix">
         <Pagination
           showQuickJumper
           className="ant-table-pagination"
-          total={total}
-          current={current}
-          pageSize={pageSize}
+          total={postState.total}
+          current={postState.page}
+          pageSize={postState.pageSize}
           onChange={this.pageChangeHandler}
         />
       </div>
@@ -183,11 +188,6 @@ class Component extends React.Component {
   }
 
   render() {
-    const {
-      list: dataSource,
-      loading,
-    } = this.props;
-
     return (
       <div className={styles.normal}>
         <SearchForm handleSubmit={this.handleSubmit} />
@@ -197,8 +197,8 @@ class Component extends React.Component {
             size={768 > window.innerWidth ? 'small' : 'default'}
             bordered
             columns={this.columns}
-            dataSource={dataSource}
-            loading={loading}
+            dataSource={this.props.postState.list}
+            loading={this.props.loading}
             scroll={{ x: this.columns.reduce((a, b) => (a.width || a.minWidth || a || 0) + (b.width || b.minWidth || 0), 0), y: 300 > window.innerHeight - 310 ? 300 : window.innerHeight - 310 }}
             rowKey={record => record.id}
             pagination={false}
@@ -214,22 +214,7 @@ class Component extends React.Component {
             <QRCode value={this.state.modelText} size={250} />
           </div>
         </Modal>
-
       </div>
     );
   }
 }
-
-function mapStateToProps(state) {
-  const { list, total, page, listState, pageSize } = state.post;
-  return {
-    loading: !!state.loading.models.post,
-    list,
-    listState,
-    pageSize,
-    total,
-    page,
-  };
-}
-
-export default connect(mapStateToProps)(Component);
