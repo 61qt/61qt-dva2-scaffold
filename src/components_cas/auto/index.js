@@ -9,7 +9,11 @@ import CONSTANTS from '../../constants';
 import User from '../../utils/user';
 import Filters from '../../filters';
 
-class Component extends React.Component {
+@Form.create()
+@connect(() => {
+  return {};
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('auto', this);
@@ -61,10 +65,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps() {
-  return {
-  };
-}
-
-export default connect(mapStateToProps)(Form.create()(Component));

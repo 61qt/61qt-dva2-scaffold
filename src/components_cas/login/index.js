@@ -1,5 +1,6 @@
 import React from 'react';
 import jQuery from 'jquery';
+import { connect } from 'dva';
 import _ from 'lodash';
 import { message, Spin, Divider, Form, Input, Icon, Button } from 'antd';
 import { NavLink } from 'dva/router';
@@ -12,7 +13,11 @@ import User from '../../utils/user';
 import CONSTANTS from '../../constants';
 import Filters from '../../filters';
 
-class Component extends React.Component {
+@Form.create()
+@connect(() => {
+  return {};
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('login', this);
@@ -173,5 +178,3 @@ class Component extends React.Component {
     );
   }
 }
-
-export default Form.create()(Component);
