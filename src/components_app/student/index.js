@@ -182,7 +182,6 @@ export default class Component extends React.Component {
     return (
       <div className={styles.normal}>
         <SearchForm handleSubmit={this.handleSubmit} />
-        <br />
         <div>
           <Table
             data-bak-size={768 > window.innerWidth ? 'small' : 'default'}

@@ -139,7 +139,7 @@ const columns = [
   {
     title: '家庭住址',
     dataIndex: 'home_address',
-    colSpan: 3,
+    colSpan: 2,
     render: (text) => {
       return text || '未填写';
     },
