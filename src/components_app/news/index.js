@@ -175,12 +175,14 @@ export default class Component extends React.Component {
     const { postState } = this.props;
     return (
       <div className="clearfix">
+        <div className="ant-table-pagination-info">当前显示{postState.start} - {postState.end}条记录，共 {postState.total} 条数据</div>
         <Pagination
           showQuickJumper
-          className="ant-table-pagination"
+          className="ant-table-pagination ant-table-pagination-hide-last"
           total={postState.total}
           current={postState.page}
           pageSize={postState.pageSize}
+          size="small"
           onChange={this.pageChangeHandler}
         />
       </div>
