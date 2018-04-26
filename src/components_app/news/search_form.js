@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'dva';
 import { Button, Form, Input, Col, Row, Icon } from 'antd';
-import buildListSearchFilters from '../../utils/build_list_search_filters';
+import buildListSearchFilter from '../../utils/build_list_search_filter';
 
 const formItemLayout = {
   labelCol: {
@@ -17,7 +17,7 @@ const formItemLayout = {
 
 
 function getFilter(values) {
-  return buildListSearchFilters({
+  return buildListSearchFilter({
     values,
     formFilterMethod: {
       title: 'like',

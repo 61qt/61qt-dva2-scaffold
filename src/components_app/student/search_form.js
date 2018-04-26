@@ -4,7 +4,7 @@ import moment from 'moment';
 import { connect } from 'dva';
 import { Button, Form, Input, Col, Row, Icon, Select } from 'antd';
 import ComponentsForm from '../../components_form';
-import buildListSearchFilters from '../../utils/build_list_search_filters';
+import buildListSearchFilter from '../../utils/build_list_search_filter';
 import Filters from '../../filters';
 
 const formItemLayout = {
@@ -19,7 +19,7 @@ const formItemLayout = {
 };
 
 function getFilter(values) {
-  return buildListSearchFilters({
+  return buildListSearchFilter({
     values,
     formFilterMethod: {
       name: 'like',

@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { DICT } from '../constants';
 
 
-function dictFilters(options) {
+function dictFilter(options) {
   // 获取参数字典，默认为全局常量 DICT 。
   const constantObj = options.dict || DICT;
 
@@ -39,7 +39,7 @@ function dictFilters(options) {
 }
 
 export default function (path, value = undefined) {
-  return dictFilters({
+  return dictFilter({
     path,
     value,
     getList: value === undefined,
