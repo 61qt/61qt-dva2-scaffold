@@ -31,15 +31,17 @@ function getFilter(values) {
 }
 
 @Form.create()
-@connect(() => {
-  return {};
+@connect((state) => {
+  return {
+    listState: _.get(state.post, 'listState') || {},
+  };
 })
 export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('news_search_from', this);
     this.state = {
-      expand: false,
+      expand: props.listState.expand || false,
       col: 8,
     };
     this.triggerHandleSubmit = _.debounce(this.triggerHandleSubmit, 200);
@@ -48,11 +50,12 @@ export default class Component extends React.Component {
   componentWillMount = () => {}
 
   componentDidMount = () => {
+    this.props.form.setFieldsValue(this.props.listState.searchValues || {});
     this.triggerHandleSubmit();
   }
 
   triggerHandleSubmit = () => {
-    this.handleSubmit();
+    this.handleSubmit({ loadOldPage: true });
   }
 
   handleSubmit = (e) => {
@@ -67,6 +70,8 @@ export default class Component extends React.Component {
             form: this.props.form,
             filter: getFilter(values),
             e,
+            expand: this.state.expand,
+            loadOldPage: _.get(e, 'loadOldPage') || false,
           });
         }
       }

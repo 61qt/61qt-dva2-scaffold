@@ -102,7 +102,7 @@ export default class Component extends React.Component {
     });
   }
 
-  pageChangeHandler = (page = this.props.page) => {
+  pageChangeHandler = (page = this.props.teacherState.page) => {
     const {
       dispatch,
       teacherState,
@@ -113,17 +113,16 @@ export default class Component extends React.Component {
     });
   }
 
-  handleSubmit = ({ filter, values }) => {
-    const {
-      dispatch,
-    } = this.props;
+  handleSubmit = ({ filter, values, expand, loadOldPage }) => {
+    const { dispatch } = this.props;
     dispatch({
       type: 'teacher/listState',
-      payload: { filter, searchValues: values },
+      payload: { filter, searchValues: values, expand },
     });
     dispatch({
       type: 'teacher/list',
-      payload: { page: 1, filter },
+      payload: { page: loadOldPage ? this.props.teacherState.page : 1, filter },
+
     });
   }
 

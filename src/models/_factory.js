@@ -23,6 +23,9 @@ export default function modelFactory({
     pageMaxSize: PAGE_SIZE_MAX,
     listState: {
       query: '',
+      expand: false,
+      searchValues: {},
+      filter: '',
     },
     summary: {},
   };
@@ -55,11 +58,12 @@ export default function modelFactory({
         return { ...state, list, total, page, pageMaxSize, start, end };
       },
 
-      saveListState(state, { payload: { filter, searchValues, query = '' } }) {
+      saveListState(state, { payload: { filter, searchValues, query = '', expand } }) {
         const listState = {
           filter,
           searchValues,
           query,
+          expand,
         };
         return { ...state, listState };
       },
@@ -177,13 +181,14 @@ export default function modelFactory({
       },
 
       // 存储 index 的搜索状态的。
-      *listState({ payload: { filter = '', searchValues = {}, query = '' } }, { put }) {
+      *listState({ payload: { filter = '', searchValues = {}, query = '', expand = false } }, { put }) {
         yield put({
           type: 'saveListState',
           payload: {
             filter,
             searchValues,
             query,
+            expand,
           },
         });
         return true;

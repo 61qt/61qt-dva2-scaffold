@@ -116,7 +116,7 @@ export default class Component extends React.Component {
     });
   }
 
-  pageChangeHandler = (page = this.props.page) => {
+  pageChangeHandler = (page = this.props.studentState.page) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'student/list',
@@ -124,15 +124,15 @@ export default class Component extends React.Component {
     });
   }
 
-  handleSubmit = ({ filter, values }) => {
+  handleSubmit = ({ filter, values, expand, loadOldPage }) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'student/listState',
-      payload: { filter, searchValues: values },
+      payload: { filter, searchValues: values, expand },
     });
     dispatch({
       type: 'student/list',
-      payload: { page: 1, filter },
+      payload: { page: loadOldPage ? this.props.studentState.page : 1, filter },
     });
   }
 
