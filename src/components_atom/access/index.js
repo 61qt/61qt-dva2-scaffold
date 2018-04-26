@@ -20,10 +20,13 @@ function checkAuthIsShow({ auth = '', resource }) {
   // 非上面的情况，就是隐藏。
   return false;
 }
+export {
+  checkAuthIsShow,
+};
 
 @connect((state) => {
   return {
-    resource: state.all_resource,
+    resource: state.all_resource.resource,
   };
 })
 export default class Component extends React.Component {
@@ -45,7 +48,3 @@ export default class Component extends React.Component {
     return (<span className={styles.accessHidden} data-auth={auth}>{children}</span>);
   }
 }
-
-export {
-  checkAuthIsShow,
-};
