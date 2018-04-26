@@ -4,7 +4,7 @@ import { Spin } from 'antd';
 
 import styles from './index.less';
 
-class Component extends React.Component {
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -54,5 +54,3 @@ class Component extends React.Component {
     );
   }
 }
-
-export default Component;

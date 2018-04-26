@@ -9,7 +9,12 @@ import CONSTANTS from '../../constants';
 import Filters from '../../filters';
 import User from '../../utils/user';
 
-class Component extends React.Component {
+@connect((state) => {
+  return {
+    sysMessageState: state.sys_message,
+  };
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,7 +72,7 @@ class Component extends React.Component {
             <NavLink to="/app/sys_message">
               <Icon type="message" />
               <span>我的消息</span>
-              <Badge count={unreadCount} />
+              <Badge count={this.props.sysMessageState.unreadCount} />
             </NavLink>
           </div>
         </Menu.Item>
@@ -125,11 +130,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    unreadCount: state.sys_message.unreadCount,
-  };
-}
-
-export default connect(mapStateToProps)(Component);

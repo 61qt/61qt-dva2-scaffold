@@ -21,7 +21,12 @@ function checkAuthIsShow({ auth = '', resource }) {
   return false;
 }
 
-class Component extends React.Component {
+@connect((state) => {
+  return {
+    resource: state.all_resource,
+  };
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -40,15 +45,6 @@ class Component extends React.Component {
     return (<span className={styles.accessHidden} data-auth={auth}>{children}</span>);
   }
 }
-
-function mapStateToProps(state) {
-  const { resource } = state.all_resource;
-  return {
-    resource,
-  };
-}
-
-export default connect(mapStateToProps)(Component);
 
 export {
   checkAuthIsShow,

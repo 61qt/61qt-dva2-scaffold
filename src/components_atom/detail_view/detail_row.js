@@ -5,7 +5,7 @@ import { Link } from 'dva/router';
 
 import styles from './detail_row.less';
 
-class Component extends React.Component {
+export default class Component extends React.Component {
   static defaultProps = {
     col: 1,
     currentExpand: 9999999,
@@ -185,5 +185,3 @@ class Component extends React.Component {
     );
   }
 }
-
-export default Component;

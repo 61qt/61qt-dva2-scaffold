@@ -4,7 +4,7 @@ import { Spin } from 'antd';
 import DetailRow from './detail_row';
 import styles from './index.css';
 
-class Component extends React.Component {
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,5 +47,3 @@ class Component extends React.Component {
     );
   }
 }
-
-export default Component;

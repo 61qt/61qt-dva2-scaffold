@@ -5,7 +5,10 @@ import HeaderAccount from './header_account';
 import styles from './header.less';
 import CONSTANTS from '../../constants';
 
-class Component extends React.Component {
+@connect(() => {
+  return {};
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -42,9 +45,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps)(Component);

@@ -22,7 +22,7 @@ const defaultProps = {
   value: '二维码',
 };
 
-class Component extends React.Component {
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -120,5 +120,3 @@ class Component extends React.Component {
     return (<canvas ref={this.canvasRef} style={{ height: size, width: size }} height={size} width={size} />);
   }
 }
-
-export default Component;

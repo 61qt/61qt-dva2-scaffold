@@ -11,7 +11,12 @@ import User from '../../utils/user';
 import Filters from '../../filters';
 import CONSTANTS from '../../constants';
 
-class Component extends React.Component {
+@connect((state) => {
+  return {
+    breadcrumb: state.breadcrumb,
+  };
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('layout', this);
@@ -199,10 +204,3 @@ class Component extends React.Component {
     );
   }
 }
-function mapStateToProps(state) {
-  return {
-    breadcrumb: state.breadcrumb,
-  };
-}
-
-export default connect(mapStateToProps)(Component);

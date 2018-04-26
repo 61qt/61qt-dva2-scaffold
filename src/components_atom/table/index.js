@@ -6,10 +6,11 @@ import './index.less';
 
 let headerHeight = jQuery('.globalHeader').outerHeight() || 52;
 
-class Component extends React.Component {
+export default class Component extends React.Component {
   static defaultProps = {
     scrollWarpper: '.ant-layout',
-    autoFixed: true,
+    // autoFixed: true,
+    autoFixed: false,
   }
   constructor(props) {
     super(props);
@@ -157,10 +158,11 @@ class Component extends React.Component {
   render() {
     const scroll = {
       ...this.props.scroll,
+      y: 'none',
     };
-    if (this.isMobile) {
-      delete scroll.y;
-    }
+    // if (this.isMobile) {
+    //   delete scroll.y;
+    // }
 
     const key = `${window.innerWidth}`;
 
@@ -169,5 +171,3 @@ class Component extends React.Component {
     </div>);
   }
 }
-
-export default Component;

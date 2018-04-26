@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './index.less';
 
-class Component extends React.Component {
+export default class Component extends React.Component {
   render() {
     const { style, children, width = '100%', line = 1, height = '1rem' } = this.props;
     return (<div
@@ -11,5 +11,3 @@ class Component extends React.Component {
     >{ children }</div>);
   }
 }
-
-export default Component;

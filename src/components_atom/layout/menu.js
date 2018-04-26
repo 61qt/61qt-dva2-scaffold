@@ -28,7 +28,13 @@ function getAllMenuItem(menu, parent) {
   return [menu];
 }
 
-class Component extends React.Component {
+@connect((state) => {
+  return {
+    resource: state.all_resource,
+    menuConfig: state.menu_config.menu,
+  };
+})
+export default class Component extends React.Component {
   static defaultProps = {
     collapsed: true,
   };
@@ -243,13 +249,3 @@ class Component extends React.Component {
     </div>);
   }
 }
-
-function mapStateToProps(state) {
-  const { resource } = state.all_resource;
-  return {
-    resource,
-    menuConfig: state.menu_config.menu,
-  };
-}
-
-export default connect(mapStateToProps)(Component);

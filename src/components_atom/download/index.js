@@ -11,7 +11,7 @@ import styles from './index.less';
 function random() {
   return `${Math.random()}`.replace(/0./, '');
 }
-class Component extends React.Component {
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     const defaultValue = _.map(props.selectRow, (row) => {
@@ -142,5 +142,3 @@ class Component extends React.Component {
     }
   }
 }
-
-export default Component;

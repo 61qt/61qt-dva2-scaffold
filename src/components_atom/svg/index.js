@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'dva';
 
 import './index.less';
 
-class Component extends React.Component {
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -20,9 +19,3 @@ class Component extends React.Component {
     </svg>);
   }
 }
-
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps)(Component);
