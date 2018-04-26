@@ -10,7 +10,13 @@ import Access from '../../components_atom/access';
 import Table from '../../components_atom/table';
 import Download from '../../components_atom/download';
 
-class Component extends React.Component {
+@connect((state) => {
+  return {
+    loading: !!state.loading.models.teacher,
+    teacherState: state.teacher,
+  };
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('teacher', this);
@@ -94,51 +100,40 @@ class Component extends React.Component {
         },
       ],
     });
-    dispatch({
-      type: 'teacher/listState',
-      payload: { },
-    });
-    dispatch({
-      type: 'teacher/list',
-      payload: { page: 1, filters: '' },
-    });
   }
 
   pageChangeHandler = (page = this.props.page) => {
     const {
       dispatch,
-      listState,
+      teacherState,
     } = this.props;
     dispatch({
       type: 'teacher/list',
-      payload: { page, filters: listState.filters },
+      payload: { page, filter: teacherState.listState.filter },
     });
   }
 
-  handleSubmit = ({ filters, values }) => {
+  handleSubmit = ({ filter, values }) => {
     const {
       dispatch,
     } = this.props;
     dispatch({
       type: 'teacher/listState',
-      payload: { filters, searchValues: values },
+      payload: { filter, searchValues: values },
     });
     dispatch({
       type: 'teacher/list',
-      payload: { page: 1, filters },
+      payload: { page: 1, filter },
     });
   }
 
   title = () => {
-    const {
-      total,
-      listState,
-    } = this.props;
+    const { teacherState } = this.props;
     return (
       <div className="clearfix">
         <h3 className={styles.tableTitle} >
           教师列表
-          { total ? <small>（共{total}条）</small> : null }
+          { teacherState.total ? <small>（共{teacherState.total}条）</small> : null }
         </h3>
 
         <div className={styles.tableTitleAction}>
@@ -149,7 +144,7 @@ class Component extends React.Component {
           </Access>
           <span>
             <Access auth="teacher.export">
-              <Download size="small" path="teacher/export" query={{ filter: listState.filters }}>导出列表</Download>
+              <Download size="small" path="teacher/export" query={{ filter: teacherState.listState.filter }}>导出列表</Download>
             </Access>
           </span>
         </div>
@@ -159,19 +154,17 @@ class Component extends React.Component {
   }
 
   footer = () => {
-    const {
-      total,
-      page: current,
-      pageSize,
-    } = this.props;
+    const { teacherState } = this.props;
     return (
       <div className="clearfix">
+        <div className="ant-table-pagination-info">当前显示{teacherState.start} - {teacherState.end}条记录，共 {teacherState.total} 条数据</div>
         <Pagination
           showQuickJumper
-          className="ant-table-pagination"
-          total={total}
-          current={current}
-          pageSize={pageSize}
+          className="ant-table-pagination ant-table-pagination-hide-last"
+          total={teacherState.total}
+          current={teacherState.page}
+          pageSize={teacherState.pageSize}
+          size="small"
           onChange={this.pageChangeHandler}
         />
       </div>
@@ -179,11 +172,6 @@ class Component extends React.Component {
   }
 
   render() {
-    const {
-      list: dataSource,
-      loading,
-    } = this.props;
-
     return (
       <div className={styles.normal}>
         <SearchForm handleSubmit={this.handleSubmit} />
@@ -193,8 +181,8 @@ class Component extends React.Component {
             size={768 > window.innerWidth ? 'small' : 'default'}
             bordered
             columns={this.columns}
-            dataSource={dataSource}
-            loading={loading}
+            dataSource={this.props.teacherState.list}
+            loading={this.props.loading}
             scroll={{ x: this.columns.reduce((a, b) => (a.width || a.minWidth || a || 0) + (b.width || b.minWidth || 0), 0), y: 300 > window.innerHeight - 310 ? 300 : window.innerHeight - 310 }}
             rowKey={record => record.id}
             pagination={false}
@@ -206,17 +194,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  const { list, total, page, listState, pageSize } = state.teacher;
-  return {
-    loading: !!state.loading.models.teacher,
-    list,
-    listState,
-    pageSize,
-    total,
-    page,
-  };
-}
-
-export default connect(mapStateToProps)(Component);

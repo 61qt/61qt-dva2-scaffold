@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'dva';
 import { Button, Form, Input, Col, Row, Icon, Select } from 'antd';
 import ComponentsForm from '../../components_form';
@@ -17,7 +18,7 @@ const formItemLayout = {
 };
 
 
-function getFilters(values) {
+function getFilter(values) {
   return buildListSearchFilters({
     values,
     formFilterMethod: {
@@ -28,24 +29,42 @@ function getFilters(values) {
   });
 }
 
-class Component extends React.Component {
-  state = {
-    expand: false,
-    col: 12,
+@Form.create()
+@connect(() => {
+  return {};
+})
+export default class Component extends React.Component {
+  constructor(props) {
+    super(props);
+    debugAdd('teacher_search_from', this);
+    this.state = {
+      expand: false,
+      col: 12,
+    };
+    this.triggerHandleSubmit = _.debounce(this.triggerHandleSubmit, 200);
   }
 
   componentWillMount = () => {}
 
+  componentDidMount = () => {
+    this.triggerHandleSubmit();
+  }
+
+  triggerHandleSubmit = () => {
+    this.handleSubmit();
+  }
+
   handleSubmit = (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const { handleSubmit } = this.props;
-        if ('function' === typeof handleSubmit) {
-          handleSubmit({
+        if ('function' === typeof this.props.handleSubmit) {
+          this.props.handleSubmit({
             values,
             form: this.props.form,
-            filters: getFilters(values),
+            filter: getFilter(values),
             e,
           });
         }
@@ -151,9 +170,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps() {
-  return {};
-}
-
-export default Form.create()(connect(mapStateToProps)(Component));
