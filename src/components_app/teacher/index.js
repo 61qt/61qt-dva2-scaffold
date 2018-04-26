@@ -159,7 +159,7 @@ export default class Component extends React.Component {
       <div className="clearfix">
         <div className="ant-table-pagination-info">当前显示{teacherState.start} - {teacherState.end}条记录，共 {teacherState.total} 条数据</div>
         <Pagination
-          showQuickJumper
+          showQuickJumper={false}
           className="ant-table-pagination ant-table-pagination-hide-last"
           total={teacherState.total}
           current={teacherState.page}

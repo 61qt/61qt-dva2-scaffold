@@ -34,7 +34,13 @@ const formTailItemLayout = {
   },
 };
 
-class Component extends React.Component {
+@Form.create()
+@connect((state) => {
+  return {
+    areaState: state.area,
+  };
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     const paramsId = _.get(props, 'match.params.id') * 1 || false;
@@ -262,7 +268,7 @@ class Component extends React.Component {
             }
             form.setFieldsValue(options);
           };
-          return (<Cascader options={this.props.areaTree} onChange={onChange} />);
+          return (<Cascader options={this.props.areaState.tree} onChange={onChange} />);
         },
         initialValue: (text, dataSource) => {
           const newValue = [dataSource.native_province_id, dataSource.native_city_id];
@@ -588,12 +594,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    areaTree: state.area.tree,
-  };
-}
-
-
-export default connect(mapStateToProps)(Form.create()(Component));
