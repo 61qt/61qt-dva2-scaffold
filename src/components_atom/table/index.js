@@ -14,7 +14,6 @@ export default class Component extends React.Component {
   }
   constructor(props) {
     super(props);
-    this.state = {};
     headerHeight = jQuery('.globalHeader').outerHeight() || 52;
     debugAdd('table', this);
     if (!this.isMobile) {
@@ -25,6 +24,23 @@ export default class Component extends React.Component {
     if (!this.isMobile) {
       this.isMobile = 660 > window.innerWidth;
     }
+
+    const minWidthCol = [];
+    if (props.columns) {
+      _.each(props.columns, (elem) => {
+        if ('minWidth' in elem) {
+          minWidthCol.push(elem);
+        }
+      });
+
+      if (1 !== minWidthCol.length && window.console && window.console.error) {
+        window.console.error('Table 组件必须传入一个存在属性为 minWidth 的 columns ，不能多不能少。');
+      }
+    }
+
+    this.state = {
+      minWidthCol,
+    };
   }
 
   componentWillMount = () => {
@@ -160,11 +176,15 @@ export default class Component extends React.Component {
       ...this.props.scroll,
       y: 'none',
     };
-    // if (this.isMobile) {
-    //   delete scroll.y;
-    // }
+    if (this.isMobile) {
+      delete scroll.y;
+    }
 
     const key = `${window.innerWidth}`;
+
+    if (__DEV__ && 1 !== this.state.minWidthCol.length) {
+      return null;
+    }
 
     return (<div key={key} data-key={key} ref={this.containerRef}>
       <Table className={this.props.autoFixed && !this.isMobile ? 'sticky-table' : ''} {...this.props} data-bak-size={this.props.size || 'small'} size="small" scroll={scroll} />
