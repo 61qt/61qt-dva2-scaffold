@@ -154,7 +154,13 @@ const columns = [
   },
 ];
 
-class Component extends React.Component {
+@connect((state) => {
+  return {
+    studentDetail: state.student.detail,
+    loading: !!state.loading.models.student,
+  };
+})
+export default class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -205,12 +211,3 @@ class Component extends React.Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    studentDetail: state.student.detail,
-    loading: !!state.loading.models.student,
-  };
-}
-
-export default connect(mapStateToProps)(Component);
