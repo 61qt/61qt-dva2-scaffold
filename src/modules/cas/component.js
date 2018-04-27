@@ -7,7 +7,7 @@ import queryString from 'query-string';
 import styles from './index.less';
 import CONSTANTS from '../../constants';
 import { modelReset } from '../../models';
-import RouterConfig from './router_config';
+import Router from './router';
 
 @connect((state) => {
   debugAdd('state', state);
@@ -85,7 +85,7 @@ export default class Component extends React.Component {
           </div>
         </div>
 
-        <RouterConfig {...this.props} />
+        <Router {...this.props} />
 
         <p className={styles.copyright}>
           Copyright © { moment().format('YYYY') } <a href="http://www.61qt.cn" target="_blank" rel="noopener noreferrer">XX网</a> • <a href="http://www.61qt.cn" target="_blank" rel="noopener noreferrer">XX网</a>

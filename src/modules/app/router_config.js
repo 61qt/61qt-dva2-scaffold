@@ -1,122 +1,22 @@
 import React from 'react';
 import _ from 'lodash';
-import { connect } from 'dva';
-import { Switch, Route } from 'dva/router';
+import { Router, Switch, Route, Redirect } from 'dva/router';
+import { locales, LocaleProvider } from 'antd';
 
-let routeArr = [];
-const routeObj = {};
+// 已经授权的模块，非精确匹配
+import Component from './component';
 
-const baseUrl = '/app';
+const zhCN = _.get(locales, 'zh_CN');
 
-/* eslint-disable import/first, import/newline-after-import */
-routeArr.push({
-  name: 'news_edit',
-  path: '/news/:id/edit',
-  exact: true,
-  component: require('../../components_app/news_add').default,
-});
-routeArr.push({
-  name: 'news_add',
-  path: '/news/add',
-  exact: true,
-  component: require('../../components_app/news_add').default,
-});
-routeArr.push({
-  name: 'news',
-  path: '/news',
-  exact: true,
-  component: require('../../components_app/news').default,
-});
-
-routeArr.push({
-  name: 'student_edit',
-  path: '/student/:id/edit',
-  exact: true,
-  component: require('../../components_app/student_add').default,
-});
-routeArr.push({
-  name: 'student_detail',
-  path: '/student/:id',
-  exact: true,
-  component: require('../../components_app/student_detail').default,
-});
-routeArr.push({
-  name: 'student_add',
-  path: '/student/add',
-  exact: true,
-  component: require('../../components_app/student_add').default,
-});
-routeArr.push({
-  name: 'student',
-  path: '/student',
-  component: require('../../components_app/student').default,
-});
-
-routeArr.push({
-  name: 'teacher_edit',
-  path: '/teacher/:id/edit',
-  exact: true,
-  component: require('../../components_app/teacher_add').default,
-});
-routeArr.push({
-  name: 'teacher_add',
-  path: '/teacher/add',
-  exact: true,
-  component: require('../../components_app/teacher_add').default,
-});
-routeArr.push({
-  name: 'teacher',
-  path: '/teacher',
-  component: require('../../components_app/teacher').default,
-});
-
-routeArr.push({
-  name: 'home',
-  path: '/',
-  exact: true,
-  component: require('../../components_app/home').default,
-});
-
-import exceptionRouteArr from '../../components_common/exception/route';
-routeArr = [].concat(routeArr).concat(exceptionRouteArr);
-
-routeArr.forEach((elem) => {
-  // eslint-disable-next-line no-param-reassign
-  elem.url = `${baseUrl}${elem.path}`;
-  routeObj[elem.name] = elem;
-});
-
-export {
-  routeObj,
-};
-
-/* eslint-enable */
-
-@connect(() => {
-  return {};
-})
-export default class Component extends React.Component {
-  constructor(props) {
-    super(props);
-    debugAdd('app_router', this);
-  }
-
-  render() {
-    return (<Switch>
-      {
-        _.map(routeArr, (elem) => {
-          const props = {
-            key: elem.path,
-            exact: elem.exact || false,
-            strict: elem.strict || false,
-            component: elem.component,
-          };
-          if (404 !== elem.name) {
-            props.path = elem.url;
-          }
-          return (<Route {...props} />);
-        })
-      }
-    </Switch>);
-  }
+function router({ history }) {
+  return (<LocaleProvider locale={zhCN}>
+    <Router history={history}>
+      <Switch>
+        <Route path="/app" component={Component} />
+        <Redirect to="/app" />
+      </Switch>
+    </Router>
+  </LocaleProvider>);
 }
+
+export default router;

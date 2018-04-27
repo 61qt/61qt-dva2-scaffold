@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import pathToRegexp from 'path-to-regexp';
 
-import { routeObj as appRouteObj } from '../modules/app/router_config';
-import { routeObj as casRouteObj } from '../modules/cas/router_config';
+import { routeObj as appRouteObj } from '../modules/app/router';
+import { routeObj as casRouteObj } from '../modules/cas/router';
 
 const routeObj = {
   app: appRouteObj,
