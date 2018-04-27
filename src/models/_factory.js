@@ -52,7 +52,10 @@ export default function modelFactory({
     state: _.cloneDeep(extendInitState),
     reducers: {
       saveReset() {
-        return _.cloneDeep(extendInitState);
+        return _.cloneDeep({
+          ...extendInitState,
+          listState: defaultListState,
+        });
       },
       saveSummary(state, { payload: { data: summary } }) {
         return { ...state, summary };
