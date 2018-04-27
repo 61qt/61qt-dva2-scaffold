@@ -183,7 +183,7 @@ export default class Component extends React.Component {
 
   render() {
     return (
-      <div className={styles.normal}>
+      <div className={`${styles.normal}`}>
         <SearchForm handleSubmit={this.handleSubmit} />
         <div>
           <Table

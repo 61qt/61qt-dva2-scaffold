@@ -236,8 +236,7 @@ export default class Component extends React.Component {
     }
 
     this.resetFormValidate();
-    const form = this.props.form;
-    form.validateFieldsAndScroll((err, values) => {
+    this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) {
         formErrorMessageShow(err);
       }

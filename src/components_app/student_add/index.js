@@ -253,7 +253,7 @@ export default class Component extends React.Component {
       payload: [
         {
           name: '学生管理',
-          url: Filters.path('news', {}),
+          url: Filters.path('student', {}),
         },
         {
           name: `${paramsId ? '编辑' : '新增'}学生`,
@@ -335,10 +335,9 @@ export default class Component extends React.Component {
       return;
     }
     this.resetFormValidate();
-    const form = this.props.form;
-    form.validateFieldsAndScroll((err, values) => {
+    this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) {
-        formErrorMessageShow(err);
+        return formErrorMessageShow(err);
       }
       if (!err) {
         const formattedValues = {

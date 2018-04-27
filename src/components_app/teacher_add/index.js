@@ -43,6 +43,7 @@ const formTailItemLayout = {
 export default class Component extends React.Component {
   constructor(props) {
     super(props);
+    debugAdd('teacher_add', this);
     const paramsId = _.get(props, 'match.params.id') * 1 || false;
     this.editInfo = {
       paramsId,
@@ -483,7 +484,7 @@ export default class Component extends React.Component {
     this.resetFormValidate();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) {
-        formErrorMessageShow(err);
+        return formErrorMessageShow(err);
       }
       if (!err) {
         const formattedValues = {
