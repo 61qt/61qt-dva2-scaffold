@@ -15,3 +15,5 @@ nginx/*.conf
 yarn-error.log
 
 prod_*/
+
+src/.sprites/**
