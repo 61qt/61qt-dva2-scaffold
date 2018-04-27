@@ -7,6 +7,10 @@ import upload from '../../utils/download';
 import User from '../../utils/user';
 import styles from './index.less';
 
+function random() {
+  return `${Math.random()}`.replace(/0./, '');
+}
+
 export default class Component extends React.Component {
   static defaultProps = {
     path: '',
@@ -18,6 +22,7 @@ export default class Component extends React.Component {
     this.state = {
       visible: false,
       submitting: false,
+      random: random(),
     };
 
     debugAdd('upload', this);
@@ -45,6 +50,13 @@ export default class Component extends React.Component {
     });
 
     return true;
+  }
+
+  uploadCancel = () => {
+    this.setState({
+      random: random(),
+      visible: false,
+    });
   }
 
   renderContent = () => {
@@ -104,7 +116,7 @@ export default class Component extends React.Component {
       },
     };
 
-    return (<span>
+    return (<span key={this.state.random}>
       <Modal
         visible={this.state.visible}
         wrapClassName={styles.normal}
@@ -112,12 +124,17 @@ export default class Component extends React.Component {
         maskClosable="false"
         footer={null}>
         <Spin spinning={this.state.submitting}>
-          <div className="upload-tip-content">
+          <div className={styles.uploadTipContent}>
             <span>正在批量导入中，请耐心等待</span>
           </div>
         </Spin>
+        <div className={styles.uploadCancelAction}>
+          <Button onClick={this.uploadCancel}>
+            取消上传
+          </Button>
+        </div>
       </Modal>
-      <Upload {...props}>
+      <Upload key={this.state.key} {...props}>
         { this.renderContent() }
       </Upload>
     </span>);
