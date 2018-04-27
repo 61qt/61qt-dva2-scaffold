@@ -145,16 +145,16 @@ export default class Component extends React.Component {
           { studentState.total ? <small>（共{studentState.total}条）</small> : null }
         </h3>
 
-        <div className={styles.tableTitleAction}>
+        <div className="table-title-action">
           <Access auth="student.export">
-            <Download confirm="true" selectRow={this.columns} size="small" path="student/export" query={{ filter: studentState.listState.filter }}>导出列表</Download>
-            &nbsp;
+            <Download confirm="true" selectRow={this.columns} size="small" path="student/export" query={{ filter: studentState.listState.filter }}>批量导出</Download>
           </Access>
           <Access auth="student.store">
             <NavLink to={Filters.path('student_add', {})} activeClassName="link-active">
               <Button size="small" type="primary" ghost>新增学生</Button>
             </NavLink>
           </Access>
+          <Download link="true" size="small" path="student/export/template">下载模板</Download>
         </div>
 
       </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import _ from 'lodash';
-import { Link } from 'dva/router';
+// import { Link } from 'dva/router';
 import store from 'store';
 import { Button, Dropdown, Menu, Modal, Checkbox } from 'antd';
 import CONSTANTS from '../../constants';
@@ -182,9 +182,9 @@ export default class Component extends React.Component {
       </span>);
     }
     else if (link) {
-      return (<Link {...rst} onClick={this.downloadBirdge}>
+      return (<a {...rst} onClick={this.downloadBirdge}>
         { children }
-      </Link>);
+      </a>);
     }
     else {
       return (<Button {...rst} onClick={this.downloadBirdge}>

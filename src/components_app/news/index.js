@@ -151,7 +151,7 @@ export default class Component extends React.Component {
           { postState.total ? <small>（共{postState.total}条）</small> : null }
         </h3>
 
-        <div className={styles.tableTitleAction}>
+        <div className="table-title-action">
           <Access auth="mobile.post.store">
             <NavLink to={Filters.path('news_add', {})} activeClassName="link-active">
               <Button size="small" type="primary" ghost>新增文章</Button>
