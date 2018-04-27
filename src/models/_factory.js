@@ -51,7 +51,7 @@ export default function modelFactory({
     namespace: modelName,
     state: _.cloneDeep(extendInitState),
     reducers: {
-      reset() {
+      saveReset() {
         return _.cloneDeep(extendInitState);
       },
       saveSummary(state, { payload: { data: summary } }) {
@@ -73,12 +73,13 @@ export default function modelFactory({
         return { ...state, list, total, page, pageMaxSize, start, end };
       },
 
-      saveListState(state, { payload: { filter, searchValues, query = '', expand } }) {
+      saveListState(state, { payload: { filter = '', searchValues = {}, query = '', expand = false, ...rest } }) {
         const listState = {
           filter,
           searchValues,
           query,
           expand,
+          ...rest,
         };
         return { ...state, listState };
       },
@@ -196,15 +197,10 @@ export default function modelFactory({
       },
 
       // 存储 index 的搜索状态的。
-      *listState({ payload: { filter = '', searchValues = {}, query = '', expand = false } }, { put }) {
+      *listState({ payload }, { put }) {
         yield put({
           type: 'saveListState',
-          payload: {
-            filter,
-            searchValues,
-            query,
-            expand,
-          },
+          payload,
         });
         return true;
       },
@@ -240,11 +236,10 @@ export default function modelFactory({
           return Promise.reject(e);
         }
       },
-
       *reset(action, { put }) {
         const newState = _.cloneDeep(initState);
         yield put({
-          type: 'saveList',
+          type: 'saveReset',
           payload: {
             ...newState,
           },
