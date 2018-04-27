@@ -91,7 +91,7 @@ export default class Component extends React.Component {
         title: '操作',
         key: 'operation',
         fixed: 'right',
-        width: 130,
+        width: 60,
         render: (text, record) => {
           return (<span className={styles.operation}>
             <Access auth="student.update">
@@ -147,6 +147,8 @@ export default class Component extends React.Component {
 
         <div className={styles.tableTitleAction}>
           <Access auth="student.export">
+            <Download confirm="true" selectRow={this.columns} size="small" path="student/export" query={{ filter: studentState.listState.filter }}>导出列表(弹窗确认)</Download>
+            &nbsp;
             <Download selectRow={this.columns} size="small" path="student/export" query={{ filter: studentState.listState.filter }}>导出列表</Download>
           </Access>
           <Access auth="student.store">
