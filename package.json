@@ -27,7 +27,8 @@
     "path-to-regexp": "^2.2.1",
     "qr.js": "^0.0.0",
     "query-string": "^6.0.0",
-    "store": "^2.0.12"
+    "store": "^2.0.12",
+    "webpack-spritesmith": "^0.4.1"
   },
   "devDependencies": {
     "babel-plugin-dva-hmr": "^0.3.2",
