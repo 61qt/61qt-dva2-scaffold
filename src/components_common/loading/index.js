@@ -12,9 +12,6 @@ export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('loading', this);
-    setTimeout(() => {
-      this.props.history.goBack();
-    }, 300);
   }
 
   componentDidMount = () => {
@@ -28,6 +25,9 @@ export default class Component extends React.Component {
         },
       ],
     });
+    setTimeout(() => {
+      this.props.history.goBack();
+    }, 100);
   }
 
   render() {

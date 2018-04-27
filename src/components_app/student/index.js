@@ -7,6 +7,7 @@ import Filters from '../../filters';
 // import EditModal from './modal';
 import SearchForm from './search_form';
 import Download from '../../components_atom/download';
+import Upload from '../../components_atom/upload';
 import Access from '../../components_atom/access';
 import Table from '../../components_atom/table';
 
@@ -116,6 +117,21 @@ export default class Component extends React.Component {
     });
   }
 
+  onUploaded = (info) => {
+    if (__DEV__) {
+      window.console.log('info', info);
+    }
+    this.resetPage();
+  }
+
+  resetPage = () => {
+    this.props.dispatch({
+      type: 'student/reset',
+    }).then(() => {
+      this.props.history.push(Filters.path('loading', {}));
+    });
+  }
+
   pageChangeHandler = (page = this.props.studentState.page) => {
     const { dispatch } = this.props;
     dispatch({
@@ -146,6 +162,7 @@ export default class Component extends React.Component {
         </h3>
 
         <div className="table-title-action">
+          <Upload onUploaded={this.onUploaded} size="small" path="student?upload">批量导入</Upload>
           <Access auth="student.export">
             <Download confirm="true" selectRow={this.columns} size="small" path="student/export" query={{ filter: studentState.listState.filter }}>批量导出</Download>
           </Access>
