@@ -54,7 +54,7 @@ server {
 
 server {
   listen       443;
-  server_name  ${modulePort}-cdn.61qt.cn ${modulePort}.61qt.cn;
+  server_name  ${moduleName}-cdn.61qt.cn ${moduleName}.61qt.cn;
 
   ssl on;
   ssl_certificate ${devRoot}/nginx/ssl.crt;
