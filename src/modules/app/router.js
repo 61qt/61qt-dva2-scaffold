@@ -35,16 +35,16 @@ routeArr.push({
   component: require('../../components_app/student_add').default,
 });
 routeArr.push({
-  name: 'student_detail',
-  path: '/student/:id',
-  exact: true,
-  component: require('../../components_app/student_detail').default,
-});
-routeArr.push({
   name: 'student_add',
   path: '/student/add',
   exact: true,
   component: require('../../components_app/student_add').default,
+});
+routeArr.push({
+  name: 'student_detail',
+  path: '/student/:id',
+  exact: true,
+  component: require('../../components_app/student_detail').default,
 });
 routeArr.push({
   name: 'student',
