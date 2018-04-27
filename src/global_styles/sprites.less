@@ -1,0 +1,54 @@
+@import '../.sprites/sprites.less';
+
+.sprite-width(@sprite) {
+  width: extract(@sprite, 5);
+}
+
+.sprite-height(@sprite) {
+  height: extract(@sprite, 6);
+}
+
+.sprite-position(@sprite) {
+  @sprite-offset-x: extract(@sprite, 3);
+  @sprite-offset-y: extract(@sprite, 4);
+  background-position: @sprite-offset-x @sprite-offset-y;
+}
+
+// .sprite-image(@sprite) {
+//   @sprite-image: extract(@sprite, 9);
+//   @sprite-image-bare: ~`"@{sprite-image}".slice(1, -1)`;
+//   background-image: url(@sprite-image-bare);
+// }
+
+.spriteElem(@sprite) {
+  // .sprite-image(@sprite);
+  .sprite-position(@sprite);
+  .sprite-width(@sprite);
+  .sprite-height(@sprite);
+}
+
+/*
+The `.sprites` mixin generates identical output to the CSS template
+  but can be overridden inside of LESS
+
+This must be run when you have at least 2 sprites.
+  If run with a single sprite, then there will be reference errors.
+
+.sprites(@spritesheet-sprites);
+*/
+.spritesElem(@sprites, @i: 1) when (@i <= length(@sprites)) {
+  @sprite: extract(@sprites, @i);
+  @sprite-name: e(extract(@sprite, 10));
+  .sp {
+    display: inline-block;
+    background-image: url('../.sprites/sprites.png');
+  }
+  .sp.sp-@{sprite-name} {
+    .spriteElem(@sprite);
+  }
+  .spritesElem(@sprites, @i + 1);
+}
+
+:global {
+  .spritesElem(@spritesheet-sprites);
+}

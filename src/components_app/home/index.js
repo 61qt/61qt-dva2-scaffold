@@ -50,6 +50,10 @@ export default class Component extends React.Component {
             })
           }
           <br />
+          <div>
+            <span className="sp sp-search" />
+            <span className="sp sp-mail" />
+          </div>
           {
             this.iconArr.map((icon) => {
               return (<Svg key={icon.type} link={icon.url} style={{ fontSize: '40px', color: '#000000' }} />);
