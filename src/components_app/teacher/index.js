@@ -143,7 +143,7 @@ export default class Component extends React.Component {
           </Access>
           <span>
             <Access auth="teacher.export">
-              <Download size="small" path="teacher/export" query={{ filter: teacherState.listState.filter }}>导出列表</Download>
+              <Download confirm="true" size="small" path="teacher/export" query={{ filter: teacherState.listState.filter }}>导出列表</Download>
             </Access>
           </span>
         </div>

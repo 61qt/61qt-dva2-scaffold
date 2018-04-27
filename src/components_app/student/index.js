@@ -147,9 +147,8 @@ export default class Component extends React.Component {
 
         <div className={styles.tableTitleAction}>
           <Access auth="student.export">
-            <Download confirm="true" selectRow={this.columns} size="small" path="student/export" query={{ filter: studentState.listState.filter }}>导出列表(弹窗确认)</Download>
+            <Download confirm="true" selectRow={this.columns} size="small" path="student/export" query={{ filter: studentState.listState.filter }}>导出列表</Download>
             &nbsp;
-            <Download selectRow={this.columns} size="small" path="student/export" query={{ filter: studentState.listState.filter }}>导出列表</Download>
           </Access>
           <Access auth="student.store">
             <NavLink to={Filters.path('student_add', {})} activeClassName="link-active">
