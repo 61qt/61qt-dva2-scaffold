@@ -251,7 +251,6 @@ export default function modelFactory({
         });
         return newState;
       },
-
     },
     subscriptions: {},
   });
