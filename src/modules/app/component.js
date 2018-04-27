@@ -13,7 +13,7 @@ import User from '../../utils/user';
 import Layout from '../../components_atom/layout';
 import { undershoot as sentryUndershoot } from '../../utils/dva-sentry';
 import styles from './index.less';
-import Router from './router';
+import RouterConfig from './router_config';
 
 let prolongingInterval = '';
 
@@ -95,7 +95,7 @@ export default class Component extends React.Component {
       location={props.location}
       history={props.history}
       breadcrumb={breadcrumb}>
-      <Router {...this.props} />
+      <RouterConfig {...this.props} />
     </Layout>);
   }
 

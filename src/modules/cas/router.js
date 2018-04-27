@@ -4,19 +4,19 @@ import { Router, Switch, Route, Redirect } from 'dva/router';
 import { locales, LocaleProvider } from 'antd';
 
 // 获取授权的模块，非精确匹配
-import Cas from '../../routes/cas';
+import Component from './component';
 
 const zhCN = _.get(locales, 'zh_CN');
 
-function RouterConfig({ history }) {
+function router({ history }) {
   return (<LocaleProvider locale={zhCN}>
     <Router history={history}>
       <Switch>
-        <Route path="/cas" component={Cas} />
+        <Route path="/cas" component={Component} />
         <Redirect to="/cas" />
       </Switch>
     </Router>
   </LocaleProvider>);
 }
 
-export default RouterConfig;
+export default router;
