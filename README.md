@@ -27,7 +27,6 @@
 # 开发指南
 
 ## clone
-git cline git@gitlab.61qt.cn:edu/zhangye-smart-edu-pc.git
 
 ## 安装依赖
 
