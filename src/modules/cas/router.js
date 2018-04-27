@@ -11,6 +11,12 @@ const baseUrl = '/cas/';
 
 /* eslint-disable import/first, import/newline-after-import */
 routeArr.push({
+  name: 'loading',
+  path: '/loading',
+  exact: true,
+  component: require('../../components_common/loading').default,
+});
+routeArr.push({
   name: 'forget',
   path: 'forget',
   exact: true,
