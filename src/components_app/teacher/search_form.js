@@ -1,4 +1,5 @@
 import React from 'react';
+import { throttle } from 'react-decoration';
 import _ from 'lodash';
 import { connect } from 'dva';
 import { Button, Form, Input, Col, Row, Icon, Select } from 'antd';
@@ -43,7 +44,6 @@ export default class Component extends React.Component {
       expand: props.listState.expand || false,
       col: 12,
     };
-    this.triggerHandleSubmit = _.debounce(this.triggerHandleSubmit, 200);
   }
 
   componentWillMount = () => {}
@@ -53,6 +53,7 @@ export default class Component extends React.Component {
     this.triggerHandleSubmit();
   }
 
+  @throttle(200)
   triggerHandleSubmit = () => {
     this.handleSubmit({ loadOldPage: true });
   }
