@@ -1,5 +1,4 @@
 import React from 'react';
-import { throttle } from 'react-decoration';
 import _ from 'lodash';
 import moment from 'moment';
 import { connect } from 'dva';
@@ -77,7 +76,6 @@ export default class Component extends React.Component {
     this.triggerHandleSubmit();
   }
 
-  @throttle(200)
   triggerHandleSubmit = () => {
     this.handleSubmit({ loadOldPage: true });
   }
