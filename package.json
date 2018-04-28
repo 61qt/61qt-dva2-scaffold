@@ -42,6 +42,7 @@
     "git-rev-sync": "^1.11.1",
     "husky": "^0.12.0",
     "moment": "^2.22.1",
+    "react-decoration": "^2.0.0",
     "redbox-react": "^1.4.3",
     "rimraf": "^2.6.2",
     "roadhog": "^2.0.0",
