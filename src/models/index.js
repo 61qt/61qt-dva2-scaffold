@@ -1,6 +1,7 @@
 const models = [
-  require('./area').default,
+  require('./admin_school').default,
   require('./all_resource').default,
+  require('./area').default,
   require('./breadcrumb').default,
   require('./ctrl_d').default,
   require('./foreign_select').default,

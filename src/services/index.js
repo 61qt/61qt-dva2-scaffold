@@ -1,3 +1,5 @@
+// eslint-disable-next-line camelcase
+import admin_school from './admin_school';
 import common from './common';
 import post from './post';
 import specialty from './specialty';
@@ -23,6 +25,7 @@ http.interceptors.request.use(requestInterceptor, (error) => {
 http.interceptors.response.use(responseSuccessInterceptor, responseFailInterceptor);
 
 export default {
+  admin_school,
   common,
   post,
   specialty,
