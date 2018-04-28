@@ -10,4 +10,8 @@ const http = axios.create({
   baseURL: apiBaseUrl,
 });
 
+export {
+  apiBaseUrl,
+};
+
 export default http;
