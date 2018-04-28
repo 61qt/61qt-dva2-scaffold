@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 // import { Link } from 'dva/router';
-import { Modal, Spin, Upload, message, Button } from 'antd';
+import { Modal, Progress, Spin, Upload, message, Button } from 'antd';
 import CONSTANTS from '../../constants';
 import upload from '../../utils/download';
 import User from '../../utils/user';
@@ -23,6 +23,8 @@ export default class Component extends React.Component {
       visible: false,
       submitting: false,
       random: random(),
+      file: {},
+      info: {},
     };
 
     debugAdd('upload', this);
@@ -88,34 +90,39 @@ export default class Component extends React.Component {
       headers: {
         Authorization: `Bearer ${User.token}`,
       },
-      beforeUpload: () => {
+      beforeUpload: (file) => {
         this.setState({
           visible: true,
+          file,
           submitting: true,
         });
         return true;
       },
       onChange: (info) => {
-        if (100 <= info.file.percent) {
+        this.setState({
+          info,
+        });
+        if ('done' === info.file.status) {
+          message.success(`${info.file.name} file uploaded successfully`);
+        }
+        else if ('error' === info.file.status) {
+          message.error(`${info.file.name} file upload failed.`);
+        }
+
+        if (-1 < ['error', 'done'].indexOf(info.file.status)) {
           this.setState({
-            visible: false,
+            // visible: false,
             submitting: false,
           });
-
-          if ('done' === info.file.status) {
-            message.success(`${info.file.name} file uploaded successfully`);
-          }
-          else if ('error' === info.file.status) {
-            message.error(`${info.file.name} file upload failed.`);
-          }
-
-          if ('error' === info.file.status && 'function' === typeof this.props.onUploaded) {
+          if ('function' === typeof this.props.onUploaded) {
             this.props.onUploaded(info);
           }
         }
       },
     };
 
+    const percent = parseInt(_.get(this.state.info, 'file.percent') || 0, 10);
+    const status = _.get(this.state.info, 'file.status') || 'uploading';
     return (<span key={this.state.random}>
       <Modal
         visible={this.state.visible}
@@ -123,9 +130,22 @@ export default class Component extends React.Component {
         keyboard="false"
         maskClosable="false"
         footer={null}>
-        <Spin spinning={this.state.submitting}>
+        <Spin spinning={false} data-bak-spinning={this.state.submitting}>
           <div className={styles.uploadTipContent}>
-            <span>正在批量导入中，请耐心等待</span>
+            <div>{this.state.file.name}</div>
+            <br />
+            <Progress percent={percent} status={'uploading' === status} />
+            <br />
+            <br />
+            {
+              'uploading' === status ? (<div>正在批量导入中，请耐心等待</div>) : null
+            }
+            {
+              'error' === status ? (<div>上传失败</div>) : null
+            }
+            {
+              'done' === status ? (<div>上传成功</div>) : null
+            }
           </div>
         </Spin>
         <div className={styles.uploadCancelAction}>
