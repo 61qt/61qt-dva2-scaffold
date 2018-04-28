@@ -1,5 +1,5 @@
 /* eslint-disable */
-// <!-- Hotjar Tracking Code for https://*s.61qt.cn -->
+// <!-- Hotjar Tracking Code -->
 if (__PROD__) {
   (function(h,o,t,j,a,r){
       h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
