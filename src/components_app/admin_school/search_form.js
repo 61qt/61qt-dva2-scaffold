@@ -94,6 +94,17 @@ export default class Component extends React.Component {
 
     // To generate mock Form.Item
     const children = [];
+
+    children.push((
+      <Col span={this.state.col} key="city_id">
+        <Form.Item {...formItemLayout} label="城市">
+          {
+            getFieldDecorator('city_id')(<Input size="small" placeholder="选择城市" />)
+          }
+        </Form.Item>
+      </Col>
+    ));
+
     children.push((
       <Col span={this.state.col} key="name">
         <Form.Item {...formItemLayout} label="姓名">
