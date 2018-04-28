@@ -162,7 +162,9 @@ export default class Component extends React.Component {
         </h3>
 
         <div className="table-title-action">
-          <Upload onUploaded={this.onUploaded} size="small" path="student?upload">批量导入</Upload>
+          <Access auth="student.store">
+            <Upload onUploaded={this.onUploaded} size="small" path="student?upload">批量导入</Upload>
+          </Access>
           <Access auth="student.export">
             <Download confirm="true" selectRow={this.columns} size="small" path="student/export" query={{ filter: studentState.listState.filter }}>批量导出</Download>
           </Access>
