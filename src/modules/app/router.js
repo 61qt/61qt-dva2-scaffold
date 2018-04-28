@@ -34,6 +34,33 @@ routeArr.push({
   component: require('../../components_app/news').default,
 });
 
+// 需要重新写。 begin
+routeArr.push({
+  name: 'admin_school_edit',
+  path: '/admin_school/:id/edit',
+  exact: true,
+  component: require('../../components_app/student_add').default,
+});
+routeArr.push({
+  name: 'admin_school_add',
+  path: '/admin_school/add',
+  exact: true,
+  component: require('../../components_app/student_add').default,
+});
+routeArr.push({
+  name: 'admin_school_detail',
+  path: '/admin_school/:id',
+  exact: true,
+  component: require('../../components_app/student_detail').default,
+});
+// 需要重新写。 end
+routeArr.push({
+  name: 'admin_school',
+  path: '/admin_school',
+  exact: true,
+  component: require('../../components_app/admin_school').default,
+});
+
 routeArr.push({
   name: 'student_edit',
   path: '/student/:id/edit',
