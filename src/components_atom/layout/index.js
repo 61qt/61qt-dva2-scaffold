@@ -183,9 +183,7 @@ export default class Component extends React.Component {
         <style>{globalStyle}</style>
         <Header {...this.props} {...this.state} className="header" />
         <Layout>
-          <Layout.Sider
-            width={200}
-            className={styles.sider}>
+          <Layout.Sider width={160} className={styles.sider}>
             <AppMenu collapsed={this.state.collapsed} location={location} history={history} />
           </Layout.Sider>
           <Layout>

@@ -235,7 +235,7 @@ export default class Component extends React.Component {
     return (<div className="mainLayoutMenuContainer" style={menuContainerStyle}>
       <Menu
         key={`menu_${JSON.stringify(collapsed)}`}
-        inlineIndent={collapsed ? 0 : 24}
+        inlineIndent={collapsed ? 0 : 16}
         theme={this.state.theme}
         mode={collapsed ? 'vertical' : 'inline'}
         openKeys={this.state.openKeys}
