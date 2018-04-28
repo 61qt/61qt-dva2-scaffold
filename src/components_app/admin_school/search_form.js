@@ -73,21 +73,17 @@ export default class Component extends ComponentSearchForm {
   constructor(props) {
     super(props);
     debugAdd('admin_school_search_from', this);
-    const { getFieldDecorator } = props.form;
 
     this.state = {
       expand: props.listState.expand || false,
       shownCount: 3,
-      children: buildSearchCol({ getFieldDecorator }),
+      children: buildSearchCol({ getFieldDecorator: props.form.getFieldDecorator }),
     };
-
-    window.console.log('constructor', this.state.children.length);
   }
 
   componentWillReceiveProps = () => {
-    const { getFieldDecorator } = this.props.form;
     this.setState({
-      children: buildSearchCol({ getFieldDecorator }),
+      children: buildSearchCol({ getFieldDecorator: this.props.form.getFieldDecorator }),
     });
   }
 }
