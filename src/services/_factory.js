@@ -1,9 +1,11 @@
 import _ from 'lodash';
 
-import http from '../utils/http';
+import http, {
+  apiBaseUrl,
+} from '../utils/http';
 import CONSTANTS from '../constants';
 
-export { http };
+export { http, apiBaseUrl };
 
 export default function actionFactory({
   namespace,
