@@ -17,47 +17,45 @@ export default function actionFactory({
   const service = {
     // 列表
     list: (options = {}) => {
-      const {
-        page = 1,
-        filter = '',
-        pageSize = PAGE_SIZE,
-        orderBy = '',
-        sort = '',
-        ignoreFilter = 0,
-        select = ['admin.name'].join(','),
-        query,
-        isMaxList = false,
-      } = options;
-      let typeSelectCustom = '';
-      if (isMaxList) {
-        typeSelectCustom = _.get(selectCustom, 'maxList');
+      let select = '';
+      if (options.isMaxList) {
+        select = _.get(selectCustom, 'maxList');
       }
       else {
-        _.get(selectCustom, 'list');
+        select = _.get(selectCustom, 'list');
       }
-      return http.get(`/${namespace}?page=${page}&per_page=${pageSize}&filter=${filter}&select=${typeSelectCustom || select}&ignore_filter=${ignoreFilter}&order_by=${orderBy}&sort=${sort}${query ? '&' : ''}${query}`);
+      if (!select) {
+        select = options.select || ['admin.name'].join(',');
+      }
+
+      const searchArr = [
+        `page=${options.page || 1}`,
+        `per_page=${options.pageSize || PAGE_SIZE}`,
+        `filter=${options.filter || ''}`,
+        `select=${select}`,
+        `ignore_filter=${options.ignoreFilter || 0}`,
+        `order_by=${options.orderBy || ''}`,
+        `sort=${options.sort || ''}`,
+        `${options.query ? '&' : ''}${options.query}`,
+      ];
+      return http.get(`/${namespace}?${searchArr.join('&')}`, options.config || '');
     },
     // 详情
     detail: (options) => {
-      const typeSelectCustom = _.get(selectCustom, 'detail');
-      const { id, select = ['admin.name'].join(',') } = options;
-      return http.get(`/${namespace}/${id}?select=${typeSelectCustom || select}`);
+      const select = _.get(selectCustom, 'detail') || options.select || ['admin.name'].join(',');
+      return http.get(`/${namespace}/${options.id}?select=${select}`, options.config);
     },
     // 删除
-    remove: (id) => {
-      return http.delete(`/${namespace}/${id}`, {});
+    remove: (id, values = {}, config = {}) => {
+      return http.delete(`/${namespace}/${id}`, values, config);
     },
     // 编辑
-    update: (id, values) => {
-      return http.put(`/${namespace}/${id}`, {
-        ...values,
-      });
+    update: (id, values = {}, config = {}) => {
+      return http.put(`/${namespace}/${id}`, values, config);
     },
     // 新增
-    create: (values) => {
-      return http.post(`/${namespace}`, {
-        ...values,
-      });
+    create: (values, config) => {
+      return http.post(`/${namespace}`, values, config);
     },
   };
 
