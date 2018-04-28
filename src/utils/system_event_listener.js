@@ -6,10 +6,12 @@ import Cookies from 'js-cookie';
 import CONSTANTS from '../constants';
 
 jQuery(window).on(CONSTANTS.EVENT.CAS_JUMP_AUTH, () => {
-  // eslint-disable-next-line no-console
   let callbackHref = window.location.href;
   callbackHref = callbackHref.replace(/#*?&*?ctrl_d=([\d-]+)/ig, '').replace(/#$/ig, '').replace(/\?$/ig, '');
-  window.location.replace(`${CONSTANTS.SYSTEM_CONFIG.CONFIG.CAS.DOMAIN}?redirect_uri=${encodeURIComponent(callbackHref)}`);
+  // eslint-disable-next-line camelcase
+  const redirect_uri = encodeURIComponent(callbackHref);
+  // eslint-disable-next-line camelcase
+  window.location.replace(`${CONSTANTS.SYSTEM_CONFIG.CONFIG.CAS.DOMAIN}?redirect_uri=${redirect_uri}`);
 });
 
 jQuery(window).on(CONSTANTS.EVENT.CAS_CALLBACK, (e, options) => {
