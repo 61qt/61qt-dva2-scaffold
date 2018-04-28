@@ -56,22 +56,28 @@ export default class Component extends React.Component {
       referrer = '';
     }
 
-    let dt = query.dt;
-    if (!query.dt && !referrer) {
+    // eslint-disable-next-line camelcase
+    let redirect_uri = query.redirect_uri;
+    // eslint-disable-next-line camelcase
+    if (!query.redirect_uri && !referrer) {
       if (window.console && window.console.log) {
         // eslint-disable-next-line no-alert
         window.console.log('没有输入路径，将自动跳转到统一管理平台');
       }
 
-      dt = encodeURIComponent(CONSTANTS.SYSTEM_CONFIG.CONFIG.APP.DOMAIN);
-      window.location.replace(`${url}${window.location.search}${window.location.search ? '&' : '?'}dt=${dt}`);
+      // eslint-disable-next-line camelcase
+      redirect_uri = encodeURIComponent(CONSTANTS.SYSTEM_CONFIG.CONFIG.APP.DOMAIN);
+      // eslint-disable-next-line camelcase
+      window.location.replace(`${url}${window.location.search}${window.location.search ? '&' : '?'}redirect_uri=${redirect_uri}`);
     }
-    else if (!query.dt && referrer) {
-      dt = encodeURIComponent(document.referrer);
-      window.location.replace(`${url}${window.location.search}${window.location.search ? '&' : '?'}dt=${dt}`);
+    else if (!query.redirect_uri && referrer) {
+      // eslint-disable-next-line camelcase
+      redirect_uri = encodeURIComponent(document.referrer);
+      // eslint-disable-next-line camelcase
+      window.location.replace(`${url}${window.location.search}${window.location.search ? '&' : '?'}redirect_uri=${redirect_uri}`);
     }
 
-    Cookies.set(CONSTANTS.SYSTEM_CONFIG.CONFIG.CAS.CALLBACK_URL, dt);
+    Cookies.set(CONSTANTS.SYSTEM_CONFIG.CONFIG.CAS.CALLBACK_URL, redirect_uri);
   }
 
   render() {

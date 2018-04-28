@@ -380,9 +380,11 @@ export default class Component extends React.Component {
       message.success(`${this.editInfo.text}学生成功`);
       this.successCallback();
       const { location } = this.props;
-      const dt = _.get(location, 'query.dt');
-      if (dt) {
-        this.props.history.replace(dt);
+      // eslint-disable-next-line camelcase
+      const redirect_uri = _.get(location, 'query.redirect_uri');
+      // eslint-disable-next-line camelcase
+      if (redirect_uri) {
+        this.props.history.replace(redirect_uri);
       }
       else {
         this.props.history.push(Filters.path('student', {}));
