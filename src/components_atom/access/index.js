@@ -38,7 +38,16 @@ export default class Component extends React.Component {
 
   render() {
     const { children, resource, auth = '' } = this.props;
-    if ('!' !== auth && (!auth || checkAuthIsShow({ auth, resource }))) {
+    let isShow = false;
+
+    if ('function' === typeof this.props.auth) {
+      isShow = this.props.auth(resource) || false;
+    }
+    else {
+      isShow = '!' !== auth && (!auth || checkAuthIsShow({ auth, resource }));
+    }
+
+    if (isShow) {
       if (React.isValidElement(children)) {
         return children;
       }
