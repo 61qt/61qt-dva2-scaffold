@@ -173,6 +173,21 @@ export function requestInterceptor(config) {
   // eslint-disable-next-line no-param-reassign
   config.startTime = new Date() * 1;
 
+  const noTokenMsgData = {
+    msg: '没有密钥，用户已经退出',
+    data: {},
+    status_code: 0,
+    code: 0,
+  };
+
+  const noTokenRejData = {
+    ...config,
+    config,
+    data: {
+      data: noTokenMsgData,
+    },
+  };
+
   if (config.headers && 'Content-Type' in config.headers) {
     // eslint-disable-next-line no-param-reassign
     config.headers['Content-Type'] = config.headers['Content-Type'];
@@ -192,29 +207,15 @@ export function requestInterceptor(config) {
   }
   else if (!User.token && !config.skipAuthorization) {
     // 这里应该退出了，应该跳到登录页面
-    return Promise.reject({
-      msg: '没有密钥，用户已经退出',
-      data: {},
-      status_code: 0,
-      code: 0,
-    });
+    return Promise.reject(noTokenRejData);
   }
 
   // 调试强制
   if (window.forceRejectRequest) {
     window.forceRejectRequest = false;
-    const rejData = {
-      ...config,
-      config,
-      data: {
-        msg: '没有密钥，用户已经退出',
-        data: {},
-        status_code: 0,
-        code: 0,
-      },
-    };
 
-    return Promise.reject(rejData);
+
+    return Promise.reject(noTokenRejData);
   }
 
   // 判断，写多几个，方便阅读。
