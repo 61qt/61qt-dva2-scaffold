@@ -102,7 +102,7 @@ function buildColumnFormItem({
     const buildElemFormItemLayout = elem.formItemLayout || {
       ...formItemLayout,
     };
-    const formItem = (<Form.Item key={elem.key || elem.dataIndex} {...formItemOptions} {...buildElemFormItemLayout} label={label ? elemTitle : ''} {...elemValidate} className={`${elem.className} ${rowIsHide ? 'ant-hide' : ''}`}>
+    const formItem = (<Form.Item key={elem.key || elem.dataIndex} {...formItemOptions} {...buildElemFormItemLayout} label={label ? elemTitle : ''} {...elemValidate} className={`${elem.className || ''} ${rowIsHide ? 'ant-hide' : ''}`}>
       { form.getFieldDecorator(elem.dataIndex, options)(elemRender) }
     </Form.Item>);
 

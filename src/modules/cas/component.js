@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import Cookies from 'js-cookie';
 import queryString from 'query-string';
+import { Layout } from 'antd';
 
 import styles from './index.less';
 import CONSTANTS from '../../constants';
@@ -74,8 +75,8 @@ export default class Component extends React.Component {
   }
 
   render() {
-    return (
-      <div className={styles.normal}>
+    return (<Layout className={styles.normal}>
+      <Layout.Content>
         <div className={styles.header}>
           <img alt="logo" className={styles.logoImage} src={CONSTANTS.LOGO.LOGO} />
           <br /><br />
@@ -84,13 +85,13 @@ export default class Component extends React.Component {
             <div>智慧教育云平台统一登录系统</div>
           </div>
         </div>
-
         <Router {...this.props} />
-
-        <p className={styles.copyright}>
+      </Layout.Content>
+      <Layout.Footer>
+        <div className={styles.copyright}>
           Copyright © { moment().format('YYYY') } <a href="http://www.61qt.cn" target="_blank" rel="noopener noreferrer">XX网</a> • <a href="http://www.61qt.cn" target="_blank" rel="noopener noreferrer">XX网</a>
-        </p>
-      </div>
-    );
+        </div>
+      </Layout.Footer>
+    </Layout>);
   }
 }

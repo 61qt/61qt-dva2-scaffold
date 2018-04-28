@@ -237,7 +237,7 @@ export default class Component extends React.Component {
       <div className={styles.normal}>
         <Spin spinning={this.state.submitting}>
           <div className={styles.form}>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit} className="cas-reg-form">
               {
                 formItem.map((elem) => {
                   return elem.render();
