@@ -1,20 +1,20 @@
-# 这个是最原始版本的例子。
+# 这个是 app 的例子，直接改 ${devRoot} 即可。
 # 需要把 ${devRoot} 替换成仓库目录。
-# 需要把 ${moduleName} 替换成模块的名称。
-# 需要把 ${modulePort} 替换成模块开启运行时候的端口。
-# 打包之后访问的时候，直接访问 ${moduleName}.61qt.cn
-# 打包之前的访问，直接访问 ${moduleName}-dev.61qt.cn
+# app 为模块的名称。
+# 9101 为模块开启运行时候的端口。
+# 打包之后访问的时候，直接访问 app.61qt.cn
+# 打包之前的访问，直接访问 app-dev.61qt.cn
 # 证书制作参考 http://blog.sina.com.cn/s/blog_870c35680101bws1.html ，所以访问的时候会有警告处理，记得点击确认。
 
 server {
   listen       80;
-  server_name  ${moduleName}.61qt.cn ${moduleName}-dev.61qt.cn;
+  server_name  app.61qt.cn app-dev.61qt.cn;
   rewrite ^(.*)$ https://$http_host/ break;
 }
 
 server {
   listen       443;
-  server_name  ${moduleName}-dev.61qt.cn;
+  server_name  app-dev.61qt.cn;
 
   ssl on;
   ssl_certificate ${devRoot}/nginx/ssl.crt;
@@ -26,12 +26,12 @@ server {
   add_header Strict-Transport-Security "max-age=1";
 
   location = / {
-    rewrite ^(.*)$ https://$http_host/${moduleName}/ break;
+    rewrite ^(.*)$ https://$http_host/app/ break;
   }
 
   location / {
     # 注意 localhost 改造成为那个 ip 和端口
-    proxy_pass http://localhost:${modulePort}/;
+    proxy_pass http://localhost:9101/;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -41,20 +41,20 @@ server {
     proxy_set_header Connection "upgrade";
   }
 
-  location ^~ /${moduleName}/ {
+  location ^~ /app/ {
     # 注意改造成为自己启动的那个 ip 及端口
-    proxy_pass http://localhost:${modulePort}/index.html?#;
+    proxy_pass http://localhost:9101/index.html?#;
   }
 
-  location ^~ /${moduleName} {
+  location ^~ /app {
     # 注意改造成为自己启动的那个 ip 及端口
-    proxy_pass http://localhost:${modulePort}/index.html?#;
+    proxy_pass http://localhost:9101/index.html?#;
   }
 }
 
 server {
   listen       443;
-  server_name  ${moduleName}-cdn.61qt.cn ${moduleName}.61qt.cn;
+  server_name  app-cdn.61qt.cn app.61qt.cn;
 
   ssl on;
   ssl_certificate ${devRoot}/nginx/ssl.crt;
@@ -67,12 +67,12 @@ server {
 
   location = / {
     # gulp webpack output dist path
-    rewrite ^(.*)$ https://$http_host/${moduleName}/ break;
+    rewrite ^(.*)$ https://$http_host/app/ break;
   }
 
   location / {
     # dist 为打包编译后的文件目录
-    root ${devRoot}/prod_${moduleName}/;
+    root ${devRoot}/prod_app/;
 
     add_header 'Access-Control-Allow-Origin' '*';
     add_header 'Access-Control-Allow-Credentials' 'true';
@@ -80,8 +80,8 @@ server {
     add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
   }
 
-  location ^~ /${moduleName} {
-    root ${devRoot}/prod_${moduleName}/;
+  location ^~ /app {
+    root ${devRoot}/prod_app/;
     index index.html;
     try_files $uri $uri/ $uri.html /index.html =404;
   }
