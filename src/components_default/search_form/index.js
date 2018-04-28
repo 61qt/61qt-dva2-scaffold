@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Button, Form, Input, Col, Row, Icon } from 'antd';
+import { Button, Form, Col, Row, Icon } from 'antd';
 import buildListSearchFilter from '../../utils/build_list_search_filter';
 
 const formItemLayout = {
@@ -13,6 +13,8 @@ const formItemLayout = {
     sm: { span: 14 },
   },
 };
+
+export { formItemLayout };
 
 function getFilter(values) {
   return buildListSearchFilter({
@@ -28,13 +30,13 @@ function getFilter(values) {
   });
 }
 
-
 export default class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       expand: false,
-      col: 8,
+      shownCount: 3,
+      children: [],
     };
   }
 
@@ -79,33 +81,17 @@ export default class Component extends React.Component {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-
-    // To generate mock Form.Item
-    const children = [];
-
-    children.push((
-      <Col span={this.state.col} key="name">
-        <Form.Item {...formItemLayout} label="名称">
-          {
-            getFieldDecorator('city_id')(<Input size="small" placeholder="名称搜索" />)
-          }
-        </Form.Item>
-      </Col>
-    ));
-
     const expand = this.state.expand;
-    const shownCount = 3;
     return (
       <Form
         className={`ant-advanced-search-form ant-advanced-search-form-small ${expand ? '' : 'is-close'}`}
         onSubmit={this.handleSubmit}
       >
         <Row gutter={40}>
-          {children.slice(0, shownCount)}
+          {this.state.children.slice(0, this.state.shownCount)}
         </Row>
         <Row className={!expand ? 'ant-hide' : ''} gutter={40}>
-          {children.slice(shownCount)}
+          {this.state.children.slice(this.state.shownCount)}
         </Row>
         <Row>
           <Col span={24} style={{ textAlign: 'right' }}>
