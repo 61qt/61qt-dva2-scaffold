@@ -38,7 +38,7 @@ export default class Component extends React.Component {
       return false;
     }
 
-    Services.common.ticketLogin(ticket).then((res) => {
+    Services.common.ticketToken(ticket).then((res) => {
       const data = res.data || {};
       User.token = data.token;
       message.success('自动登录成功');

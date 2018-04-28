@@ -40,9 +40,9 @@ Service.refreshToken = () => {
   });
 };
 
-Service.ticketLogin = (ticket) => {
+Service.ticketToken = (ticket) => {
   // ticket 登录，不需要带 token
-  return http.get(`/token/${ticket}`, {}, {
+  return http.get(`/token/${ticket}`, {
     skipAuthorization: true,
   });
 };
