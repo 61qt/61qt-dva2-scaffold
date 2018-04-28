@@ -2,21 +2,21 @@
 # 需要把 ${devRoot} 替换成仓库目录。
 # app 为模块的名称。
 # 9101 为模块开启运行时候的端口。
-# 打包之后访问的时候，直接访问 app.61qt.cn
-# 打包之前的访问，直接访问 app-dev.61qt.cn
+# 打包之前的访问，直接访问 app-dev.edu.com app.edu.com app-dev.61qt.cn app.61qt.cn
 # 证书制作参考 http://blog.sina.com.cn/s/blog_870c35680101bws1.html ，所以访问的时候会有警告处理，记得点击确认。
+
+# server {
+#   listen       80;
+#   server_name  app.edu.com app-dev.edu.com app.61qt.cn app-dev.61qt.cn;
+#   rewrite ^(.*)$ https://$http_host/ break;
+# }
 
 server {
   listen       80;
-  server_name  app.61qt.cn app-dev.61qt.cn;
-  rewrite ^(.*)$ https://$http_host/ break;
-}
+  listen       443 ssl;
+  server_name  app-dev.edu.com app.edu.com app-dev.61qt.cn app.61qt.cn;
 
-server {
-  listen       443;
-  server_name  app-dev.61qt.cn;
-
-  ssl on;
+  # ssl on;
   ssl_certificate ${devRoot}/nginx/ssl.crt;
   ssl_certificate_key ${devRoot}/nginx/ssl.key;
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -26,7 +26,7 @@ server {
   add_header Strict-Transport-Security "max-age=1";
 
   location = / {
-    rewrite ^(.*)$ https://$http_host/app/ break;
+    rewrite ^(.*)$ $scheme://$http_host/app/ break;
   }
 
   location / {
@@ -53,10 +53,11 @@ server {
 }
 
 server {
-  listen       443;
-  server_name  app-cdn.61qt.cn app.61qt.cn;
+  listen       80;
+  listen       443 ssl;
+  server_name  app-cdn.edu.com app-static.edu.com app-cdn.61qt.cn app-static.61qt.cn;
 
-  ssl on;
+  # ssl on;
   ssl_certificate ${devRoot}/nginx/ssl.crt;
   ssl_certificate_key ${devRoot}/nginx/ssl.key;
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -67,7 +68,7 @@ server {
 
   location = / {
     # gulp webpack output dist path
-    rewrite ^(.*)$ https://$http_host/app/ break;
+    rewrite ^(.*)$ $scheme://$http_host/app/ break;
   }
 
   location / {
