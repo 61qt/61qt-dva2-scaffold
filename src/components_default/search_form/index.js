@@ -35,7 +35,7 @@ export default class Component extends React.Component {
     super(props);
     this.state = {
       expand: false,
-      shownCount: 3,
+      showCount: 3,
     };
   }
 
@@ -92,10 +92,10 @@ export default class Component extends React.Component {
         onSubmit={this.handleSubmit}
       >
         <Row gutter={40}>
-          {searchCol.slice(0, this.state.shownCount)}
+          {searchCol.slice(0, this.state.showCount)}
         </Row>
         <Row className={!expand ? 'ant-hide' : ''} gutter={40}>
-          {searchCol.slice(this.state.shownCount)}
+          {searchCol.slice(this.state.showCount)}
         </Row>
         <Row>
           <Col span={24} style={{ textAlign: 'right' }}>

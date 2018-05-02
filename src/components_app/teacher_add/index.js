@@ -547,7 +547,7 @@ export default class Component extends React.Component {
     });
 
     const expand = this.state.expand;
-    const shownCount = DICT.TEACHER.IS_BELONG.NO === this.props.form.getFieldValue('is_belong') ? 12 : 11;
+    const showCount = DICT.TEACHER.IS_BELONG.NO === this.props.form.getFieldValue('is_belong') ? 12 : 11;
 
     return (
       <Spin spinning={this.state.submitting}>
@@ -556,12 +556,12 @@ export default class Component extends React.Component {
           onSubmit={this.handleSubmit}>
           <Well title={`${this.editInfo.text}教师`}>
             <Row gutter={40}>
-              {children.slice(0, shownCount)}
+              {children.slice(0, showCount)}
             </Row>
             <Row
               className={`${expand ? '' : 'ant-hide'}`}
               gutter={40}>
-              {children.slice(shownCount)}
+              {children.slice(showCount)}
             </Row>
           </Well>
           <Well holderplace>
