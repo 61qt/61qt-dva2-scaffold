@@ -15,6 +15,12 @@ const gender = {
 
 export default {
   USER: {
+    STATUS: {
+      NORMAL: 0,
+      ___NORMAL: '正常',
+      BAN: 1,
+      ___BAN: '禁用',
+    },
     USER_TYPE: {
       SUPER: 1,
       ___SUPER: '超级管理员',
