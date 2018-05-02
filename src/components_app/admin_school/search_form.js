@@ -8,11 +8,12 @@ import { Form, Input, Col } from 'antd';
 import ComponentsForm from '../../components_form';
 import ComponentSearchForm, { formItemLayout } from '../../components_default/search_form';
 // import Filters from '../../filters';
+import { DICT } from '../../constants';
 
 @Form.create()
 @connect((state) => {
   return {
-    listState: _.get(state.admin_school, 'listState') || {},
+    listState: _.get(state.user, 'listState') || {},
   };
 })
 export default class Component extends ComponentSearchForm {
@@ -23,6 +24,9 @@ export default class Component extends ComponentSearchForm {
     this.state = {
       expand: props.listState.expand || false,
       showCount: 3,
+      defaultFilter: [
+        ['user_type', '=', DICT.USER.USER_TYPE.SCHOOL],
+      ],
     };
   }
 
