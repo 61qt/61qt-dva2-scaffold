@@ -36,29 +36,29 @@ routeArr.push({
 
 // 需要重新写。 begin
 routeArr.push({
-  name: 'admin_school_edit',
-  path: '/admin_school/:id/edit',
+  name: 'admin_city_edit',
+  path: '/admin_city/:id/edit',
   exact: true,
   component: require('../../components_app/student_add').default,
 });
 routeArr.push({
-  name: 'admin_school_add',
-  path: '/admin_school/add',
+  name: 'admin_city_add',
+  path: '/admin_city/add',
   exact: true,
   component: require('../../components_app/student_add').default,
 });
 routeArr.push({
-  name: 'admin_school_detail',
-  path: '/admin_school/:id',
+  name: 'admin_city_detail',
+  path: '/admin_city/:id',
   exact: true,
   component: require('../../components_app/student_detail').default,
 });
 // 需要重新写。 end
 routeArr.push({
-  name: 'admin_school',
-  path: '/admin_school',
+  name: 'admin_city',
+  path: '/admin_city',
   exact: true,
-  component: require('../../components_app/admin_school').default,
+  component: require('../../components_app/admin_city').default,
 });
 
 routeArr.push({

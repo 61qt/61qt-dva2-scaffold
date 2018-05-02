@@ -19,13 +19,13 @@ import { DICT } from '../../constants';
 export default class Component extends ComponentSearchForm {
   constructor(props) {
     super(props);
-    debugAdd('admin_school_search_from', this);
+    debugAdd('admin_city_search_from', this);
 
     this.state = {
       expand: props.listState.expand || false,
       showCount: 3,
       defaultFilter: [
-        ['user_type', '=', DICT.USER.USER_TYPE.SCHOOL],
+        ['user_type', '=', DICT.USER.USER_TYPE.CITY],
       ],
     };
   }

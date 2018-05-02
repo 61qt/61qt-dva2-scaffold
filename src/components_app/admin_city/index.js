@@ -20,7 +20,7 @@ import Table from '../../components_atom/table';
 export default class Component extends React.Component {
   constructor(props) {
     super(props);
-    debugAdd('admin_school', this);
+    debugAdd('admin_city', this);
     this.columns = [
       {
         title: '编号',
@@ -83,7 +83,7 @@ export default class Component extends React.Component {
         render: (text, record) => {
           return (<span className={styles.operation}>
             <Access data-bak-auth="user.update">
-              <NavLink to={Filters.path('admin_school_edit', { id: record.id })} activeClassName="link-active">编辑</NavLink>
+              <NavLink to={Filters.path('admin_city_edit', { id: record.id })} activeClassName="link-active">编辑</NavLink>
             </Access>
           </span>);
         },
@@ -97,8 +97,8 @@ export default class Component extends React.Component {
       type: 'breadcrumb/current',
       payload: [
         {
-          name: '学校管理员管理',
-          url: Filters.path('admin_school', {}),
+          name: '市级管理员管理',
+          url: Filters.path('admin_city', {}),
         },
       ],
     });
@@ -143,8 +143,8 @@ export default class Component extends React.Component {
     const { userState } = this.props;
     return (
       <div className="clearfix">
-        <h3 className={styles.tableTitle} >
-          学校管理员列表
+        <h3 className="table-title">
+          市级管理员列表
           { userState.total ? <small>（共{userState.total}条）</small> : null }
         </h3>
 
@@ -156,8 +156,8 @@ export default class Component extends React.Component {
             <Download confirm="true" selectRow={this.columns} size="small" path="user/export" query={{ filter: userState.listState.filter }}>批量导出</Download>
           </Access>
           <Access data-bak-auth="user.store">
-            <NavLink to={Filters.path('admin_school_add', {})} activeClassName="link-active">
-              <Button size="small" type="primary" ghost>新增学校管理员</Button>
+            <NavLink to={Filters.path('admin_city_add', {})} activeClassName="link-active">
+              <Button size="small" type="primary" ghost>新增市级管理员</Button>
             </NavLink>
           </Access>
           <Download link="true" size="small" path="user/export/template">下载模板</Download>
