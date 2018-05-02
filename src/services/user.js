@@ -1,10 +1,10 @@
 import Factory, { http } from '../services/_factory';
 
-const namespace = 'student';
+const namespace = 'user';
 
 const schema = {
   list: `{
-    user {
+    ${namespace} {
       id
       name
     }

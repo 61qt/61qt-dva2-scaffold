@@ -7,7 +7,8 @@ import { message, Spin, Select, Form, Input, Button } from 'antd';
 import { NavLink } from 'dva/router';
 
 import styles from '../login/index.less';
-import CONSTANTS from '../../constants';
+// import CONSTANTS from '../../constants';
+import { DICT } from '../../constants';
 import Services from '../../services';
 import formErrorMessageShow from '../../utils/form_error_message_show';
 import Filters from '../../filters';
@@ -38,7 +39,9 @@ export default class Component extends React.Component {
         render: () => {
           return (<Select placeholder="请选择注册身份">
             {
-              Filters.dict(['user', 'role']).map((elem) => {
+              _.filter(Filters.dict(['user', 'user_type']), {
+                value: DICT.USER.USER_TYPE.PARENT,
+              }).map((elem) => {
                 return (<Select.Option key={elem.value} value={elem.value}>{elem.label}</Select.Option>);
               })
             }
@@ -225,7 +228,7 @@ export default class Component extends React.Component {
       columns: this.columns,
       shouldInitialValue: true,
       defaultValueSet: {
-        role: CONSTANTS.DICT.USER.ROLE.PARENT,
+        role: DICT.USER.USER_TYPE.PARENT,
       },
       formItemLayout: {},
       formValidate: this.state.formValidate,

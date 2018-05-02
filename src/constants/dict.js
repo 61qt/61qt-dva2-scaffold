@@ -15,8 +15,22 @@ const gender = {
 
 export default {
   USER: {
-    ROLE: {
-      PARENT: 0,
+    USER_TYPE: {
+      SUPER: 1,
+      ___SUPER: '超级管理员',
+      CITY: 2,
+      ___CITY: '市级管理员',
+      DISTRICT: 3,
+      ___DISTRICT: '县区级管理员',
+      SCHOOL: 4,
+      ___SCHOOL: '校级管理员',
+      BACKEND: 5,
+      ___BACKEND: '后台管理用户',
+      TEACHER: 6,
+      ___TEACHER: '教师',
+      STUDENT: 7,
+      ___STUDENT: '学生',
+      PARENT: 8,
       ___PARENT: '家长',
     },
   },
