@@ -7,6 +7,7 @@ import student from './student';
 // eslint-disable-next-line camelcase
 import sys_message from './sys_message';
 import teacher from './teacher';
+import user from './user';
 
 import { http } from './_factory';
 import {
@@ -32,5 +33,6 @@ export default {
   student,
   sys_message,
   teacher,
+  user,
 };
 
