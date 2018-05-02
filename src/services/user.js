@@ -11,6 +11,7 @@ const schema = {
       [
         'id',
         'name',
+        'city_id',
       ].join('\n')
     }}`,
   ].join('\n'),
