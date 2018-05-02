@@ -11,6 +11,7 @@ const models = [
   require('./student').default,
   require('./sys_message').default,
   require('./teacher').default,
+  require('./user').default,
 ];
 
 function modelReset(dispatch) {

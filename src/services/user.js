@@ -1,14 +1,19 @@
 import Factory, { http } from '../services/_factory';
+import FactoryGraphql from '../services/_factory_graphql';
 
 const namespace = 'user';
 
 const schema = {
-  list: `{
-    ${namespace} {
-      id
-      name
-    }
-  }`,
+  list: [
+    'id',
+    'name',
+    `userRoles{${
+      [
+        'id',
+        'name',
+      ].join('\n')
+    }}`,
+  ].join('\n'),
 };
 
 const Service = Factory({
@@ -16,11 +21,17 @@ const Service = Factory({
   schema,
 });
 
-Service.list = (values) => {
-  return http.post('/graphql', {
+const graphqlService = FactoryGraphql({
+  Service,
+  namespace,
+  schema,
+});
+
+graphqlService.fetch1 = (values) => {
+  return http.post('graphql', {
     ...values,
     query: schema.list,
   });
 };
 
-export default Service;
+export default graphqlService;
