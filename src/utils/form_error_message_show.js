@@ -19,9 +19,12 @@ function getMsgArr(errDataArgs) {
           return elem.message || JSON.stringify(elem);
         }).join(';');
       }
+      else if (_.isArray(tips) && 1 === tips.length) {
+        tips = tips[0];
+      }
 
       if ('object' === typeof tips) {
-        getMsgArr(tips);
+        msgArr = msgArr.concat(getMsgArr(tips));
       }
       else if (__DEV__) {
         msgArr = msgArr.concat(`${k}: ${tips}`);
@@ -74,11 +77,19 @@ function formErrorMessageShow(rej, options = {}) {
     return false;
   }
 
-  const errData = _.get(rej, 'data') || rej || {};
+  let errData = _.get(rej, 'data.errors[0]') || _.get(rej, 'data') || rej || {};
+  if (_.get(rej, 'data.errors[0].debugMessage')) {
+    try {
+      errData = JSON.parse(_.get(rej, 'data.errors[0].debugMessage'));
+    }
+    catch (e) {
+      // do nothing
+    }
+  }
 
   const msgArr = getMsgArr(errData);
 
-  const title = _.isString(rej.msg) ? rej.msg : '系统提示';
+  const title = errData.message || _.isString(rej.msg) ? errData.msg : '系统提示';
   notification.error({
     message: title,
     key,

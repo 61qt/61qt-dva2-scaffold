@@ -29,14 +29,14 @@ export default class Component extends React.Component {
         fixed: 'left',
         width: 100,
       },
+      // {
+      //   title: '名称',
+      //   dataIndex: 'name',
+      //   key: 'name',
+      //   width: 130,
+      // },
       {
-        title: '名称',
-        dataIndex: 'name',
-        key: 'name',
-        width: 130,
-      },
-      {
-        title: '登录账号',
+        title: '账号',
         dataIndex: 'username',
         key: 'username',
         width: 130,

@@ -78,8 +78,15 @@ function makeTimeoutDetection(uuid) {
 export function responseSuccessInterceptor(response) {
   clearNetworkTimeout(response.uuid || _.get(response, 'config.uuid'));
   const { data } = response;
+  // window.responseSuccessInterceptorResponse = response;
   jQuery(window).trigger('request', response);
   jQuery(window).trigger('httpFinish', response);
+  if (/\/graphql\/?$/.test(_.get(response, 'config.url'))) {
+    const errors = _.get(response, 'data.errors') || null;
+    if (errors) {
+      return Promise.reject(response);
+    }
+  }
   return data;
 }
 

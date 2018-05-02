@@ -103,8 +103,8 @@ export default function modelFactory({
         try {
           const data = yield call(Service.graphqlList, { page, filter, query, pageSize, orderBy, sort });
           const modelData = _.get(data, `data.${modelName}`);
-          window.listData = data;
-          window.listModelData = modelData;
+          // window.listData = data;
+          // window.listModelData = modelData;
           const start = modelData.per_page * 1 * (modelData.current_page * 1 - 1) * 1 + 1;
           const length = _.get(modelData, 'data.length') * 1 || 0;
           yield put({
@@ -171,7 +171,7 @@ export default function modelFactory({
         }
       },
 
-      *create({ payload: values }, { call, put }) {
+      *create({ payload: { values } }, { call, put }) {
         try {
           const data = yield call(Service.graphqlCreate, values);
           yield put({ type: 'reload' });
@@ -185,11 +185,15 @@ export default function modelFactory({
       *detail({ payload: values }, { call, put }) {
         try {
           const data = yield call(Service.graphqlDetail, values);
+          const detail = _.get(data, `data.${modelName}.data[0]`);
+          if (!detail) {
+            return Promise.reject('找不到该资源');
+          }
           yield put({
             type: 'saveDetail',
-            payload: data.data,
+            payload: detail,
           });
-          return data;
+          return detail;
         }
         catch (e) {
           return Promise.reject(e);

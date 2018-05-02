@@ -19,13 +19,7 @@ export default function actionFactory({
     ...Service,
     // 列表
     graphqlList: (options = {}) => {
-      let schema = '';
-      if (options.isMaxList) {
-        schema = _.get(schemaCustom, 'maxList') || _.get(schemaCustom, 'list');
-      }
-      else {
-        schema = _.get(schemaCustom, 'list');
-      }
+      let schema = _.get(schemaCustom, 'list');
       if (!schema) {
         schema = options.schema || '';
       }
@@ -68,24 +62,92 @@ export default function actionFactory({
       ];
       return http.post('/graphql', {
         query: schemaArr.join('\n'),
-      }, options.config || '');
+      }, options.config || {});
     },
     // 详情
     graphqlDetail: (options) => {
-      const select = _.get(schemaCustom, 'detail') || options.schema || ['admin.name'].join(',');
-      return http.post(`/graphql/${options.id}?select=${select}`, {}, options.config);
+      let schema = _.get(schemaCustom, 'list');
+      if (!schema) {
+        schema = options.schema || '';
+      }
+
+      const schemaArr = [
+        `{
+          ${namespace} (id: ${options.id}) {
+            data {
+              id
+              ${schema}
+            }
+          }
+        }`,
+      ];
+      return http.post('/graphql/', {
+        query: schemaArr.join('\n'),
+      }, options.config || {});
     },
     // 删除
     graphqlRemove: (id, values = {}, config = {}) => {
-      return http.post(`/graphql/${id}`, values, config);
+      return http.post('/graphql/', values, config);
     },
     // 编辑
-    graphqlUpdate: (id, values = {}, config = {}) => {
-      return http.post(`/graphql/${id}`, values, config);
+    graphqlUpdate: (id, values = {}, options = {}) => {
+      const valueArr = [];
+      for (const [key, value] of Object.entries(values)) {
+        if (_.isString(value)) {
+          if (/_id$/.test(key)) {
+            valueArr.push(`${key}: ${value || 0}`);
+          }
+          else {
+            valueArr.push(`${key}: "${value}"`);
+          }
+        }
+        else {
+          valueArr.push(`${key}: ${value}`);
+        }
+      }
+      valueArr.push(`id: ${id}`);
+      const schemaArr = [
+        `mutation {
+          updateCityAdmin (${valueArr.join(',')}) {
+            id
+            name
+          }
+        }`,
+      ];
+      return http.post('/graphql/', {
+        query: schemaArr.join('\n'),
+      }, options.config || {});
     },
     // 新增
-    graphqlCreate: (values, config) => {
-      return http.post('/graphql', values, config);
+    graphqlCreate: (values = {}, options = {}) => {
+      const valueArr = [];
+      for (const [key, value] of Object.entries(values)) {
+        if (_.isString(value)) {
+          if (/_id$/.test(key)) {
+            valueArr.push(`${key}: ${value || 0}`);
+          }
+          else if (/phone/.test(key)) {
+            valueArr.push(`${key}: ${value || 0}`);
+          }
+          else {
+            valueArr.push(`${key}: "${value}"`);
+          }
+        }
+        else {
+          valueArr.push(`${key}: ${value}`);
+        }
+      }
+      const schemaArr = [
+        `mutation {
+          createCityAdmin (${valueArr.join(',')}) {
+            id
+            name
+          }
+        }`,
+      ];
+      return http.post('/graphql/', {
+        query: schemaArr.join('\n'),
+      }, options.config || {});
     },
   };
 

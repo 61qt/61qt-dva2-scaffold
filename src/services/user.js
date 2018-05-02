@@ -3,12 +3,14 @@ import FactoryGraphql from '../services/_factory_graphql';
 
 const namespace = 'user';
 
+const modelSchema = [
+  'id',
+  'username',
+  'user_type',
+];
 const schema = {
   list: [
-    'id',
-    // 'name',
-    // 'city_id',
-    'username',
+    ...modelSchema,
     `userRoles{${
       [
         'id',

@@ -39,13 +39,13 @@ routeArr.push({
   name: 'admin_city_edit',
   path: '/admin_city/:id/edit',
   exact: true,
-  component: require('../../components_app/student_add').default,
+  component: require('../../components_app/admin_city_add').default,
 });
 routeArr.push({
   name: 'admin_city_add',
   path: '/admin_city/add',
   exact: true,
-  component: require('../../components_app/student_add').default,
+  component: require('../../components_app/admin_city_add').default,
 });
 routeArr.push({
   name: 'admin_city_detail',
