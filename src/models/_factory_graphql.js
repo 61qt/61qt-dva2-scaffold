@@ -102,15 +102,18 @@ export default function modelFactory({
         }
         try {
           const data = yield call(Service.graphqlList, { page, filter, query, pageSize, orderBy, sort });
-          const start = data.data.per_page * 1 * (data.data.current_page * 1 - 1) * 1 + 1;
-          const length = _.get(data, 'data.data.length') * 1 || 0;
+          const modelData = _.get(data, `data.${modelName}`);
+          window.listData = data;
+          window.listModelData = modelData;
+          const start = modelData.per_page * 1 * (modelData.current_page * 1 - 1) * 1 + 1;
+          const length = _.get(modelData, 'data.length') * 1 || 0;
           yield put({
             type: 'saveList',
             payload: {
-              data: data.data[modelName],
-              total: data.data.total,
-              pageSize: data.data.per_page * 1,
-              page: data.data.current_page,
+              data: modelData.data,
+              total: modelData.total,
+              pageSize: modelData.per_page * 1,
+              page: modelData.current_page,
               start,
               end: start + length - 1,
             },
