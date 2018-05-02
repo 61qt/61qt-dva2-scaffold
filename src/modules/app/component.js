@@ -47,9 +47,9 @@ export default class Component extends React.Component {
   componentDidMount = () => {
     const random = Math.random() * 10;
     prolongingInterval = window.setInterval(this.setLiving, (4 * 60 + random) * 1000);
-    this.props.dispatch({
-      type: 'area/init',
-    });
+    // this.props.dispatch({
+    //   type: 'area/init',
+    // });
   }
 
   componentWillUnmount = () => {
@@ -72,9 +72,9 @@ export default class Component extends React.Component {
       return false;
     }
 
-    this.props.dispatch({
-      type: 'area/init',
-    });
+    // this.props.dispatch({
+    //   type: 'area/init',
+    // });
 
     Services.common.loginToken().then((res) => {
       return this.loginTokenSuccess({ res });
