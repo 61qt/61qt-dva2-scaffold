@@ -30,11 +30,39 @@ export default function actionFactory({
         schema = options.schema || '';
       }
 
+      let filter = [];
+      if (options.filter) {
+        if (_.isString(options.filter)) {
+          try {
+            filter = JSON.parse(options.filter);
+          }
+          catch (e) {
+            filter = [];
+          }
+          if (!_.isArray(filter)) {
+            filter = [];
+          }
+        }
+      }
+      window.console.log('filter', filter);
+      const query = _.map(filter, (elem) => {
+        return `${elem[0]}: ${elem[2]}`;
+      }).join(',');
+
+      const take = options.pageSize || PAGE_SIZE;
       const schemaArr = [
         `{
-          ${namespace} (take: ${options.pageSize || PAGE_SIZE}, orderBy: "${options.orderBy || 'id'}", sort: "${options.sort || 'desc'}") {
-            id
-            ${schema}
+          ${namespace} (page: ${options.page || 1}, take: ${take}, orderBy: "${options.orderBy || 'id'}", sort: "${options.sort || 'desc'}"${query ? ',' : ''} ${query}) {
+            data {
+              id
+              ${schema}
+            }
+            current_page
+            last_page
+            per_page
+            total
+            from
+            to
           }
         }`,
       ];
