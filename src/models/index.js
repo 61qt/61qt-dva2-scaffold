@@ -1,5 +1,4 @@
 const models = [
-  require('./admin_school').default,
   require('./all_resource').default,
   require('./area').default,
   require('./breadcrumb').default,
