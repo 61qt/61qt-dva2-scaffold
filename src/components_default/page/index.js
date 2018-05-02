@@ -14,7 +14,6 @@ import Table from '../../components_atom/table';
 })
 export default class Component extends React.Component {
   constructor(props) {
-    window.console.log('p props', props);
     super(props);
     debugAdd('page', this);
     this.state = {
