@@ -16,8 +16,9 @@ const formItemLayout = {
 
 export { formItemLayout };
 
-function getFilter(values) {
+function getFilter(values, options) {
   return buildListSearchFilter({
+    defaultFilter: options.defaultFilter || [],
     values,
     formFilterMethod: {
       name: 'like',
@@ -36,6 +37,7 @@ export default class Component extends React.Component {
     this.state = {
       expand: false,
       showCount: 3,
+      defaultFilter: [],
     };
   }
 
@@ -64,7 +66,9 @@ export default class Component extends React.Component {
           this.props.handleSubmit({
             values,
             form: this.props.form,
-            filter: getFilter(values),
+            filter: getFilter(values, {
+              defaultFilter: this.state.defaultFilter,
+            }),
             e,
             expand: this.state.expand,
             loadOldPage: _.get(e, 'loadOldPage') || false,
