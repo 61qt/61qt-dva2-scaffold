@@ -15,6 +15,7 @@ import Table from '../../components_atom/table';
 export default class Component extends React.Component {
   constructor(props) {
     super(props);
+    window.console.log('暂时用不了');
     debugAdd('page', this);
     this.state = {
       model: 'student',
