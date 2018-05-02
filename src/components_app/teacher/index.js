@@ -130,7 +130,7 @@ export default class Component extends React.Component {
     const { teacherState } = this.props;
     return (
       <div className="clearfix">
-        <h3 className={styles.tableTitle} >
+        <h3 className="table-title">
           教师列表
           { teacherState.total ? <small>（共{teacherState.total}条）</small> : null }
         </h3>

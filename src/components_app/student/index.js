@@ -156,7 +156,7 @@ export default class Component extends React.Component {
     const { studentState } = this.props;
     return (
       <div className="clearfix">
-        <h3 className={styles.tableTitle} >
+        <h3 className="table-title">
           学生列表
           { studentState.total ? <small>（共{studentState.total}条）</small> : null }
         </h3>

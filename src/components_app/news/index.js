@@ -146,7 +146,7 @@ export default class Component extends React.Component {
     const { postState } = this.props;
     return (
       <div className="clearfix">
-        <h3 className={styles.tableTitle} >
+        <h3 className="table-title">
           文章列表
           { postState.total ? <small>（共{postState.total}条）</small> : null }
         </h3>
