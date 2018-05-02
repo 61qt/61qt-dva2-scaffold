@@ -36,7 +36,6 @@ export default class Component extends React.Component {
     this.state = {
       expand: false,
       shownCount: 3,
-      children: [],
     };
   }
 
@@ -45,6 +44,10 @@ export default class Component extends React.Component {
   componentDidMount = () => {
     this.props.form.setFieldsValue(this.props.listState.searchValues || {});
     this.triggerHandleSubmit();
+  }
+
+  getSearchCol = () => {
+    return [];
   }
 
   triggerHandleSubmit = () => {
@@ -82,16 +85,17 @@ export default class Component extends React.Component {
 
   render() {
     const expand = this.state.expand;
+    const searchCol = this.getSearchCol();
     return (
       <Form
         className={`ant-advanced-search-form ant-advanced-search-form-small ${expand ? '' : 'is-close'}`}
         onSubmit={this.handleSubmit}
       >
         <Row gutter={40}>
-          {this.state.children.slice(0, this.state.shownCount)}
+          {searchCol.slice(0, this.state.shownCount)}
         </Row>
         <Row className={!expand ? 'ant-hide' : ''} gutter={40}>
-          {this.state.children.slice(this.state.shownCount)}
+          {searchCol.slice(this.state.shownCount)}
         </Row>
         <Row>
           <Col span={24} style={{ textAlign: 'right' }}>
