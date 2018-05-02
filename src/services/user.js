@@ -6,7 +6,9 @@ const namespace = 'user';
 const schema = {
   list: [
     'id',
-    'name',
+    // 'name',
+    // 'city_id',
+    'username',
     `userRoles{${
       [
         'id',

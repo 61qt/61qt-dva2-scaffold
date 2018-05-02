@@ -44,7 +44,7 @@ export default function actionFactory({
           }
         }
       }
-      window.console.log('filter', filter);
+
       const query = _.map(filter, (elem) => {
         return `${elem[0]}: ${elem[2]}`;
       }).join(',');

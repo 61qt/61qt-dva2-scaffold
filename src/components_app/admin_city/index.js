@@ -30,60 +30,59 @@ export default class Component extends React.Component {
         width: 100,
       },
       {
-        title: '姓名',
+        title: '名称',
         dataIndex: 'name',
         key: 'name',
-        fixed: 'left',
         width: 130,
       },
       {
         title: '登录账号',
-        key: 'username',
         dataIndex: 'username',
+        key: 'username',
         width: 130,
       },
       {
-        title: '所属部门',
-        key: 'department.name',
-        dataIndex: 'department.name',
+        title: '市',
+        dataIndex: 'city_id',
+        key: 'city_id',
         width: 100,
       },
       {
-        title: '角色',
-        key: 'sng_role.name',
-        dataIndex: 'sng_role.name',
-        width: 100,
-        render: (text) => {
-          return text;
-        },
+        title: '操作人',
+        key: 'admin_id',
+        dataIndex: 'admin_id',
+        width: 130,
       },
       {
-        title: '状态',
-        key: 'status',
-        dataIndex: 'status',
-        width: 100,
-        render: (text) => {
-          return Filters.dict(['admin', 'status'], text);
-        },
-      },
-      {
-        title: '联系电话',
+        title: '手机号码',
         key: 'phone',
         dataIndex: 'phone',
-        minWidth: 110,
-        render: (text) => {
-          return text || '';
-        },
+        minWidth: 100,
       },
+      // {
+      //   title: '状态',
+      //   key: 'status',
+      //   dataIndex: 'status',
+      //   width: 100,
+      //   render: (text) => {
+      //     return Filters.dict(['user', 'status'], text);
+      //   },
+      // },
       {
         title: '操作',
         key: 'operation',
         fixed: 'right',
-        width: 80,
+        width: 140,
         render: (text, record) => {
           return (<span className={styles.operation}>
             <Access data-bak-auth="user.update">
               <NavLink to={Filters.path('admin_city_edit', { id: record.id })} activeClassName="link-active">编辑</NavLink>
+            </Access>
+            <Access data-bak-auth="user.destroy">
+              <a>删除</a>
+            </Access>
+            <Access data-bak-auth="user.update">
+              <a>禁用</a>
             </Access>
           </span>);
         },
