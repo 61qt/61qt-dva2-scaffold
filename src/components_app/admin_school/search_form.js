@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { connect } from 'dva';
 import { Form, Input, Col } from 'antd';
 // Select
-import CitySelect from '../../components_common/city_select';
+// import CitySelect from '../../components_common/city_select';
 import ComponentsForm from '../../components_form';
 import ComponentSearchForm, { formItemLayout } from '../../components_default/search_form';
 // import Filters from '../../filters';
@@ -35,7 +35,7 @@ export default class Component extends ComponentSearchForm {
       <Col span={col} key="city_id">
         <Form.Item {...formItemLayout} label="城市">
           {
-            getFieldDecorator('city_id')(<CitySelect />)
+            getFieldDecorator('city_id')(<Input size="small" placeholder="选择城市" />)
           }
         </Form.Item>
       </Col>
