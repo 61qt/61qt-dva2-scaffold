@@ -31,19 +31,25 @@ const modelExtend = {
 
       if (!data) {
         try {
-          data = yield call(Services.common.allArea, { });
+          const areaAllData = yield call(Services.area.graphqlAll, { });
+          data = areaAllData.data;
           localStorage.setItem(STORE_CACHE_KEY, JSON.stringify(data));
         }
         catch (e) {
-          return;
+          return Promise.reject(e);
         }
       }
 
-      const list = Object.entries(data).map((elem) => {
-        return elem[1];
+      const key = {};
+      _.map(data, (elem) => {
+        // eslint-disable-next-line no-param-reassign
+        elem.id *= 1;
+        // eslint-disable-next-line no-param-reassign
+        elem.parent_id *= 1;
+        key[elem.id] = elem;
       });
-      list.forEach((elem) => {
-        const children = _.filter(list, {
+      data.forEach((elem) => {
+        const children = _.filter(data, {
           parent_id: elem.id,
         });
         const options = {
@@ -55,14 +61,14 @@ const modelExtend = {
         }
         Object.assign(elem, options);
       });
-      const tree = _.filter(list, {
+      const tree = _.filter(data, {
         parent_id: 1,
       });
       yield put({
         type: 'save',
         payload: {
-          key: data,
-          list,
+          key,
+          list: data,
           tree,
         },
       });

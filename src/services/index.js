@@ -1,5 +1,6 @@
 // eslint-disable-next-line camelcase
 import admin_city from './admin_city';
+import area from './area';
 import common from './common';
 import post from './post';
 import specialty from './specialty';
@@ -26,6 +27,7 @@ http.interceptors.response.use(responseSuccessInterceptor, responseFailIntercept
 
 export default {
   admin_city,
+  area,
   common,
   post,
   specialty,
