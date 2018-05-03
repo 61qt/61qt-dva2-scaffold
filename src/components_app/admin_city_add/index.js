@@ -294,18 +294,9 @@ export default class Component extends React.Component {
     }
     promise.then((res) => {
       window.res = res;
-      message.success(`${this.editInfo.text}学生成功`);
+      message.success(`${this.editInfo.text}成功`);
       this.successCallback();
-      const { location } = this.props;
-      // eslint-disable-next-line camelcase
-      const redirect_uri = _.get(location, 'query.redirect_uri');
-      // eslint-disable-next-line camelcase
-      if (redirect_uri) {
-        this.props.history.replace(redirect_uri);
-      }
-      else {
-        this.props.history.push(Filters.path('student', {}));
-      }
+      this.props.history.push(Filters.path('admin_city', {}));
     }).catch((rej) => {
       window.rej = rej;
       formErrorMessageShow(rej);
@@ -357,7 +348,7 @@ export default class Component extends React.Component {
           className="app-edit-form"
           onSubmit={this.handleSubmit}
         >
-          <DetailView titleClassName="text-align-right" className="small" col={1} labelWidth="10em" expand={99999} dataSource={{}} columns={children} renderTitle={renderTitle} title={`${this.editInfo.text}学生`} />
+          <DetailView titleClassName="text-align-right" className="small" col={1} labelWidth="10em" expand={99999} dataSource={{}} columns={children} renderTitle={renderTitle} title={`${this.editInfo.text}资料`} />
 
           <br />
           <div>
