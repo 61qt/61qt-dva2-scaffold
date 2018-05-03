@@ -3,21 +3,42 @@ import FactoryGraphql from '../services/_factory_graphql';
 
 const namespace = 'user';
 
-const modelSelect = [
+const modelFields = [
   'id',
-  'username',
+  'province_id',
+  'city_id',
+  'district_id',
+  'school_id',
+  'department_id',
   'user_type',
+  'username',
+  'name',
+  'phone',
+  'email',
+  // 'password',
+  'operator',
+  'id_number',
+  'status',
+  'last_login_at',
+  'created_at',
+  // 'updated_at',
 ];
+
+const modelRelate = [
+  `userRoles {
+    id
+    name
+    city_id
+  }`,
+];
+
 const select = {
   list: [
-    ...modelSelect,
-    `userRoles{${
-      [
-        'id',
-        'name',
-        'city_id',
-      ].join('\n')
-    }}`,
+    ...modelFields,
+    ...modelRelate,
+  ].join('\n'),
+  detail: [
+    ...modelFields,
   ].join('\n'),
 };
 
