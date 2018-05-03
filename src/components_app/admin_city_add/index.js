@@ -130,7 +130,7 @@ export default class Component extends React.Component {
           validator: (rule, value, callback) => {
             const form = this.props.form;
             if (value && value !== form.getFieldValue('password')) {
-              callback('Two passwords that you enter is inconsistent!');
+              callback('两次密码不一致');
             }
             else {
               callback();

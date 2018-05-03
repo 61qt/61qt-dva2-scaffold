@@ -7,11 +7,51 @@ import CONSTANTS from '../constants';
 
 export { http, apiBaseUrl };
 
+function toBothCamelCase(str) {
+  return str.replace(/[-_]\w/ig, (match) => {
+    return match.charAt(1).toUpperCase();
+  }).replace(/^[a-z]/, (match) => {
+    return match.charAt(0).toUpperCase();
+  });
+}
+
+function buildFormDataArr(values) {
+  const valueArr = [];
+  for (const [key, value] of Object.entries(values)) {
+    if (/phone/.test(key)) {
+      valueArr.push(`${key}: "${value || 0}"`);
+    }
+    else if (/_id$/.test(key)) {
+      valueArr.push(`${key}: ${value || 0}`);
+    }
+    else if (_.isString(value)) {
+      valueArr.push(`${key}: "${value}"`);
+    }
+    else {
+      valueArr.push(`${key}: ${value}`);
+    }
+  }
+  return valueArr;
+}
+
+function getMutationName({
+  mutation,
+  action,
+  table,
+}) {
+  let mutationFunc = _.get(mutation, `${action}.name`) || '';
+  if (!mutationFunc) {
+    mutationFunc = `${action}${toBothCamelCase(table)}`;
+  }
+  return mutationFunc;
+}
+
 export default function actionFactory({
   table,
   PAGE_SIZE = CONSTANTS.PAGE_SIZE,
   PAGE_SIZE_MAX = CONSTANTS.PAGE_SIZE_MAX,
   Service = {},
+  mutation = {},
   ...rest
 }) {
   const selectCustom = rest.select;
@@ -110,27 +150,12 @@ export default function actionFactory({
     },
     // 编辑
     graphqlUpdate: (id, values = {}, options = {}) => {
-      const valueArr = [];
-      for (const [key, value] of Object.entries(values)) {
-        if (/phone/.test(key)) {
-          valueArr.push(`${key}: "${value || 0}"`);
-        }
-        else if (/_id$/.test(key)) {
-          valueArr.push(`${key}: ${value || 0}`);
-        }
-        else if (_.isString(value)) {
-          valueArr.push(`${key}: "${value}"`);
-        }
-        else {
-          valueArr.push(`${key}: ${value}`);
-        }
-      }
+      const valueArr = buildFormDataArr(values);
       valueArr.push(`id: ${id}`);
       const schemaArr = [
         `mutation {
-          updateCityAdmin (${valueArr.join(',')}) {
+          ${getMutationName({ mutation, table, action: 'update' })} (${valueArr.join(',')}) {
             id
-            name
           }
         }`,
       ];
@@ -140,26 +165,11 @@ export default function actionFactory({
     },
     // 新增
     graphqlCreate: (values = {}, options = {}) => {
-      const valueArr = [];
-      for (const [key, value] of Object.entries(values)) {
-        if (/phone/.test(key)) {
-          valueArr.push(`${key}: "${value || 0}"`);
-        }
-        else if (/_id$/.test(key)) {
-          valueArr.push(`${key}: ${value || 0}`);
-        }
-        else if (_.isString(value)) {
-          valueArr.push(`${key}: "${value}"`);
-        }
-        else {
-          valueArr.push(`${key}: ${value}`);
-        }
-      }
+      const valueArr = buildFormDataArr(values);
       const schemaArr = [
         `mutation {
-          createCityAdmin (${valueArr.join(',')}) {
+          ${getMutationName({ mutation, table, action: 'create' })} (${valueArr.join(',')}) {
             id
-            name
           }
         }`,
       ];
