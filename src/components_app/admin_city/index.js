@@ -1,7 +1,7 @@
 // import _ from 'lodash';
 import React from 'react';
 import { connect } from 'dva';
-import { Pagination, Button } from 'antd';
+import { message, Pagination, Popconfirm, Button } from 'antd';
 import { NavLink } from 'dva/router';
 import styles from './index.less';
 import Filters from '../../filters';
@@ -10,6 +10,8 @@ import Download from '../../components_atom/download';
 import Upload from '../../components_atom/upload';
 import Access from '../../components_atom/access';
 import Table from '../../components_atom/table';
+import Services from '../../services';
+import { DICT } from '../../constants';
 
 @connect((state) => {
   return {
@@ -59,15 +61,15 @@ export default class Component extends React.Component {
         dataIndex: 'phone',
         minWidth: 100,
       },
-      // {
-      //   title: '状态',
-      //   key: 'status',
-      //   dataIndex: 'status',
-      //   width: 100,
-      //   render: (text) => {
-      //     return Filters.dict(['user', 'status'], text);
-      //   },
-      // },
+      {
+        title: '状态',
+        key: 'status',
+        dataIndex: 'status',
+        width: 100,
+        render: (text) => {
+          return Filters.dict(['user', 'status'], text);
+        },
+      },
       {
         title: '操作',
         key: 'operation',
@@ -79,11 +81,17 @@ export default class Component extends React.Component {
               <NavLink to={Filters.path('admin_city_edit', { id: record.id })} activeClassName="link-active">编辑</NavLink>
             </Access>
             <Access data-bak-auth="admin_city.destroy">
-              <a>删除</a>
+              <Popconfirm placement="left" title="确认要删除？" onConfirm={this.handleRemove.bind(this, { record })}>
+                <a>删除</a>
+              </Popconfirm>
             </Access>
-            <Access data-bak-auth="admin_city.update">
-              <a>禁用</a>
-            </Access>
+            <span className={DICT.USER.STATUS.BAN === record.status ? 'ant-hide' : ''}>
+              <Access data-bak-auth="admin_city.update">
+                <Popconfirm placement="left" title="确认要禁用？" onConfirm={this.handleStatusChange.bind(this, { record, values: { status: DICT.USER.STATUS.BAN } })}>
+                  <a>禁用</a>
+                </Popconfirm>
+              </Access>
+            </span>
           </span>);
         },
       },
@@ -123,6 +131,32 @@ export default class Component extends React.Component {
     dispatch({
       type: 'admin_city/list',
       payload: { page, filter: this.props.adminCityState.listState.filter },
+    });
+  }
+
+  handleRemove = ({ record }) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'admin_city/remove',
+      payload: {
+        id: record.id,
+      },
+    }).then(() => {
+      message.success('删除成功');
+      this.pageChangeHandler();
+    }).catch(() => {
+      message.success('删除成功');
+      this.pageChangeHandler();
+    });
+  }
+
+  handleStatusChange = ({ record, values }) => {
+    Services.admin_city.graphqlChangeStatus(record.id, values).then(() => {
+      message.success('禁用成功');
+      this.pageChangeHandler();
+    }).catch(() => {
+      message.success('禁用成功');
+      this.pageChangeHandler();
     });
   }
 

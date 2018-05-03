@@ -5,8 +5,6 @@ import http, {
 } from '../utils/http';
 import CONSTANTS from '../constants';
 
-export { http, apiBaseUrl };
-
 function toBothCamelCase(str) {
   return str.replace(/[-_]\w/ig, (match) => {
     return match.charAt(1).toUpperCase();
@@ -33,6 +31,8 @@ function buildFormDataArr(values) {
   }
   return valueArr;
 }
+
+export { http, apiBaseUrl, buildFormDataArr, toBothCamelCase };
 
 function getMutationName({
   mutation,
@@ -145,29 +145,45 @@ export default function actionFactory({
       });
     },
     // 删除
-    graphqlRemove: (id, values = {}, config = {}) => {
-      return http.post('/graphql/', values, config);
-    },
-    // 编辑
-    graphqlUpdate: (id, values = {}, options = {}) => {
+    graphqlRemove: (id, values, options = {}) => {
       const valueArr = buildFormDataArr(values);
       valueArr.push(`id: ${id}`);
       const schemaArr = [
-        `mutation {
-          ${getMutationName({ mutation, table, action: 'update' })} (${valueArr.join(',')}) {
+        `mutation removeMutation($id: ID) {
+          ${getMutationName({ mutation, table, action: 'remove' })} (id: $id) {
             id
           }
         }`,
       ];
       return http.post('/graphql/', {
         query: schemaArr.join('\n'),
+        variables: {
+          id: id * 1,
+        },
+      }, options.config || {});
+    },
+    // 编辑
+    graphqlUpdate: (id, values = {}, options = {}) => {
+      const valueArr = buildFormDataArr(values);
+      const schemaArr = [
+        `mutation updateMutation($id: ID) {
+          ${getMutationName({ mutation, table, action: 'update' })} (id: $id, ${valueArr.join(',')}) {
+            id
+          }
+        }`,
+      ];
+      return http.post('/graphql/', {
+        query: schemaArr.join('\n'),
+        variables: {
+          id: id * 1,
+        },
       }, options.config || {});
     },
     // 新增
     graphqlCreate: (values = {}, options = {}) => {
       const valueArr = buildFormDataArr(values);
       const schemaArr = [
-        `mutation {
+        `mutation createMutation {
           ${getMutationName({ mutation, table, action: 'create' })} (${valueArr.join(',')}) {
             id
           }
@@ -175,6 +191,7 @@ export default function actionFactory({
       ];
       return http.post('/graphql/', {
         query: schemaArr.join('\n'),
+        variables: {},
       }, options.config || {});
     },
   };

@@ -149,10 +149,9 @@ export default function modelFactory({
       //   }
       // },
 
-      *remove({ payload: id }, { call, put }) {
+      *remove({ payload: { id, values = {} } }, { call }) {
         try {
-          const data = yield call(Service.graphqlRemove, id);
-          yield put({ type: 'reload' });
+          const data = yield call(Service.graphqlRemove, id, values);
           return data;
         }
         catch (e) {
@@ -160,10 +159,9 @@ export default function modelFactory({
         }
       },
 
-      *update({ payload: { id, values } }, { call, put }) {
+      *update({ payload: { id, values } }, { call }) {
         try {
           const data = yield call(Service.graphqlUpdate, id, values);
-          yield put({ type: 'reload' });
           return data;
         }
         catch (e) {
@@ -171,10 +169,9 @@ export default function modelFactory({
         }
       },
 
-      *create({ payload: { values } }, { call, put }) {
+      *create({ payload: { values } }, { call }) {
         try {
           const data = yield call(Service.graphqlCreate, values);
-          yield put({ type: 'reload' });
           return data;
         }
         catch (e) {
@@ -198,12 +195,6 @@ export default function modelFactory({
         catch (e) {
           return Promise.reject(e);
         }
-      },
-
-      *reload(action, { put, select }) {
-        const page = yield select(state => state[modelName].page);
-        const data = yield put({ type: 'list', payload: { page } });
-        return data;
       },
 
       // 存储 index 的搜索状态的。

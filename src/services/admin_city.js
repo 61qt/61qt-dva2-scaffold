@@ -1,4 +1,4 @@
-import FactoryGraphql from '../services/_factory_graphql';
+import FactoryGraphql, { http, buildFormDataArr } from '../services/_factory_graphql';
 
 const namespace = 'user';
 // admin city 是对应 user 里面的某个类型的数据，故在同一个表。
@@ -58,5 +58,22 @@ const Service = FactoryGraphql({
     },
   },
 });
+
+Service.graphqlChangeStatus = (id, values = {}, options = {}) => {
+  const valueArr = buildFormDataArr(values);
+  const schemaArr = [
+    `mutation changeStatusMutation($id: ID) {
+      changeCityAdminStatus (id: $id, ${valueArr.join(',')}) {
+        id
+      }
+    }`,
+  ];
+  return http.post('/graphql/', {
+    query: schemaArr.join('\n'),
+    variables: {
+      id: id * 1,
+    },
+  }, options.config || {});
+};
 
 export default Service;
