@@ -17,13 +17,7 @@ export default function actionFactory({
   const service = {
     // 列表
     list: (options = {}) => {
-      let select = '';
-      if (options.isMaxList) {
-        select = _.get(selectCustom, 'maxList');
-      }
-      else {
-        select = _.get(selectCustom, 'list');
-      }
+      let select = select = _.get(selectCustom, 'list');
       if (!select) {
         select = options.select || ['admin.name'].join(',');
       }

@@ -46,7 +46,6 @@ export default function actionFactory({
       const schema = `query List($page: Int, $take: Int, $orderBy: String, $sort: String) {
         ${namespace} (page: $page, take: $take, orderBy: $orderBy, sort: $sort, ${query ? ',' : ''} ${query}) {
           data {
-            id
             ${select}
           }
           current_page
@@ -78,7 +77,6 @@ export default function actionFactory({
       const schema = `query Detail($id: ID) {
         ${namespace} (id: $id) {
           data {
-            id
             ${select}
           }
         }
