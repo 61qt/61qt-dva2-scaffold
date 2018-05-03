@@ -89,13 +89,20 @@ export default class Component extends React.Component {
                 <a>删除</a>
               </Popconfirm>
             </Access>
-            <span className={DICT.USER.STATUS.BAN === record.status ? 'ant-hide' : ''}>
-              <Access data-bak-auth="admin_city.update">
-                <Popconfirm placement="left" title="确认要禁用？" onConfirm={this.handleStatusChange.bind(this, { record, values: { status: DICT.USER.STATUS.BAN } })}>
-                  <a>禁用</a>
-                </Popconfirm>
-              </Access>
-            </span>
+            <Access data-bak-auth="admin_city.update">
+              <span>
+                <span className={DICT.USER.STATUS.BAN === record.status ? 'ant-hide' : ''}>
+                  <Popconfirm placement="left" title="确认要禁用？" onConfirm={this.handleStatusChange.bind(this, { record, values: { status: DICT.USER.STATUS.BAN } })}>
+                    <a>禁用</a>
+                  </Popconfirm>
+                </span>
+                <span className={DICT.USER.STATUS.NORMAL === record.status ? 'ant-hide' : ''}>
+                  <Popconfirm placement="left" title="确认要启用？" onConfirm={this.handleStatusChange.bind(this, { record, values: { status: DICT.USER.STATUS.NORMAL } })}>
+                    <a>启用</a>
+                  </Popconfirm>
+                </span>
+              </span>
+            </Access>
           </span>);
         },
       },
@@ -155,11 +162,11 @@ export default class Component extends React.Component {
   }
 
   handleStatusChange = ({ record, values }) => {
-    Services.admin_city.graphqlChangeStatus(record.id, values).then(() => {
-      message.success('禁用成功');
+    Services.admin_city.graphqlPatchUpdate('changeStatus', record.id, values).then(() => {
+      message.success('设置成功');
       this.pageChangeHandler();
     }).catch(() => {
-      message.success('禁用成功');
+      message.success('设置成功');
       this.pageChangeHandler();
     });
   }

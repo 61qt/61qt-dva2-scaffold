@@ -191,16 +191,15 @@ export default function actionFactory({
     },
     // graphql 删除
     graphqlRemove: (id, values, options = {}) => {
-      const schemaArr = [
-        `mutation removeMutation($id: ID) {
-          ${getMutationName({ mutation, table, action: 'remove' })} (id: $id) {
-            id
-          }
-        }`,
-      ];
+      const schema = `mutation removeMutation($id: ID) {
+        ${getMutationName({ mutation, table, action: 'remove' })} (id: $id) {
+          id
+        }
+      }`;
+
       return http.post(`/graphql?f=${table}`, {
         operationName: 'removeMutation',
-        query: schemaArr.join('\n'),
+        query: schema,
         variables: {
           id: id * 1,
         },
@@ -209,16 +208,14 @@ export default function actionFactory({
     // graphql 编辑
     graphqlUpdate: (id, values = {}, options = {}) => {
       const valueArr = buildFormDataArr(values);
-      const schemaArr = [
-        `mutation updateMutation($id: ID) {
-          ${getMutationName({ mutation, table, action: 'update' })} (id: $id, ${valueArr.join(',')}) {
-            id
-          }
-        }`,
-      ];
+      const schema = `mutation updateMutation($id: ID) {
+        ${getMutationName({ mutation, table, action: 'update' })} (id: $id, ${valueArr.join(',')}) {
+          id
+        }
+      }`;
       return http.post(`/graphql?f=${table}`, {
         operationName: 'updateMutation',
-        query: schemaArr.join('\n'),
+        query: schema,
         variables: {
           id: id * 1,
         },
@@ -227,19 +224,35 @@ export default function actionFactory({
     // graphql 新增
     graphqlCreate: (values = {}, options = {}) => {
       const valueArr = buildFormDataArr(values);
-      const schemaArr = [
-        `mutation createMutation {
-          ${getMutationName({ mutation, table, action: 'create' })} (${valueArr.join(',')}) {
-            id
-          }
-        }`,
-      ];
+      const schema = `mutation createMutation {
+        ${getMutationName({ mutation, table, action: 'create' })} (${valueArr.join(',')}) {
+          id
+        }
+      }`;
       return http.post(`/graphql?f=${table}`, {
         operationName: 'createMutation',
-        query: schemaArr.join('\n'),
+        query: schema,
         variables: {},
       }, options.config || {});
     },
+
+    // graphql 新增
+    graphqlPatchUpdate: (mutationType, id, values = {}, options = {}) => {
+      const valueArr = buildFormDataArr(values);
+      const schema = `mutation patchUpdateMutation($id: ID) {
+        ${getMutationName({ mutation, table, action: mutationType })} (id: $id, ${valueArr.join(',')}) {
+          id
+        }
+      }`;
+      return http.post(`/graphql?f=${table}`, {
+        operationName: 'patchUpdateMutation',
+        query: schema,
+        variables: {
+          id,
+        },
+      }, options.config || {});
+    },
+
   };
 
   // 最大列表
