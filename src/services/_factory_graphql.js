@@ -70,7 +70,7 @@ export default function actionFactory({
     },
     // 详情
     graphqlDetail: (options) => {
-      let select = _.get(selectCustom, 'list');
+      let select = _.get(selectCustom, 'detail');
       if (!select) {
         select = options.select || '';
       }
