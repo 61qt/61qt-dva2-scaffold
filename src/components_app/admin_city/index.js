@@ -9,6 +9,7 @@ import SearchForm from './search_form';
 import Download from '../../components_atom/download';
 import Upload from '../../components_atom/upload';
 import Access from '../../components_atom/access';
+import Area from '../../components_atom/area';
 import Table from '../../components_atom/table';
 import Services from '../../services';
 import { DICT } from '../../constants';
@@ -48,6 +49,9 @@ export default class Component extends React.Component {
         dataIndex: 'city_id',
         key: 'city_id',
         width: 100,
+        render: (text) => {
+          return (<Area areaId={text} />);
+        },
       },
       {
         title: '操作人',
