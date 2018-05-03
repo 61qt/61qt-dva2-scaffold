@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import FactoryGraphql, { http } from '../services/_factory_graphql';
+import Factory, { http } from '../services/_factory';
 
 const namespace = 'area';
 const table = 'area';
@@ -25,7 +25,7 @@ const select = {
   ].join('\n'),
 };
 
-const Service = FactoryGraphql({
+const Service = Factory({
   namespace,
   table: namespace,
   select,

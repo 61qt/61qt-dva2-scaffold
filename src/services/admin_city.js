@@ -1,4 +1,4 @@
-import FactoryGraphql, { http, buildFormDataArr } from '../services/_factory_graphql';
+import Factory, { http, buildFormDataArr } from '../services/_factory';
 
 const namespace = 'user';
 // admin city 是对应 user 里面的某个类型的数据，故在同一个表。
@@ -42,7 +42,7 @@ const select = {
   ].join('\n'),
 };
 
-const Service = FactoryGraphql({
+const Service = Factory({
   namespace,
   table: namespace,
   select,
