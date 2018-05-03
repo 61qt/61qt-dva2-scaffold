@@ -6,7 +6,6 @@ import { message } from 'antd';
 import queryString from 'query-string';
 import formErrorMessageShow from '../../utils/form_error_message_show';
 
-
 import Services from '../../services';
 import CONSTANTS from '../../constants';
 import User from '../../utils/user';

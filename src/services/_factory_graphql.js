@@ -14,14 +14,14 @@ export default function actionFactory({
   Service = {},
   ...rest
 }) {
-  const schemaCustom = rest.schema;
+  const selectCustom = rest.select;
   const service = {
     ...Service,
     // 列表
     graphqlList: (options = {}) => {
-      let schema = _.get(schemaCustom, 'list');
-      if (!schema) {
-        schema = options.schema || '';
+      let select = _.get(selectCustom, 'list');
+      if (!select) {
+        select = options.select || '';
       }
 
       let filter = [];
@@ -43,46 +43,51 @@ export default function actionFactory({
         return `${elem[0]}: ${elem[2]}`;
       }).join(',');
 
-      const take = options.pageSize || PAGE_SIZE;
-      const schemaArr = [
-        `{
-          ${namespace} (page: ${options.page || 1}, take: ${take}, orderBy: "${options.orderBy || 'id'}", sort: "${options.sort || 'desc'}"${query ? ',' : ''} ${query}) {
-            data {
-              id
-              ${schema}
-            }
-            current_page
-            last_page
-            per_page
-            total
-            from
-            to
+      const schema = `query List($page: Int, $take: Int, $orderBy: String, $sort: String) {
+        ${namespace} (page: $page, take: $take, orderBy: $orderBy, sort: $sort, ${query ? ',' : ''} ${query}) {
+          data {
+            id
+            ${select}
           }
-        }`,
-      ];
+          current_page
+          last_page
+          per_page
+          total
+          from
+          to
+        }
+      }`;
+
       return http.post('/graphql', {
-        query: schemaArr.join('\n'),
+        query: schema,
+        variables: {
+          page: options.page || 1,
+          take: options.pageSize || PAGE_SIZE,
+          orderBy: options.orderBy || 'id',
+          sort: options.sort || 'desc',
+        },
       }, options.config || {});
     },
     // 详情
     graphqlDetail: (options) => {
-      let schema = _.get(schemaCustom, 'list');
-      if (!schema) {
-        schema = options.schema || '';
+      let select = _.get(selectCustom, 'list');
+      if (!select) {
+        select = options.select || '';
       }
 
-      const schemaArr = [
-        `{
-          ${namespace} (id: ${options.id}) {
-            data {
-              id
-              ${schema}
-            }
+      const schema = `query Detail($id: ID) {
+        ${namespace} (id: $id) {
+          data {
+            id
+            ${select}
           }
-        }`,
-      ];
+        }
+      }`;
       return http.post('/graphql/', {
-        query: schemaArr.join('\n'),
+        query: schema,
+        variables: {
+          id: options.id * 1,
+        },
       }, options.config || {});
     },
     // 删除

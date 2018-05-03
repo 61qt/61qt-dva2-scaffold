@@ -3,14 +3,14 @@ import FactoryGraphql from '../services/_factory_graphql';
 
 const namespace = 'user';
 
-const modelSchema = [
+const modelSelect = [
   'id',
   'username',
   'user_type',
 ];
-const schema = {
+const select = {
   list: [
-    ...modelSchema,
+    ...modelSelect,
     `userRoles{${
       [
         'id',
@@ -23,19 +23,19 @@ const schema = {
 
 const Service = Factory({
   namespace,
-  schema,
+  select,
 });
 
 const graphqlService = FactoryGraphql({
   Service,
   namespace,
-  schema,
+  select,
 });
 
 graphqlService.fetch1 = (values) => {
   return http.post('graphql', {
     ...values,
-    query: schema.list,
+    query: select.list,
   });
 };
 
