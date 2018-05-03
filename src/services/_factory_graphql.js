@@ -98,13 +98,14 @@ export default function actionFactory({
     graphqlUpdate: (id, values = {}, options = {}) => {
       const valueArr = [];
       for (const [key, value] of Object.entries(values)) {
-        if (_.isString(value)) {
-          if (/_id$/.test(key)) {
-            valueArr.push(`${key}: ${value || 0}`);
-          }
-          else {
-            valueArr.push(`${key}: "${value}"`);
-          }
+        if (/phone/.test(key)) {
+          valueArr.push(`${key}: "${value || 0}"`);
+        }
+        else if (/_id$/.test(key)) {
+          valueArr.push(`${key}: ${value || 0}`);
+        }
+        else if (_.isString(value)) {
+          valueArr.push(`${key}: "${value}"`);
         }
         else {
           valueArr.push(`${key}: ${value}`);
@@ -127,16 +128,14 @@ export default function actionFactory({
     graphqlCreate: (values = {}, options = {}) => {
       const valueArr = [];
       for (const [key, value] of Object.entries(values)) {
-        if (_.isString(value)) {
-          if (/_id$/.test(key)) {
-            valueArr.push(`${key}: ${value || 0}`);
-          }
-          else if (/phone/.test(key)) {
-            valueArr.push(`${key}: ${value || 0}`);
-          }
-          else {
-            valueArr.push(`${key}: "${value}"`);
-          }
+        if (/phone/.test(key)) {
+          valueArr.push(`${key}: "${value || 0}"`);
+        }
+        else if (/_id$/.test(key)) {
+          valueArr.push(`${key}: ${value || 0}`);
+        }
+        else if (_.isString(value)) {
+          valueArr.push(`${key}: "${value}"`);
         }
         else {
           valueArr.push(`${key}: ${value}`);

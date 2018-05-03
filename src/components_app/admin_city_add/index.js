@@ -81,6 +81,9 @@ export default class Component extends React.Component {
       {
         title: '操作人',
         dataIndex: 'operator',
+        rules: [{
+          required: true, message: '必填',
+        }],
       },
       {
         title: '身份证号',
@@ -96,6 +99,9 @@ export default class Component extends React.Component {
           max: 19999999999,
         },
         zeroEmptyFlag: true,
+        rules: [{
+          required: true, message: '必填',
+        }],
       },
       {
         title: 'Email',
