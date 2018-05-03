@@ -4,6 +4,7 @@ const models = [
   require('./breadcrumb').default,
   require('./ctrl_d').default,
   require('./foreign_select').default,
+  require('./foreign_select_graphql').default,
   // require('./menu_config').default,
   require('./post').default,
   require('./specialty').default,

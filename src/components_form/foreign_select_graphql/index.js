@@ -3,15 +3,14 @@ import jQuery from 'jquery';
 import { Select, Spin } from 'antd';
 import _ from 'lodash';
 import { connect } from 'dva';
-import { http } from '../../services/_factory';
+import Services from '../../services';
 
 const timeout = {};
-const currentValue = {};
 const optionsCache = {};
 let dispatchSave = false;
 
 // eslint-disable-next-line no-underscore-dangle
-window.____foreignSelectOptionsCache = optionsCache;
+window.____foreignSelectGraphqlOptionsCache = optionsCache;
 
 // 监控全局的 request 事件。如果数据更新了，就把缓存的外键选择进行清除操作。
 // 这个需要在 url 那边同时增加触发 httpFinish 的事件。
@@ -23,7 +22,7 @@ jQuery(window).on('httpFinish', (e, options) => {
 
   const tagA = document.createElement('a');
   tagA.href = options.url;
-  const url = _.get(tagA, 'pathname');
+  const url = _.get(tagA, 'pathname') || '';
 
   if (url && -1 === ['get'].indexOf(options.method.toLocaleLowerCase())) {
     const key1 = url;
@@ -36,7 +35,7 @@ jQuery(window).on('httpFinish', (e, options) => {
     delete optionsCache[key4];
     if (dispatchSave) {
       dispatchSave({
-        type: 'foreign_select/info',
+        type: 'foreign_select_graphql/info',
         payload: optionsCache,
       });
     }
@@ -45,23 +44,10 @@ jQuery(window).on('httpFinish', (e, options) => {
 
 // 特定的表，显示的名字是不同的字段的。
 function getModalOptions({ props }) {
-  const url = props.url || '';
-  if (-1 < ['class', 'course', 'product'].indexOf(url)) {
-    return {
-      valueName: 'id',
-      textName: 'display_name',
-    };
-  }
-  else if (-1 < ['school'].indexOf(url)) {
+  if (-1 < ['school'].indexOf(props.table)) {
     return {
       valueName: 'name',
       textName: 'name',
-    };
-  }
-  else if (-1 < ['keyword_reply'].indexOf(url)) {
-    return {
-      valueName: 'id',
-      textName: 'keyword',
     };
   }
   else {
@@ -73,69 +59,42 @@ function getModalOptions({ props }) {
 }
 
 // 创建怎么搜索的方法。
-function buildQuery({ format, name, method, value, props }) {
+function buildFilter({ name, method, value, props }) {
   const options = props.options || getModalOptions({ props });
-  let query = `?search=${value}`;
-  // filter 模式
-  if ('filter' === format) {
-    let filterArr = [];
-    if (_.isArray(props.filterOption)) {
-      filterArr = filterArr.concat(props.filterOption);
-    }
-    if ('' !== value) {
-      filterArr.push([name || options.textName, method || 'like', value]);
-    }
-    if (0 < filterArr.length) {
-      query = `?filter=${JSON.stringify(filterArr)}`;
-    }
+  let filterArr = [];
+  if (_.isArray(props.filterOption)) {
+    filterArr = filterArr.concat(props.filterOption);
+  }
+  if ('' !== value) {
+    filterArr.push([name || options.textName, method || 'like', value]);
   }
 
-
-  if ('' === value) {
-    query = '?';
-  }
-
-  return query;
+  return filterArr;
 }
 
 // 进行数据获取更新连接。
 // uuid 是用来强行更新缓存的
-function fetch({ value, query, url, props, force = false, dispatch }, callback, options = {}) {
-  // const timeoutSaveKey = `${uuid}_${url}`;
-  const timeoutSaveKey = `timeout_${url}_${query}`;
+function fetch({ value, query, props, callback, options = {} }) {
+  // const timeoutSaveKey = `${uuid}_${props.table}`;
+  const timeoutSaveKey = `timeout_${props.table}_${query}`;
   if (timeout[timeoutSaveKey]) {
     clearTimeout(timeout[timeoutSaveKey]);
     timeout[timeoutSaveKey] = null;
   }
-  currentValue[url] = value;
 
-  const key = `${url}`;
+  const key = `${props.table}`;
   optionsCache[key] = optionsCache[key] || [];
 
-  if ('specialty' === url) {
-    return callback([]);
-  }
-
   // // 从缓存读取。而且缓存大于 5 条记录的时候才读取。
-  // if (!force && optionsCache[key] && 5 < optionsCache[key].length && !value) {
+  // if (!props.force && optionsCache[key] && 5 < optionsCache[key].length && !value) {
   // 从缓存读取。
-  if (!force && optionsCache[key] && 1 < optionsCache[key].length && !value) {
+  if (!props.force && optionsCache[key] && 1 < optionsCache[key].length && !value) {
     return callback(optionsCache[key]);
   }
 
-  function fake() {
-    let urlRequest = `/${url}${query || ''}`;
-    if (props.apiSelect) {
-      const select = `select=${props.apiSelect}`;
-      if (-1 < urlRequest.indexOf('?')) {
-        urlRequest = `${urlRequest}&${select}`;
-      }
-      else {
-        urlRequest = `${urlRequest}?${select}`;
-      }
-    }
-    http.get(urlRequest).then((response) => {
-      const data = response.data.data;
+  function debunceFakeFetch() {
+    Services[props.table].graphqlMaxList().then((response) => {
+      const data = _.get(response, `data.${props.table}.data`);
       const searchList = [];
       data.forEach((elem) => {
         // 获取 elem 的 value 和 text 的 存储 index 。
@@ -154,32 +113,36 @@ function fetch({ value, query, url, props, force = false, dispatch }, callback, 
       }
       optionsCache[key] = _.uniqBy(_.orderBy([].concat(searchList).concat(optionsCache[key]), 'value', 'desc'), 'value');
       callback(optionsCache[key]);
-      dispatch({
-        type: 'foreign_select/info',
+      props.dispatch({
+        type: 'foreign_select_graphql/info',
         payload: optionsCache,
       });
+      return optionsCache[key];
+    }).catch((rej) => {
+      window.console.log('rej', rej);
     });
   }
 
-  timeout[timeoutSaveKey] = setTimeout(fake, 300);
+  timeout[timeoutSaveKey] = setTimeout(debunceFakeFetch, 300);
 }
 
 @connect((state) => {
   return {
-    foreignSelectInfoState: state.foreign_select.info,
+    foreignSelectGraphqlInfoState: state.foreign_select_graphql.info,
   };
 })
 export default class Component extends React.Component {
-  // static defaultProps = {
-  //   // append: true,
-  //   force: false,
-  //   allowClear: false,
-  // }
+  static defaultProps = {
+    append: true,
+    force: false,
+    allowClear: false,
+    table: '',
+  }
 
   constructor(props) {
     super(props);
-    if (__DEV__ && props.url && 'specialty' === props.url) {
-      window.console.error('使用 SpecialtyTreeSelect 替换专业外键。', '使用例子:', '<FormComponents.SpecialtyTreeSelect allowClear numberFormat data-comment-treeSearch="树搜索" />');
+    if (!props.table) {
+      window.console.error('ForeignSelectGraphql 必须传输 table 参数');
     }
     const value = props.value || undefined;
     const options = props.options || getModalOptions({ props });
@@ -187,13 +150,15 @@ export default class Component extends React.Component {
       loading: false,
       value,
       options: {
+        valueName: 'id',
+        textName: 'name',
         ...options,
       },
     };
     this.uuid = UUID().replace(/-/g, '_');
-    debugAdd('foreign_select', this);
-    // window.console.log('props.url', props.url, 'this.uuid', this.uuid);
-    debugAdd(`foreign_select_all_${props.url || ''}_${this.uuid}`, this);
+    debugAdd('foreign_select_graphql', this);
+    // window.console.log('props.table', props.table, 'this.uuid', this.uuid);
+    debugAdd(`foreign_select_graphql_all_${props.table || ''}_${this.uuid}`, this);
   }
 
   componentDidMount = () => {
@@ -205,17 +170,16 @@ export default class Component extends React.Component {
 
   // 更新传输的 value
   componentWillReceiveProps = (nextProps) => {
-    // window.console.log('ForeignSelect componentWillReceiveProps', nextProps.value, nextProps.url, nextProps);
+    // window.console.log('ForeignSelectGraphql componentWillReceiveProps', nextProps.value, nextProps.table, nextProps);
     if ('value' in nextProps && this.props.value !== nextProps.value) {
-      const value = nextProps.value;
       this.setState({
-        value,
+        value: nextProps.value,
       }, () => {
-        this.handleSearch(_.isString(value) ? value : JSON.stringify(value) || '');
-        this.initValueElem(value);
+        this.handleSearch(_.isString(nextProps.value) ? nextProps.value : JSON.stringify(nextProps.value) || '');
+        this.initValueElem(nextProps.value);
       });
     }
-    else if ('url' in nextProps && this.props.url !== nextProps.url) {
+    else if ('table' in nextProps && this.props.table !== nextProps.table) {
       this.handleSearch('');
       this.initValueElem('');
     }
@@ -226,39 +190,32 @@ export default class Component extends React.Component {
   }
 
   initValueElem = (value) => {
-    const { url, foreignSelectInfoState } = this.props;
     if (value) {
-      const valueElem = _.find(foreignSelectInfoState[url], {
+      const valueElem = _.find(this.props.foreignSelectGraphqlInfoState[this.props.table], {
         value,
-      }) || _.find(foreignSelectInfoState[url], {
+      }) || _.find(this.props.foreignSelectGraphqlInfoState[this.props.table], {
         value: value * 1,
       });
 
-      let query = `?filter=${JSON.stringify([[this.state.options.valueName, 'multiple' === this.props.mode ? 'in' : '=', value]])}`;
+      const query = [[this.state.options.valueName, 'multiple' === this.props.mode ? 'in' : '=', value]];
 
-      if (-1 < this.props.url.indexOf('?')) {
-        query = '';
-      }
-
+      // 如果缓存中没有。
       if (!valueElem) {
         fetch({
           value,
           query,
-          url: this.props.url,
-          search: this.props.search,
-          uuid: this.uuid,
           props: this.props,
-          force: this.props.force || false,
-          dispatch: this.props.dispatch,
-        }, (data) => {
-          if (this.componentUnmountFlag) {
-            return;
-          }
-          this.setState({
-            loading: false,
-          });
-          return data;
-        }, this.state.options);
+          callback: (data) => {
+            if (this.componentUnmountFlag) {
+              return;
+            }
+            this.setState({
+              loading: false,
+            });
+            return data;
+          },
+          options: this.state.options,
+        });
       }
     }
   }
@@ -311,9 +268,9 @@ export default class Component extends React.Component {
     // this.handleChange(formatedValue);
 
     const { onSelect } = this.props;
-    const $selected = _.find(this.props.foreignSelectInfoState[this.props.url] || [], {
+    const $selected = _.find(this.props.foreignSelectGraphqlInfoState[this.props.table] || [], {
       [this.state.options.valueName]: value * 1,
-    }) || _.find(this.props.foreignSelectInfoState[this.props.url] || [], {
+    }) || _.find(this.props.foreignSelectGraphqlInfoState[this.props.table] || [], {
       [this.state.options.valueName]: value,
     }) || null;
     if ('function' === typeof onSelect) {
@@ -335,9 +292,9 @@ export default class Component extends React.Component {
     const formatedValue = this.formatValue(value);
     // this.handleChange(formatedValue);
 
-    const $selected = _.find(this.props.foreignSelectInfoState[this.props.url] || [], {
+    const $selected = _.find(this.props.foreignSelectGraphqlInfoState[this.props.table] || [], {
       [this.state.options.valueName]: value * 1,
-    }) || _.find(this.props.foreignSelectInfoState[this.props.url] || [], {
+    }) || _.find(this.props.foreignSelectGraphqlInfoState[this.props.table] || [], {
       [this.state.options.valueName]: value,
     }) || null;
 
@@ -366,35 +323,27 @@ export default class Component extends React.Component {
       loading: true,
     });
 
-    let query = buildQuery({
-      url: this.props.url,
+    const query = buildFilter({
       ...this.props.search,
       value: formatedValue,
       props: this.props,
     });
 
-    if (-1 < this.props.url.indexOf('?')) {
-      query = '';
-    }
-
     fetch({
       value: formatedValue,
       query,
-      url: this.props.url,
-      search: this.props.search,
-      uuid: this.uuid,
       props: this.props,
-      force: this.props.force || false,
-      dispatch: this.props.dispatch,
-    }, (data) => {
-      if (this.componentUnmountFlag) {
-        return;
-      }
-      this.setState({
-        loading: false,
-      });
-      return data;
-    }, this.state.options);
+      callback: (data) => {
+        if (this.componentUnmountFlag) {
+          return;
+        }
+        this.setState({
+          loading: false,
+        });
+        return data;
+      },
+      options: this.state.options,
+    });
   }
 
   render() {
@@ -406,7 +355,6 @@ export default class Component extends React.Component {
     else {
       formatValue = -1 < [undefined, null].indexOf(value) ? value : `${value}`;
     }
-    const { url } = this.props;
     const filterFunc = 'function' === typeof this.props.filterFunc ? this.props.filterFunc : (arr) => {
       return arr;
     };
@@ -451,7 +399,7 @@ export default class Component extends React.Component {
         }}
       >
         {
-          filterFunc(this.props.foreignSelectInfoState[this.props.url] || []).map((elem) => {
+          filterFunc(this.props.foreignSelectGraphqlInfoState[this.props.table] || []).map((elem) => {
             let filter = renderLabel(elem);
             if ('string' !== typeof filter) {
               filter = JSON.stringify(elem);
@@ -460,7 +408,7 @@ export default class Component extends React.Component {
             return (
               <Select.Option
                 elem={elem}
-                key={`${url}_${elem.value}`}
+                key={`${this.props.table}_${elem.value}`}
                 value={renderValue(elem)}
                 title={elem.text}
                 filter={filter}

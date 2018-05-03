@@ -57,9 +57,9 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="school_id">
-        <Form.Item {...formItemLayout} label="学校">
+        <Form.Item {...formItemLayout} label="$学校">
           {
-            getFieldDecorator('school_id')(<ComponentsForm.ForeignSelect size="small" placeholder="学校" url="admin" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat />)
+            getFieldDecorator('school_id')(<ComponentsForm.ForeignSelectGraphql size="small" placeholder="$学校" table="user" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat />)
           }
         </Form.Item>
       </Col>
