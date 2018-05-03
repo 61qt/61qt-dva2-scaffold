@@ -1,3 +1,4 @@
+import AreaSelect from './area_select';
 import DateRange from './date_range';
 import ForeignSelect from './foreign_select';
 import ForeignSelectGraphql from './foreign_select_graphql';
@@ -9,6 +10,7 @@ import TimeRange from './time_range';
 import WeekRange from './week_range';
 
 export default {
+  AreaSelect,
   DateRange,
   ForeignSelect,
   ForeignSelectGraphql,

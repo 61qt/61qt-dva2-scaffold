@@ -47,21 +47,29 @@ export default class Component extends React.Component {
         title: '省',
         dataIndex: 'province_id',
         render: () => {
-          return (<FormComponents.ForeignSelect placeholder="请选择" url="school" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear />);
+          return (<FormComponents.AreaSelect areaParentId="1" placeholder="请选择" disabled />);
         },
+        initialValue: () => {
+          return 620000;
+        },
+        shouldInitialValue: true,
       },
       {
         title: '市',
         dataIndex: 'city_id',
         render: () => {
-          return (<FormComponents.ForeignSelect placeholder="请选择" url="school" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear />);
+          return (<FormComponents.AreaSelect areaParentId="620000" placeholder="请选择" disabled />);
         },
+        initialValue: () => {
+          return 620700;
+        },
+        shouldInitialValue: true,
       },
       {
         title: '县',
         dataIndex: 'district_id',
         render: () => {
-          return (<FormComponents.ForeignSelect placeholder="请选择" url="school" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear />);
+          return (<FormComponents.AreaSelect areaParentId="620700" placeholder="请选择" allowClear />);
         },
       },
       {
