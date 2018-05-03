@@ -10,9 +10,12 @@ import Download from '../../components_atom/download';
 import Upload from '../../components_atom/upload';
 import Access from '../../components_atom/access';
 import Table from '../../components_atom/table';
+import PageLayout from '../../components_atom/page-layout';
+import FilterTree from '../../components_atom/filter_tree';
 
 @connect((state) => {
   return {
+    area: state.area,
     loading: !!state.loading.models.student,
     studentState: state.student,
   };
@@ -107,6 +110,9 @@ export default class Component extends React.Component {
   componentDidMount = () => {
     const { dispatch } = this.props;
     dispatch({
+      type: 'area/init',
+    });
+    dispatch({
       type: 'breadcrumb/current',
       payload: [
         {
@@ -122,6 +128,12 @@ export default class Component extends React.Component {
       window.console.log('info', info);
     }
     this.resetPage();
+  }
+
+  onSelect = () => {
+  }
+
+  onCheck = () => {
   }
 
   resetPage = () => {
@@ -199,8 +211,15 @@ export default class Component extends React.Component {
   }
 
   render() {
-    return (
-      <div className={`${styles.normal}`}>
+    const sider = (
+      <FilterTree
+        tree={this.props.area.tree.slice(0, 5)}
+        onSelect={this.onSelect}
+        onCheck={this.onCheck}
+      />
+    );
+    const children = (
+      <div>
         <SearchForm handleSubmit={this.handleSubmit} />
         <div>
           <Table
@@ -218,6 +237,11 @@ export default class Component extends React.Component {
           />
         </div>
       </div>
+    );
+    return (
+      <PageLayout Sider={sider}>
+        {children}
+      </PageLayout>
     );
   }
 }

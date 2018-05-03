@@ -1,0 +1,25 @@
+@import '../../global_styles/_variables.less';
+
+.normal {
+}
+
+:global {
+  .page-layout-sider {
+    position: sticky;
+    top: 57px;
+    float: left;
+    overflow: scroll;
+    margin-left: -15px;
+    margin-right: 10px;
+    margin-bottom: -94px;
+    width: 200px;
+    border: 1px solid @border-color-normal;
+    border-radius: 4px;
+    height: 100%;
+  }
+  
+  .page-layout-content {
+    overflow: hidden;
+    height: 100%;
+  }
+}
