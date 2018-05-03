@@ -292,13 +292,11 @@ export default class Component extends React.Component {
         },
       });
     }
-    promise.then((res) => {
-      window.res = res;
+    promise.then(() => {
       message.success(`${this.editInfo.text}成功`);
       this.successCallback();
       this.props.history.push(Filters.path('admin_city', {}));
     }).catch((rej) => {
-      window.rej = rej;
       formErrorMessageShow(rej);
       let rejData = {};
       try {

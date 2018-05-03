@@ -98,14 +98,20 @@ export default [
     ],
   },
   {
-    name: '文章管理',
+    name: '学期管理',
+    key: 'term',
+    url: 'term',
+    // resourceKey: '学期管理',
+  },
+  {
+    name: '$文章管理',
     key: 'news',
     icon: 'news',
     url: 'news',
     // resourceKey: '文章管理',
   },
   {
-    name: '基础数据管理',
+    name: '$基础数据管理',
     key: 'base',
     icon: 'base',
     resourceKey: '基础数据管理',
@@ -125,7 +131,7 @@ export default [
     ],
   },
   {
-    name: '第三方应用认证',
+    name: '$第三方应用认证',
     key: 'thirdparty',
     icon: 'thirdparty',
     resourceKey: '第三方应用认证',

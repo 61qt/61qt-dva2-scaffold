@@ -173,8 +173,6 @@ export default class Component extends React.Component {
       treeDefaultExpandAll = this.props.treeDefaultExpandAll || treeDefaultExpandAll;
     }
 
-    window.tree = this.props.tree;
-
     let tree = this.props.tree;
     if (this.props.selectAll) {
       tree = [{
