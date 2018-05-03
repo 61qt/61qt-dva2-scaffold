@@ -97,7 +97,8 @@ export default function actionFactory({
         }
       }`;
 
-      return http.post('/graphql', {
+      return http.post(`/graphql?f=${table}`, {
+        operationName: 'List',
         query: schema,
         variables: {
           page: options.page || 1,
@@ -129,7 +130,8 @@ export default function actionFactory({
           }
         }
       }`;
-      return http.post('/graphql/', {
+      return http.post(`/graphql?f=${table}`, {
+        operationName: 'Detail',
         query: schema,
         variables: {
           id: options.id * 1,
@@ -146,8 +148,6 @@ export default function actionFactory({
     },
     // 删除
     graphqlRemove: (id, values, options = {}) => {
-      const valueArr = buildFormDataArr(values);
-      valueArr.push(`id: ${id}`);
       const schemaArr = [
         `mutation removeMutation($id: ID) {
           ${getMutationName({ mutation, table, action: 'remove' })} (id: $id) {
@@ -155,7 +155,8 @@ export default function actionFactory({
           }
         }`,
       ];
-      return http.post('/graphql/', {
+      return http.post(`/graphql?f=${table}`, {
+        operationName: 'removeMutation',
         query: schemaArr.join('\n'),
         variables: {
           id: id * 1,
@@ -172,7 +173,8 @@ export default function actionFactory({
           }
         }`,
       ];
-      return http.post('/graphql/', {
+      return http.post(`/graphql?f=${table}`, {
+        operationName: 'updateMutation',
         query: schemaArr.join('\n'),
         variables: {
           id: id * 1,
@@ -189,7 +191,8 @@ export default function actionFactory({
           }
         }`,
       ];
-      return http.post('/graphql/', {
+      return http.post(`/graphql?f=${table}`, {
+        operationName: 'createMutation',
         query: schemaArr.join('\n'),
         variables: {},
       }, options.config || {});

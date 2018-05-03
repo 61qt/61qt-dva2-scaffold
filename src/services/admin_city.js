@@ -68,7 +68,7 @@ Service.graphqlChangeStatus = (id, values = {}, options = {}) => {
       }
     }`,
   ];
-  return http.post('/graphql/', {
+  return http.post('/graphql?c=admin_city', {
     query: schemaArr.join('\n'),
     variables: {
       id: id * 1,
