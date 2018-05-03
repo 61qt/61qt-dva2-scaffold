@@ -2,6 +2,12 @@
 
 export default [
   {
+    name: '架构管理',
+    key: 'org',
+    url: 'org',
+    // resourceKey: '架构管理',
+  },
+  {
     name: '管理员管理',
     key: 'admin',
     icon: 'admin',
