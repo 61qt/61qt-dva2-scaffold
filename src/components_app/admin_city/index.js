@@ -51,8 +51,8 @@ export default class Component extends React.Component {
       },
       {
         title: '操作人',
-        key: 'admin_id',
-        dataIndex: 'admin_id',
+        key: 'operator',
+        dataIndex: 'operator',
         width: 130,
       },
       {

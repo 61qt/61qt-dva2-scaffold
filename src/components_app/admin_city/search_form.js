@@ -66,10 +66,10 @@ export default class Component extends ComponentSearchForm {
     ));
 
     children.push((
-      <Col span={col} key="sng_admin_id">
+      <Col span={col} key="operator">
         <Form.Item {...formItemLayout} label="操作人">
           {
-            getFieldDecorator('sng_admin_id')(<ComponentsForm.ForeignSelect size="small" placeholder="操作人" url="admin" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat />)
+            getFieldDecorator('operator')(<Input size="small" placeholder="搜索" />)
           }
         </Form.Item>
       </Col>

@@ -95,9 +95,13 @@ function fetch({ value, query, props, callback, options = {} }) {
   function debunceFakeFetch() {
     Services[props.table].graphqlMaxList().then((response) => {
       // const data = _.get(response, `data.${props.table}.data`);
-      const data = _.get(response, 'data.data.data');
+      const data = _.get(response, 'data.data');
+      // window.console.log('data', data);
+      // window.console.log('response', response);
+      // window.response = response;
+      // window.data = data;
       const searchList = [];
-      data.forEach((elem) => {
+      _.each(data || [], (elem) => {
         // 获取 elem 的 value 和 text 的 存储 index 。
         searchList.push({
           ...elem,
