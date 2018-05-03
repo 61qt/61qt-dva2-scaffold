@@ -13,7 +13,7 @@ import { DICT } from '../../constants';
 @Form.create()
 @connect((state) => {
   return {
-    listState: _.get(state.user, 'listState') || {},
+    listState: _.get(state.admin_city, 'listState') || {},
   };
 })
 export default class Component extends ComponentSearchForm {
@@ -59,7 +59,7 @@ export default class Component extends ComponentSearchForm {
       <Col span={col} key="school_id">
         <Form.Item {...formItemLayout} label="$学校">
           {
-            getFieldDecorator('school_id')(<ComponentsForm.ForeignSelectGraphql size="small" placeholder="$学校" table="user" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat />)
+            getFieldDecorator('school_id')(<ComponentsForm.ForeignSelectGraphql size="small" placeholder="$学校" table="admin_city" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat />)
           }
         </Form.Item>
       </Col>

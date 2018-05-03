@@ -8,7 +8,7 @@ import CONSTANTS from '../constants';
 export { http, apiBaseUrl };
 
 export default function actionFactory({
-  namespace,
+  table,
   PAGE_SIZE = CONSTANTS.PAGE_SIZE,
   PAGE_SIZE_MAX = CONSTANTS.PAGE_SIZE_MAX,
   Service = {},
@@ -44,7 +44,7 @@ export default function actionFactory({
       }).join(',');
 
       const schema = `query List($page: Int, $take: Int, $orderBy: String, $sort: String) {
-        ${namespace} (page: $page, take: $take, orderBy: $orderBy, sort: $sort, ${query ? ',' : ''} ${query}) {
+        ${table} (page: $page, take: $take, orderBy: $orderBy, sort: $sort, ${query ? ',' : ''} ${query}) {
           data {
             ${select}
           }
@@ -65,7 +65,15 @@ export default function actionFactory({
           orderBy: options.orderBy || 'id',
           sort: options.sort || 'desc',
         },
-      }, options.config || {});
+      }, options.config || {}).then((res) => {
+        // 直接返回 转换后的 data 数据。
+        const data = _.get(res, `data.${table}`);
+        const returnData = {
+          ...res,
+        };
+        returnData.data = data;
+        return returnData;
+      });
     },
     // 详情
     graphqlDetail: (options) => {
@@ -75,7 +83,7 @@ export default function actionFactory({
       }
 
       const schema = `query Detail($id: ID) {
-        ${namespace} (id: $id) {
+        ${table} (id: $id) {
           data {
             ${select}
           }
@@ -86,7 +94,15 @@ export default function actionFactory({
         variables: {
           id: options.id * 1,
         },
-      }, options.config || {});
+      }, options.config || {}).then((res) => {
+        // 直接返回 转换后的 data 数据。
+        const data = _.get(res, `data.${table}`);
+        const returnData = {
+          ...res,
+        };
+        returnData.data = data;
+        return returnData;
+      });
     },
     // 删除
     graphqlRemove: (id, values = {}, config = {}) => {

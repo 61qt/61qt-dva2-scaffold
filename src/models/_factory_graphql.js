@@ -72,9 +72,9 @@ export default function modelFactory({
         return { ...state, list, total, page, pageSize, start, end };
       },
 
-      saveMaxList(state, { payload: { data: list, total, page, pageMaxSize, start, end } }) {
-        return { ...state, list, total, page, pageMaxSize, start, end };
-      },
+      // saveMaxList(state, { payload: { data: list, total, page, pageMaxSize, start, end } }) {
+      //   return { ...state, list, total, page, pageMaxSize, start, end };
+      // },
 
       saveListState(state, { payload: { filter = '', searchValues = {}, query = '', expand = false, ...rest } }) {
         const listState = {
@@ -102,7 +102,7 @@ export default function modelFactory({
         }
         try {
           const data = yield call(Service.graphqlList, { page, filter, query, pageSize, orderBy, sort });
-          const modelData = _.get(data, `data.${modelName}`);
+          const modelData = _.get(data, 'data');
           // window.listData = data;
           // window.listModelData = modelData;
           const start = modelData.per_page * 1 * (modelData.current_page * 1 - 1) * 1 + 1;
@@ -125,29 +125,29 @@ export default function modelFactory({
         }
       },
 
-      *maxList({ payload: { page = 1, filter = '', query = '' } }, { call, put, select }) {
-        const pageMaxSize = yield select(state => state[modelName].pageMaxSize);
-        try {
-          const data = yield call(Service.graphqlMaxList, { page, filter, query, pageSize: pageMaxSize });
-          const start = data.data.per_page * 1 * (data.data.current_page * 1 - 1) * 1 + 1;
-          const length = _.get(data, 'data.data.length') * 1 || 0;
-          yield put({
-            type: 'saveMaxList',
-            payload: {
-              data: data.data.data,
-              total: data.data.total,
-              pageMaxSize: data.data.per_page * 1,
-              page: data.data.current_page,
-              start,
-              end: start + length,
-            },
-          });
-          return data;
-        }
-        catch (e) {
-          return Promise.reject(e);
-        }
-      },
+      // *maxList({ payload: { page = 1, filter = '', query = '' } }, { call, put, select }) {
+      //   const pageMaxSize = yield select(state => state[modelName].pageMaxSize);
+      //   try {
+      //     const data = yield call(Service.graphqlMaxList, { page, filter, query, pageSize: pageMaxSize });
+      //     const start = data.data.per_page * 1 * (data.data.current_page * 1 - 1) * 1 + 1;
+      //     const length = _.get(data, 'data.data.length') * 1 || 0;
+      //     yield put({
+      //       type: 'saveMaxList',
+      //       payload: {
+      //         data: data.data.data,
+      //         total: data.data.total,
+      //         pageMaxSize: data.data.per_page * 1,
+      //         page: data.data.current_page,
+      //         start,
+      //         end: start + length,
+      //       },
+      //     });
+      //     return data;
+      //   }
+      //   catch (e) {
+      //     return Promise.reject(e);
+      //   }
+      // },
 
       *remove({ payload: id }, { call, put }) {
         try {
@@ -185,7 +185,7 @@ export default function modelFactory({
       *detail({ payload: values }, { call, put }) {
         try {
           const data = yield call(Service.graphqlDetail, values);
-          const detail = _.get(data, `data.${modelName}.data[0]`);
+          const detail = _.get(data, 'data.data[0]');
           if (!detail) {
             return Promise.reject('找不到该资源');
           }

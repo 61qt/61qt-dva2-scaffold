@@ -1,4 +1,5 @@
 // eslint-disable-next-line camelcase
+import admin_city from './admin_city';
 import common from './common';
 import post from './post';
 import specialty from './specialty';
@@ -6,7 +7,6 @@ import student from './student';
 // eslint-disable-next-line camelcase
 import sys_message from './sys_message';
 import teacher from './teacher';
-import user from './user';
 
 import { http } from './_factory';
 import {
@@ -25,12 +25,12 @@ http.interceptors.request.use(requestInterceptor, (error) => {
 http.interceptors.response.use(responseSuccessInterceptor, responseFailInterceptor);
 
 export default {
+  admin_city,
   common,
   post,
   specialty,
   student,
   sys_message,
   teacher,
-  user,
 };
 

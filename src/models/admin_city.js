@@ -3,7 +3,7 @@ import Services from '../services';
 
 const modelExtend = {};
 
-const modelName = 'user';
+const modelName = 'admin_city';
 export default graphqlModelFactory({
   modelName,
   Service: Services[modelName],

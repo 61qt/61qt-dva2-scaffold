@@ -1,7 +1,7 @@
-import Factory, { http } from '../services/_factory';
 import FactoryGraphql from '../services/_factory_graphql';
 
 const namespace = 'user';
+// admin city 是对应 user 里面的某个类型的数据，故在同一个表。
 
 const modelFields = [
   'id',
@@ -42,22 +42,21 @@ const select = {
   ].join('\n'),
 };
 
-const Service = Factory({
+const Service = FactoryGraphql({
   namespace,
+  table: namespace,
   select,
+  mutation: {
+    update: {
+      name: 'updateCityAdmin',
+    },
+    create: {
+      name: 'createCityAdmin',
+    },
+    remove: {
+      name: 'deleteCityAdmin',
+    },
+  },
 });
 
-const graphqlService = FactoryGraphql({
-  Service,
-  namespace,
-  select,
-});
-
-graphqlService.fetch1 = (values) => {
-  return http.post('graphql', {
-    ...values,
-    query: select.list,
-  });
-};
-
-export default graphqlService;
+export default Service;

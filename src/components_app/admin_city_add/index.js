@@ -169,7 +169,7 @@ export default class Component extends React.Component {
     if (paramsId) {
       // 编辑状态
       dispatch({
-        type: 'user/detail',
+        type: 'admin_city/detail',
         payload: { id: paramsId },
       }).then((data) => {
         this.setState({
@@ -277,7 +277,7 @@ export default class Component extends React.Component {
     let promise;
     if ('update' === this.editInfo.method) {
       promise = this.props.dispatch({
-        type: 'user/update',
+        type: 'admin_city/update',
         payload: {
           id: this.editInfo.paramsId,
           values: formData,
@@ -286,7 +286,7 @@ export default class Component extends React.Component {
     }
     else {
       promise = this.props.dispatch({
-        type: 'user/create',
+        type: 'admin_city/create',
         payload: {
           values: formData,
         },

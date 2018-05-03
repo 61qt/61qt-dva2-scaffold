@@ -13,8 +13,8 @@ import Table from '../../components_atom/table';
 
 @connect((state) => {
   return {
-    loading: !!state.loading.models.user,
-    userState: state.user,
+    loading: !!state.loading.models.admin_city,
+    adminCityState: state.admin_city,
   };
 })
 export default class Component extends React.Component {
@@ -75,13 +75,13 @@ export default class Component extends React.Component {
         width: 140,
         render: (text, record) => {
           return (<span className={styles.operation}>
-            <Access data-bak-auth="user.update">
+            <Access data-bak-auth="admin_city.update">
               <NavLink to={Filters.path('admin_city_edit', { id: record.id })} activeClassName="link-active">编辑</NavLink>
             </Access>
-            <Access data-bak-auth="user.destroy">
+            <Access data-bak-auth="admin_city.destroy">
               <a>删除</a>
             </Access>
-            <Access data-bak-auth="user.update">
+            <Access data-bak-auth="admin_city.update">
               <a>禁用</a>
             </Access>
           </span>);
@@ -112,69 +112,69 @@ export default class Component extends React.Component {
 
   resetPage = () => {
     this.props.dispatch({
-      type: 'user/reset',
+      type: 'admin_city/reset',
     }).then(() => {
       this.props.history.push(Filters.path('loading', {}));
     });
   }
 
-  pageChangeHandler = (page = this.props.userState.page) => {
+  pageChangeHandler = (page = this.props.adminCityState.page) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'user/list',
-      payload: { page, filter: this.props.userState.listState.filter },
+      type: 'admin_city/list',
+      payload: { page, filter: this.props.adminCityState.listState.filter },
     });
   }
 
   handleSubmit = ({ filter, values, expand, loadOldPage }) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'user/listState',
+      type: 'admin_city/listState',
       payload: { filter, searchValues: values, expand },
     });
     dispatch({
-      type: 'user/list',
-      payload: { page: loadOldPage ? this.props.userState.page : 1, filter },
+      type: 'admin_city/list',
+      payload: { page: loadOldPage ? this.props.adminCityState.page : 1, filter },
     });
   }
 
   title = () => {
-    const { userState } = this.props;
+    const { adminCityState } = this.props;
     return (
       <div className="clearfix">
         <h3 className="table-title">
           市级管理员列表
-          { userState.total ? <small>（共{userState.total}条）</small> : null }
+          { adminCityState.total ? <small>（共{adminCityState.total}条）</small> : null }
         </h3>
 
         <div className="table-title-action">
-          <Access data-bak-auth="user.store">
-            <Upload onUploaded={this.onUploaded} size="small" path="user?upload">批量导入</Upload>
+          <Access data-bak-auth="admin_city.store">
+            <Upload onUploaded={this.onUploaded} size="small" path="admin_city?upload">批量导入</Upload>
           </Access>
-          <Access data-bak-auth="user.export">
-            <Download confirm="true" selectRow={this.columns} size="small" path="user/export" query={{ filter: userState.listState.filter }}>批量导出</Download>
+          <Access data-bak-auth="admin_city.export">
+            <Download confirm="true" selectRow={this.columns} size="small" path="admin_city/export" query={{ filter: adminCityState.listState.filter }}>批量导出</Download>
           </Access>
-          <Access data-bak-auth="user.store">
+          <Access data-bak-auth="admin_city.store">
             <NavLink to={Filters.path('admin_city_add', {})} activeClassName="link-active">
               <Button size="small" type="primary" ghost>新增市级管理员</Button>
             </NavLink>
           </Access>
-          <Download link="true" size="small" path="user/export/template">下载模板</Download>
+          <Download link="true" size="small" path="admin_city/export/template">下载模板</Download>
         </div>
       </div>
     );
   }
 
   footer = () => {
-    const { userState } = this.props;
+    const { adminCityState } = this.props;
     return (
       <div className="clearfix">
-        <div className="ant-table-pagination-info">当前显示{userState.start} - {userState.end}条记录，共 {userState.total} 条数据</div>
+        <div className="ant-table-pagination-info">当前显示{adminCityState.start} - {adminCityState.end}条记录，共 {adminCityState.total} 条数据</div>
         <Pagination
           className="ant-table-pagination ant-table-pagination-hide-last"
-          total={userState.total}
-          current={userState.page}
-          pageSize={userState.pageSize}
+          total={adminCityState.total}
+          current={adminCityState.page}
+          pageSize={adminCityState.pageSize}
           showQuickJumper={false}
           size="small"
           onChange={this.pageChangeHandler}
@@ -193,7 +193,7 @@ export default class Component extends React.Component {
             size="small"
             bordered
             columns={this.columns}
-            dataSource={this.props.userState.list}
+            dataSource={this.props.adminCityState.list}
             loading={this.props.loading}
             scroll={{ x: this.columns.reduce((a, b) => (a.width || a.minWidth || a || 0) + (b.width || b.minWidth || 0), 0), y: 300 > window.innerHeight - 310 ? 300 : window.innerHeight - 310 }}
             rowKey={record => record.id}
