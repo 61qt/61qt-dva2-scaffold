@@ -9,7 +9,7 @@ import Area from '../../components_atom/area';
 import { DICT } from '../../constants';
 import Page from '../../components_default/page';
 import ComponentsForm from '../../components_form';
-import { searchFormItemLayout } from '../../components_default/search_form';
+import { searchFormItemLayout } from '../../components_atom/search_form';
 
 @Form.create()
 @connect((state) => {

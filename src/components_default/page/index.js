@@ -47,6 +47,7 @@ export default class Component extends React.Component {
   }
 
   onSiderSelect = (selected) => {
+    // todo add every node filter type
     this.handleSubmit({
       siderValues: {
         city_id: selected[0] || selected,
@@ -79,8 +80,8 @@ export default class Component extends React.Component {
           scroll={{ x: columns.reduce((a, b) => (a.width || a.minWidth || a || 0) + (b.width || b.minWidth || 0), 0), y: 300 > window.innerHeight - 310 ? 300 : window.innerHeight - 310 }}
           rowKey={record => record.id}
           pagination={false}
-          title={this.title}
-          footer={this.footer}
+          title={this.tableTitle}
+          footer={this.tableFooter}
         />
       </div>);
     }
@@ -106,7 +107,7 @@ export default class Component extends React.Component {
       showCount = 3;
     }
 
-    if (this.getSearchColumn) {
+    if (this.getSearchColumn()) {
       return (<SearchForm
         handleSubmit={this.handleSubmit}
         form={this.props.form}
@@ -205,7 +206,7 @@ export default class Component extends React.Component {
     });
   }
 
-  title = () => {
+  tableTitle = () => {
     const { pageState = {} } = this.props;
 
     return (
@@ -234,7 +235,7 @@ export default class Component extends React.Component {
     );
   }
 
-  footer = () => {
+  tableFooter = () => {
     const { pageState } = this.props;
     return (
       <div className="clearfix">
