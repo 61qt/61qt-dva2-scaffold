@@ -1,4 +1,5 @@
 import React from 'react';
+import jQuery from 'jquery';
 import { Input, Tree } from 'antd';
 import _ from 'lodash';
 
@@ -20,6 +21,13 @@ export default class Component extends React.Component {
     };
 
     this.search = _.debounce(this.search, 300);
+  }
+
+  componentDidMount = () => {
+    const last = _.last(this.state.checkedKeys);
+    if (last) {
+      jQuery(`[data-tree-value=${last}]`).click();
+    }
   }
 
   onExpand = (expandedKeys) => {
@@ -92,7 +100,7 @@ export default class Component extends React.Component {
         </span>
       ) : <span>{node.name}</span>;
 
-      return (<Tree.TreeNode title={title} value={node.value} key={node.value} selectable={selectable}>
+      return (<Tree.TreeNode title={<span data-tree-value={node.value}>{title}</span>} value={node.value} key={node.value} selectable={selectable}>
         {
           deep < 1 * this.props.deep && _.isArray(node.children) ? this.recursiveRender(node.children, 1 + deep) : null
         }
