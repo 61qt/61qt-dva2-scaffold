@@ -144,6 +144,7 @@ export default function actionFactory({
         operationName: 'List',
         query: schema,
         variables: {
+          filter: options.filter || '[]',
           page: options.page || 1,
           take: options.pageSize || PAGE_SIZE,
           orderBy: options.orderBy || 'id',
