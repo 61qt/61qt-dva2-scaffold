@@ -245,8 +245,8 @@ export default class Component extends React.Component {
       multiple={false}
     />);
 
-    const children = (
-      <div>
+    return (
+      <PageLayout Sider={Sider}>
         <SearchForm defaultFilter={this.state.defaultFilter} handleSubmit={this.handleSubmit} />
         <div>
           <Table
@@ -263,11 +263,6 @@ export default class Component extends React.Component {
             footer={this.footer}
           />
         </div>
-      </div>
-    );
-    return (
-      <PageLayout Sider={Sider}>
-        {children}
       </PageLayout>
     );
   }

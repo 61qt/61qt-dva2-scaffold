@@ -13,6 +13,7 @@ import Area from '../../components_atom/area';
 import Table from '../../components_atom/table';
 import Services from '../../services';
 import { DICT } from '../../constants';
+import PageLayout from '../../components_atom/page-layout';
 
 @connect((state) => {
   return {
@@ -229,7 +230,7 @@ export default class Component extends React.Component {
   }
 
   render() {
-    return (
+    return (<PageLayout>
       <div className={`${styles.normal}`}>
         <SearchForm handleSubmit={this.handleSubmit} />
         <div>
@@ -248,6 +249,6 @@ export default class Component extends React.Component {
           />
         </div>
       </div>
-    );
+    </PageLayout>);
   }
 }
