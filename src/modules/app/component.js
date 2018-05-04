@@ -58,24 +58,33 @@ export default class Component extends React.Component {
 
   onEnter() {
     const query = queryString.parse(window.location.search);
-    if (query.ticket && User.validToken(query.ticket)) {
-      User.token = query.ticket;
+    if (query.ticket) {
+      // 带有 ticket 进入程序，应该先进行 ticket 换 token 。
       const url = window.location.href.replace(/&*ticket=[^&]*/, '').replace(/#$/, '').replace(/\?$/, '');
       window.location.replace(url);
-      return;
+      return this.ticketToken(query.ticket);
     }
 
     // 初始化，从本地存储读取登录信息。
     if (!User.token) {
-      this.loginTokenFail({});
-      return false;
+      return jQuery(window).trigger(CONSTANTS.EVENT.CAS_JUMP_AUTH);
     }
 
-    // this.props.dispatch({
-    //   type: 'area/init',
-    // });
+    this.props.dispatch({
+      type: 'area/init',
+    });
 
+    this.setState({
+      pending: false,
+      logged: true,
+    });
+    // return this.getAuthInfo();
+  }
+
+  getAuthInfo = () => {
     Services.common.loginToken().then((res) => {
+      const random = Math.random() * 10;
+      prolongingInterval = window.setInterval(this.setLiving, (4 * 60 + random) * 1000);
       return this.loginTokenSuccess({ res });
     }).catch((rej) => {
       this.loginTokenFail({ rej });
@@ -121,8 +130,22 @@ export default class Component extends React.Component {
     }
   }
 
+  ticketToken = (ticket) => {
+    return Services.common.ticketToken(ticket).then((res) => {
+      const data = res.data || {};
+      User.token = data.token;
+      if (__DEV__) {
+        window.console.log('ticketToken', ticket, User.token);
+      }
+      message.success('登录成功');
+    }).catch((rej) => {
+      formErrorMessageShow(rej);
+      message.success('无效 ticket');
+    });
+  }
+
   loginTokenFail({ rej }) {
-    // document.cookie = 'isLogout=true;path=/';
+    document.cookie = 'isLogout=true;path=/';
     if (rej && undefined !== rej.status) {
       if (rej && 401 === rej.status) {
         message.error('授权已经过期，需要重新登录');
@@ -141,21 +164,20 @@ export default class Component extends React.Component {
 
   loginTokenSuccess({ res }) {
     const data = _.get(res, 'data') || {};
-    const { user, access } = data;
+    // data.user.access = data.access.join(',');
 
-    user.access = access.join(',');
+    User.info = data.user;
+    sentryUndershoot.setUserContent(data.user);
 
-    User.info = user;
-    sentryUndershoot.setUserContent(user);
+    // this.props.dispatch({
+    //   type: 'all_resource/access',
+    //   payload: { access },
+    // });
+    // this.props.dispatch({
+    //   type: 'all_resource/list',
+    //   payload: { page: 1, filter: '' },
+    // });
 
-    this.props.dispatch({
-      type: 'all_resource/access',
-      payload: { access },
-    });
-    this.props.dispatch({
-      type: 'all_resource/list',
-      payload: { page: 1, filter: '' },
-    });
     this.setState({
       pending: false,
       logged: true,
@@ -179,8 +201,7 @@ export default class Component extends React.Component {
 
   render() {
     const render = () => {
-      // const render = (...args) => {
-      // window.console.log('app index render args', args);
+      // 显示加载中的数据
       if (this.state.pending) {
         let loadingHtml = '加载中';
         // eslint-disable-next-line no-underscore-dangle
@@ -196,13 +217,14 @@ export default class Component extends React.Component {
         </div>);
       }
 
+      // 显示登录成功的数据
       if (this.state.logged) {
         return this.getAuthedComp();
       }
 
-      else {
+      if (!this.state.pending && !this.state.logged) {
         setTimeout(() => {
-          jQuery(window).trigger(CONSTANTS.EVENT.CAS_JUMP_AUTH);
+          return jQuery(window).trigger(CONSTANTS.EVENT.CAS_JUMP_AUTH);
         }, 1000);
         return (<div>
           <div>授权中。。。</div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import jQuery from 'jquery';
+import queryString from 'query-string';
 import { connect } from 'dva';
 import _ from 'lodash';
 import { message, Spin, Divider, Form, Input, Icon, Button } from 'antd';
@@ -21,9 +22,12 @@ export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('login', this);
+    const query = queryString.parse(window.location.search);
+    const redirectUri = query.redirect_uri;
     this.state = {
       submitting: false,
       formValidate: {},
+      redirectUri,
     };
     this.columns = [
       {
@@ -77,21 +81,33 @@ export default class Component extends React.Component {
   handleSubmitAjax = ({ values }) => {
     const formData = {
       ...values,
+      redirect_uri: this.state.redirectUri,
     };
-    Services.common.login(formData).then((res) => {
+
+    Services.common.login(queryString.stringify(formData), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+      },
+    }).then((res) => {
       // document.cookie = 'isLogout=false;path=/';
       const data = _.get(res, 'data') || {};
       User.token = data.token;
       User.info = data.user;
 
-      message.success('登录成功');
-      this.setState({
-        submitting: false,
-      });
-      return jQuery(window).trigger(CONSTANTS.EVENT.CAS_CALLBACK, {
-        ticket: data.token,
-      });
+      // window.console.log('res', res);
+      // window.res = res;
+      if (0 === res.code) {
+        message.success('登录成功');
+        this.setState({
+          submitting: false,
+        });
+        return jQuery(window).trigger(CONSTANTS.EVENT.CAS_CALLBACK);
+      }
+      else {
+        formErrorMessageShow(res);
+      }
     }).catch((rej) => {
+      // window.console.log('rej', rej);
       formErrorMessageShow(rej);
       this.errorCallback(rej.data);
     });
@@ -143,6 +159,10 @@ export default class Component extends React.Component {
       warpCol: false,
       label: false,
     });
+
+    if (!this.state.redirectUri) {
+      return (<div>redirect_uri 参数有误</div>);
+    }
 
     return (
       <div className={styles.normal}>

@@ -115,9 +115,7 @@ export default class Component extends React.Component {
         submitting: false,
       });
       return window.location.replcae(Filters.path('login', {}));
-      // return jQuery(window).trigger(CONSTANTS.EVENT.CAS_CALLBACK, {
-      //   ticket: data.token,
-      // });
+      // return jQuery(window).trigger(CONSTANTS.EVENT.CAS_CALLBACK);
     }).catch((rej) => {
       formErrorMessageShow(rej);
       this.errorCallback(rej.data);

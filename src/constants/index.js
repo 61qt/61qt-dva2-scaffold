@@ -4,14 +4,12 @@ const SYSTEM_CONFIG = {
   LIST: ['CAS', 'APP'],
   CONFIG: {
     CAS: {
-      // 用来存储回调时候的 url 的 key
-      CALLBACK_URL: 'CAS_BALLBACK_URL',
-      DOMAIN: __DEV__ ? 'https://cas-dev.61qt.cn/' : 'https://cas.61qt.cn/',
-      API_BASE_URL: 'https://zhsng-sng-api.61qt.cn/',
+      DOMAIN: __DEV__ ? 'http://cas-dev.edu.com/' : 'http://cas.edu.com/',
+      API_BASE_URL: 'http://openapi.edu.com/',
     },
     APP: {
-      DOMAIN: __DEV__ ? 'https://app-dev.61qt.cn/' : 'https://app.61qt.cn/',
-      API_BASE_URL: 'https://zhsng-sng-api.61qt.cn/',
+      DOMAIN: __DEV__ ? 'http://app-dev.edu.com/' : 'http://app.edu.com/',
+      API_BASE_URL: 'http://api.edu.com/',
     },
   },
 };
@@ -26,6 +24,7 @@ const CONSTANTS = {
   SYSTEM_CONFIG,
   DICT,
   STORE_SAVE_KEY: 'STORE_SAVE_KEY',
+  // PAGE_SIZE: 5,
   PAGE_SIZE: 20,
   // 直接获取全部数据，会使用到。
   PAGE_SIZE_MAX: 9999,

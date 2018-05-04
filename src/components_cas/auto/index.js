@@ -42,9 +42,7 @@ export default class Component extends React.Component {
       const data = res.data || {};
       User.token = data.token;
       message.success('自动登录成功');
-      return jQuery(window).trigger(CONSTANTS.EVENT.CAS_CALLBACK, {
-        ticket: data.token,
-      });
+      return jQuery(window).trigger(CONSTANTS.EVENT.CAS_CALLBACK);
     }).catch(() => {
       message.error('自动登录失败，请使用密码登录');
       setTimeout(() => {

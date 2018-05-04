@@ -1,9 +1,7 @@
 import jQuery from 'jquery';
-import _ from 'lodash';
-import queryString from 'query-string';
-import Cookies from 'js-cookie';
 
 import CONSTANTS from '../constants';
+import { apiBaseUrl } from '../services/_factory';
 
 jQuery(window).on(CONSTANTS.EVENT.CAS_JUMP_AUTH, () => {
   let callbackHref = window.location.href;
@@ -11,20 +9,9 @@ jQuery(window).on(CONSTANTS.EVENT.CAS_JUMP_AUTH, () => {
   // eslint-disable-next-line camelcase
   const redirect_uri = encodeURIComponent(callbackHref);
   // eslint-disable-next-line camelcase
-  window.location.replace(`${CONSTANTS.SYSTEM_CONFIG.CONFIG.CAS.DOMAIN}?redirect_uri=${redirect_uri}`);
+  return window.location.replace(`${apiBaseUrl}/redirect?redirect_uri=${redirect_uri}`);
 });
 
-jQuery(window).on(CONSTANTS.EVENT.CAS_CALLBACK, (e, options) => {
-  // eslint-disable-next-line camelcase
-  let redirect_uri = Cookies.get(CONSTANTS.SYSTEM_CONFIG.CONFIG.CAS.CALLBACK_URL) || '';
-  // eslint-disable-next-line camelcase
-  redirect_uri = redirect_uri.replace(/#.+/, '').replace(/\?$/, '');
-  const parseUrl = queryString.parseUrl(redirect_uri);
-  let redirectUriHasQuery = true;
-  if (_.isEmpty(parseUrl.query)) {
-    redirectUriHasQuery = false;
-  }
-
-  // eslint-disable-next-line camelcase
-  window.location.replace(`${redirect_uri}${redirectUriHasQuery ? '&' : '?'}ticket=${options.ticket}`);
+jQuery(window).on(CONSTANTS.EVENT.CAS_CALLBACK, () => {
+  return window.location.replace(`${apiBaseUrl}${/\/$/.test(apiBaseUrl) ? '' : '/'}authorize?${window.location.search.replace(/\?/, '')}`);
 });
