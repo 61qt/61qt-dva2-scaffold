@@ -85,7 +85,8 @@ export function responseSuccessInterceptor(response) {
   const url = `${_.get(response, 'config.url') || ''}`.replace(/\?.*/, '');
   if (/\/graphql\/?$/.test(url)) {
     const errors = _.get(response, 'data.errors') || null;
-    if (errors) {
+    const error = _.get(response, 'data.error') || null;
+    if (errors || error) {
       return Promise.reject(response);
     }
   }
