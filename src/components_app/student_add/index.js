@@ -2,9 +2,9 @@ import moment from 'moment';
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'dva';
-import { message, Spin, Select, DatePicker, Radio, Button, Form } from 'antd';
+import { message, Spin, Input, DatePicker, Radio, Button, Form } from 'antd';
+// Select
 import styles from './index.less';
-import Services from '../../services';
 import FormComponents from '../../components_form';
 import Filters from '../../filters';
 import formErrorMessageShow from '../../utils/form_error_message_show';
@@ -33,216 +33,10 @@ export default class Component extends React.Component {
       submitting: false,
       loading: true,
       dataSource: false,
+      confirmDirty: false,
+      parentsLength: 1,
     };
-    this.columns = [
-      {
-        title: '学生头像',
-        dataIndex: 'avatar',
-        rowSpan: 4,
-        render: (defaultValue) => {
-          const newOptions = {
-            initValue: defaultValue,
-            options: {
-              width: 150,
-              height: 150,
-            },
-          };
-
-          return (
-            <FormComponents.ImageUploader {...newOptions} />
-          );
-        },
-        initialValue: (text, dataSource) => {
-          return dataSource.avatar || '';
-        },
-        shouldInitialValue: true,
-        rules: [{
-          required: true, message: '必须上传学生头像',
-        }],
-      },
-      {
-        title: '学生姓名',
-        dataIndex: 'name',
-        rules: [{
-          required: true, message: '学生姓名必填',
-        }],
-      },
-      {
-        title: '出生日期',
-        dataIndex: 'birthday',
-        render: () => {
-          return <DatePicker />;
-        },
-        initialValue: (text = moment().add(-10, 'year').unix()) => {
-          return moment.unix(text);
-        },
-        rules: [{
-          required: true, message: '必须选择出生日期',
-        }],
-      },
-      {
-        title: '性别',
-        dataIndex: 'gender',
-        render: () => {
-          return (<Radio.Group options={Filters.dict(['student', 'gender'])} />);
-        },
-        rules: [{
-          required: true, message: '必须选择性别',
-        }],
-      },
-      {
-        title: '学生手机',
-        dataIndex: 'phone',
-        inputNumberOptions: {
-          // className 带有 ant-input-number-row 代表长度为 100% 。
-          className: 'ant-input-number-row',
-          min: 13000000000,
-          max: 19999999999,
-        },
-        zeroEmptyFlag: true,
-      },
-      {
-        title: '主要联系人姓名',
-        dataIndex: 'primary_name',
-        rules: [{
-          required: true, message: '必须填写主要联系人姓名',
-        }],
-      },
-
-      {
-        title: '主要联系人电话',
-        dataIndex: 'primary_phone',
-        inputNumberOptions: {
-          className: 'ant-input-number-row',
-          min: 13000000000,
-          max: 19999999999,
-        },
-        zeroEmptyFlag: true,
-        rules: [{
-          required: true, message: '必须填写主要联系人电话',
-        }, {
-          validator: (rule, value, callback) => {
-            if (value && (13000000000 > value || 19999999999 < value)) {
-              callback('手机号格式不正确');
-            }
-            callback();
-          },
-        }],
-      },
-      {
-        title: '身份证号',
-        dataIndex: 'id_number',
-      },
-      {
-        title: '所在学校',
-        dataIndex: 'school',
-        render: () => {
-          const options = {
-            valueName: 'name', // 用于 options 的 value dataIndex ， 默认不传输为 id 。
-            textName: 'name', // 用于 options 的 label dataIndex ， 默认不传输为 name 。
-          };
-          return (<FormComponents.ForeignSelect placeholder="所在学校" url="school" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear options={options} mode="combobox" />);
-        },
-      },
-      {
-        title: '次要联系人姓名',
-        dataIndex: 'secondary_name',
-        rules: [{
-          validator: (rule, value, callback) => {
-            props.form.validateFields(['secondary_phone'], { force: true });
-            callback();
-          },
-        }],
-      },
-      {
-        title: '次要联系人电话',
-        dataIndex: 'secondary_phone',
-        inputNumberOptions: {
-          className: 'ant-input-number-row',
-          min: 13000000000,
-          max: 19999999999,
-        },
-        zeroEmptyFlag: true,
-        rules: [{
-          validator: (rule, value, callback) => {
-            if (value && (13000000000 > value || 19999999999 < value)) {
-              callback('手机号格式不正确');
-            }
-            const secondaryName = props.form.getFieldValue('secondary_name');
-            if ((!value && secondaryName) || (value && !secondaryName)) {
-              callback('次要联系人姓名和次要联系人电话需要同时填写');
-            }
-            else {
-              callback();
-            }
-          },
-        }],
-      },
-      {
-        title: '家庭住址',
-        dataIndex: 'home_address',
-        colSpan: 3,
-      },
-      {
-        title: '邮箱地址',
-        dataIndex: 'email',
-      },
-      {
-        title: '来源',
-        dataIndex: 'source',
-        render: () => {
-          return (<Select allowClear>
-            {
-              Filters.dict(['student', 'source']).map((elem) => {
-                return (<Select.Option key={elem.value} value={elem.value}>{elem.label}</Select.Option>);
-              })
-            }
-          </Select>);
-        },
-      },
-      {
-        title: '身高(cm)',
-        dataIndex: 'height',
-        inputNumberOptions: {
-          min: 1,
-          max: 300,
-        },
-        zeroEmptyFlag: true,
-      },
-      {
-        title: '体重(kg)',
-        dataIndex: 'weight',
-        inputNumberOptions: {
-          min: 1,
-          max: 999,
-        },
-        zeroEmptyFlag: true,
-      },
-
-      {
-        title: '鞋码',
-        dataIndex: 'shoes',
-        inputNumberOptions: {
-          min: 1,
-          max: 999,
-        },
-        zeroEmptyFlag: true,
-      },
-
-      {
-        title: '民族',
-        dataIndex: 'nation',
-        render: () => {
-          return (<Select allowClear>
-            {
-              Filters.dict(['nation']).map((elem) => {
-                return (<Select.Option key={elem.value} value={elem.value}>{elem.label}</Select.Option>);
-              })
-            }
-          </Select>);
-        },
-      },
-    ];
+    this.columns = [];
   }
 
   componentDidMount = () => {
@@ -286,6 +80,231 @@ export default class Component extends React.Component {
         dataSource: {},
       });
     }
+  }
+
+  getFormColumns = () => {
+    let columns = [
+      {
+        title: '头像',
+        dataIndex: 'avatar',
+        rowSpan: 5,
+        render: (defaultValue) => {
+          const newOptions = {
+            initValue: defaultValue,
+            options: {
+              width: 150,
+              height: 150,
+            },
+          };
+
+          return (
+            <FormComponents.ImageUploader {...newOptions} />
+          );
+        },
+        initialValue: (text, dataSource) => {
+          return dataSource.avatar || '';
+        },
+        shouldInitialValue: true,
+        // rules: [{
+        //   required: true, message: '必须上传头像',
+        // }],
+      },
+      {
+        title: '姓名',
+        dataIndex: 'name',
+        rules: [{
+          required: true, message: '姓名必填',
+        }],
+      },
+      {
+        title: '登录账号',
+        dataIndex: 'username',
+        rules: [{
+          required: true, message: '姓名必填',
+        }],
+      },
+      {
+        title: '手机号',
+        dataIndex: 'phone',
+        inputNumberOptions: {
+          // className 带有 ant-input-number-row 代表长度为 100% 。
+          className: 'ant-input-number-row',
+          min: 13000000000,
+          max: 19999999999,
+        },
+        zeroEmptyFlag: true,
+      },
+      {
+        title: '身份证号',
+        dataIndex: 'id_number',
+      },
+      {
+        title: '学籍号',
+        dataIndex: 'student_no',
+      },
+      {
+        title: '所属机构',
+        dataIndex: 'department_id',
+        // colSpan: 2,
+      },
+      {
+        title: '所属学校',
+        dataIndex: 'school_id',
+      },
+      {
+        title: '年级',
+        dataIndex: 'grade',
+      },
+      {
+        title: '班级',
+        dataIndex: 'class_id',
+      },
+      // {
+      //   title: '____入学年月',
+      //   dataIndex: 'entrance_at',
+      //   hiddenRule: true,
+      // },
+      {
+        title: '入学年月',
+        dataIndex: 'entrance_at',
+        // colSpan: 2,
+        render: () => {
+          const format = 'YYYY-MM';
+          const onChange = (date) => {
+            let unix = 0;
+            if (date && date.unix) {
+              unix = moment(date.format(format), format).unix();
+            }
+            this.props.form.setFieldsValue({ entrance_at: unix });
+          };
+
+          return (<DatePicker.MonthPicker onChange={onChange} format={format} />);
+        },
+      },
+      {
+        title: '性别',
+        dataIndex: 'gender',
+        render: () => {
+          return (<Radio.Group options={Filters.dict(['student', 'gender'])} />);
+        },
+        rules: [{
+          required: true, message: '必须选择性别',
+        }],
+      },
+      {
+        title: '邮箱地址',
+        dataIndex: 'email',
+      },
+      {
+        title: 'QQ号',
+        dataIndex: 'qq',
+      },
+    ];
+
+    // 组装家长联系方式。
+    _.each(_.range(0, this.state.parentsLength), (index) => {
+      const readIndex = 1 + index;
+      columns.push({
+        title: `家长${1 === this.state.parentsLength ? '' : readIndex}姓名`,
+        dataIndex: `parents[${index}].name`,
+        colSpan: 2,
+      });
+      columns.push({
+
+        title: `${1 === this.state.parentsLength ? '' : '家长'}${1 === this.state.parentsLength ? '' : readIndex} 联系方式`,
+        dataIndex: `parents[${index}].phone`,
+        colSpan: 2,
+        inputNumberOptions: {
+          // className 带有 ant-input-number-row 代表长度为 100% 。
+          className: 'ant-input-number-row',
+          min: 13000000000,
+          max: 19999999999,
+        },
+        zeroEmptyFlag: true,
+      });
+    });
+    columns.push({
+      title: null,
+      dataIndex: '____parent_add',
+      colSpan: 1,
+      render: () => {
+        const onAddClick = () => {
+          const parentsLength = this.state.parentsLength * 1 || 0;
+          this.setState({
+            parentsLength: parentsLength + 1,
+          });
+        };
+
+        const onRemoveClick = () => {
+          let parentsLength = this.state.parentsLength * 1 || 0;
+          if (2 > parentsLength) {
+            parentsLength = 2;
+          }
+
+          this.setState({
+            parentsLength: parentsLength - 1,
+          });
+        };
+
+        return (<span>
+          <Button type="primary" size="small" onClick={onAddClick}>增加一名家长</Button>
+          &nbsp;&nbsp;
+          {
+            1 !== this.state.parentsLength ? (<Button type="danger" ghost size="small" onClick={onRemoveClick}>删除最后一名家长</Button>) : null
+          }
+        </span>);
+      },
+    });
+
+    columns = columns.concat([
+      {
+        title: '密码',
+        dataIndex: 'password',
+        rules: [{
+          validator: (rule, value, callback) => {
+            const form = this.props.form;
+            if (value && this.state.confirmDirty) {
+              form.validateFields(['password_confirmation'], { force: true });
+            }
+            callback();
+          },
+        }],
+        colSpan: 2,
+        extra: () => {
+          return this.editInfo.paramsId ? '' : '如不填写密码则默认身份证后6位为初始密码';
+        },
+        render: () => {
+          return (<Input placeholder="请输入密码" type="password" />);
+        },
+      },
+      {
+        title: '确认密码',
+        dataIndex: 'password_confirmation',
+        rules: [{
+          validator: (rule, value, callback) => {
+            const form = this.props.form;
+            if (value && value !== form.getFieldValue('password')) {
+              callback('两次密码不一致');
+            }
+            else {
+              callback();
+            }
+          },
+        }],
+        colSpan: 2,
+        render: () => {
+          const handleBlur = (e) => {
+            const value = e.target.value;
+            this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+          };
+
+          return (<Input placeholder="请再次输入密码" type="password" onBlur={handleBlur} />);
+        },
+      },
+    ]);
+
+    this.columns = columns;
+    return columns;
   }
 
   resetFormValidate = () => {
@@ -351,6 +370,10 @@ export default class Component extends React.Component {
             .second(0)
             .unix();
         }
+        if (values.entrance_at && values.entrance_at.unix) {
+          const format = 'YYYY-MM';
+          formattedValues.entrance_at = moment(values.entrance_at.format(format), format).unix();
+        }
         for (const [key, value] of Object.entries(formattedValues)) {
           formattedValues[key] = formatFormValue(value);
         }
@@ -371,24 +394,26 @@ export default class Component extends React.Component {
     };
     let promise;
     if ('update' === this.editInfo.method) {
-      promise = Services.student.update(this.editInfo.paramsId, formData);
+      promise = this.props.dispatch({
+        type: 'student/update',
+        payload: {
+          id: this.editInfo.paramsId,
+          values: formData,
+        },
+      });
     }
     else {
-      promise = Services.student.create(formData);
+      promise = this.props.dispatch({
+        type: 'student/create',
+        payload: {
+          values: formData,
+        },
+      });
     }
     promise.then(() => {
       message.success(`${this.editInfo.text}学生成功`);
       this.successCallback();
-      const { location } = this.props;
-      // eslint-disable-next-line camelcase
-      const redirect_uri = _.get(location, 'query.redirect_uri');
-      // eslint-disable-next-line camelcase
-      if (redirect_uri) {
-        this.props.history.replace(redirect_uri);
-      }
-      else {
-        this.props.history.push(Filters.path('student', {}));
-      }
+      this.props.history.push(Filters.path('student', {}));
     }).catch((rej) => {
       formErrorMessageShow(rej);
       this.errorCallback(rej.data);
@@ -408,7 +433,7 @@ export default class Component extends React.Component {
     const children = buildColumnFormItem({
       ...this.props,
       ...this.state,
-      columns: this.columns,
+      columns: this.getFormColumns(),
       shouldInitialValue: this.editInfo.paramsId,
       defaultValueSet: this.state.dataSource,
       formItemLayout: {},

@@ -129,22 +129,6 @@ export default {
   },
   STUDENT: {
     GENDER: gender,
-    SOURCE: {
-      UNKNOW: 0,
-      ___UNKNOW: '未设置',
-      AD: 1,
-      ___AD: '户外广告',
-      POST: 2,
-      ___POST: '宣传单',
-      FRIEND: 3,
-      ___FRIEND: '亲友推荐',
-      NET: 4,
-      ___NET: '微信咨询',
-      ACTIVITY: 5,
-      ___ACTIVITY: '活动邀约',
-      OTHER: 6,
-      ___OTHER: '其他',
-    },
   },
   WEEK: {
     MONDAY: 1,
