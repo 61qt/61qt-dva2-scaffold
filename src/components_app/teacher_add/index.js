@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { message, Spin, Select, Cascader, Radio, Button, Form, Col, Row, Icon, Input } from 'antd';
 import { DICT } from '../../constants';
 import Well from '../../components_atom/well';
+import PageLayout from '../../components_atom/page-layout';
 import buildColumnFormItem from '../../utils/build_column_form_item';
 import Filters from '../../filters';
 import FormComponents from '../../components_form';
@@ -586,12 +587,13 @@ export default class Component extends React.Component {
   }
 
   render() {
-    return (
+    return (<PageLayout>
       <div className={styles.normal}>
         <Spin spinning={this.state.loading}>
           { this.state.dataSource && !this.state.loading ? this.renderForm() : <div>正在加载</div> }
         </Spin>
       </div>
+    </PageLayout>
     );
   }
 }

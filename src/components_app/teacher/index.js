@@ -9,6 +9,7 @@ import SearchForm from './search_form';
 import Access from '../../components_atom/access';
 import Table from '../../components_atom/table';
 import Download from '../../components_atom/download';
+import PageLayout from '../../components_atom/page-layout';
 
 @connect((state) => {
   return {
@@ -169,7 +170,7 @@ export default class Component extends React.Component {
   }
 
   render() {
-    return (
+    return (<PageLayout>
       <div className={`${styles.normal}`}>
         <SearchForm handleSubmit={this.handleSubmit} />
         <div>
@@ -187,6 +188,7 @@ export default class Component extends React.Component {
           />
         </div>
       </div>
+    </PageLayout>
     );
   }
 }

@@ -9,6 +9,7 @@ import Access from '../../components_atom/access';
 import QRCode from '../../components_atom/qrcode';
 import Table from '../../components_atom/table';
 import Filters from '../../filters';
+import PageLayout from '../../components_atom/page-layout';
 
 @connect((state) => {
   return {
@@ -182,7 +183,7 @@ export default class Component extends React.Component {
   }
 
   render() {
-    return (
+    return (<PageLayout>
       <div className={`${styles.normal}`}>
         <SearchForm handleSubmit={this.handleSubmit} />
         <div>
@@ -208,6 +209,7 @@ export default class Component extends React.Component {
           </div>
         </Modal>
       </div>
+    </PageLayout>
     );
   }
 }

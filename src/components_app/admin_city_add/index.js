@@ -11,6 +11,7 @@ import formErrorMessageShow from '../../utils/form_error_message_show';
 import buildColumnFormItem from '../../utils/build_column_form_item';
 import formatFormValue from '../../utils/format_form_value';
 import DetailView from '../../components_atom/detail_view';
+import PageLayout from '../../components_atom/page-layout';
 
 @Form.create()
 @connect(() => {
@@ -369,12 +370,13 @@ export default class Component extends React.Component {
   }
 
   render() {
-    return (
+    return (<PageLayout>
       <div className={styles.normal}>
         <Spin spinning={this.state.loading}>
           { this.state.dataSource && !this.state.loading ? this.renderForm() : <div>正在加载</div>}
         </Spin>
       </div>
+    </PageLayout>
     );
   }
 }

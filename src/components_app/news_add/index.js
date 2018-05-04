@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Spin, Form, message, Row, Col, Button, Modal } from 'antd';
 import styles from './index.less';
 import Well from '../../components_atom/well';
+import PageLayout from '../../components_atom/page-layout';
 import FormComponents from '../../components_form';
 import formatFormValue from '../../utils/format_form_value';
 import QRCode from '../../components_atom/qrcode';
@@ -369,12 +370,13 @@ export default class Component extends React.Component {
   }
 
   render() {
-    return (
+    return (<PageLayout>
       <div className={styles.normal}>
         <Spin spinning={this.state.loading}>
           { this.state.dataSource && !this.state.loading ? this.renderForm() : <div>正在加载</div>}
         </Spin>
       </div>
+    </PageLayout>
     );
   }
 }

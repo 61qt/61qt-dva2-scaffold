@@ -6,6 +6,7 @@ import DetailView from '../../components_atom/detail_view';
 import styles from './index.less';
 import Filters from '../../filters';
 import Access from '../../components_atom/access';
+import PageLayout from '../../components_atom/page-layout';
 
 const columns = [
   {
@@ -202,12 +203,13 @@ export default class Component extends React.Component {
       </span>
     </div>);
 
-    return (
+    return (<PageLayout>
       <div className={styles.normal}>
         <h2>{studentDetail.name || ''} - 学生信息详情</h2>
 
         <DetailView col={500 > window.innerWidth ? 1 : 2} labelWidth="10em" expand={4} data-comment-expand={13} loading={loading} dataSource={studentDetail} columns={columns} title={detailTitle} />
       </div>
+    </PageLayout>
     );
   }
 }
