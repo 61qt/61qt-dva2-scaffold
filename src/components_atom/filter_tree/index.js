@@ -124,6 +124,7 @@ export default class Component extends React.Component {
             />
         </div>
         <Tree
+          className="side-tree-select"
           onExpand={this.onExpand}
           onCheck={this.onCheck}
           onSelect={this.onSelect}

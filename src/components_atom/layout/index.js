@@ -1,20 +1,17 @@
 import _ from 'lodash';
 import jQuery from 'jquery';
-import { Modal, Breadcrumb, version, Layout, Icon, Tooltip } from 'antd';
+import { Modal, version, Layout, Icon, Tooltip } from 'antd';
 import React from 'react';
 import { connect } from 'dva';
-import { Link, NavLink } from 'dva/router';
+import { Link } from 'dva/router';
 import Header from './header';
 import AppMenu from './menu';
 import styles from './index.less';
 import User from '../../utils/user';
-import Filters from '../../filters';
 import CONSTANTS from '../../constants';
 
-@connect((state) => {
-  return {
-    breadcrumb: state.breadcrumb,
-  };
+@connect(() => {
+  return {};
 })
 export default class Component extends React.Component {
   constructor(props) {
@@ -43,31 +40,9 @@ export default class Component extends React.Component {
   }
 
   getRightLayout = () => {
-    const pathname = _.get(window, 'location.pathname') || '';
-    const isHome = -1 < ['/app/', '/app'].indexOf(pathname);
-    const breadcrumbCurrent = _.get(this, 'props.breadcrumb.current') || [];
     return (
       <Layout.Content className={`rightLayout ${styles.rightLayout}`}>
-        <div className={`${styles.breadcrumbContainer} ${isHome ? 'ant-hide' : ''}`}>
-          <Breadcrumb>
-            <Breadcrumb.Item>
-              <NavLink to={Filters.path('home', {})} activeClassName="link-active">首页</NavLink>
-            </Breadcrumb.Item>
-            {
-              _.map(breadcrumbCurrent || [], (elem) => {
-                const url = elem.url.replace(/\/+$/, '');
-                return (<Breadcrumb.Item key={url}>
-                  <NavLink to={`${url}`} activeClassName="link-active">{elem.name}</NavLink>
-                </Breadcrumb.Item>);
-              })
-            }
-          </Breadcrumb>
-        </div>
-        <div className={styles.content}>
-          <div className={styles.main}>
-            { this.props.children }
-          </div>
-        </div>
+        { this.props.children }
       </Layout.Content>
     );
   }
@@ -153,7 +128,6 @@ export default class Component extends React.Component {
 
   render() {
     const { location, history } = this.props;
-    const RightLayout = this.getRightLayout();
 
     const layoutStyle = {};
     if (this.state.collapsed) {
@@ -187,7 +161,7 @@ export default class Component extends React.Component {
             <AppMenu collapsed={this.state.collapsed} location={location} history={history} />
           </Layout.Sider>
           <Layout>
-            { RightLayout }
+            { this.getRightLayout() }
             <Modal title="错误提示" visible={this.state.modalVisible} onOk={this.handleModelOk} onCancel={this.handleModelClose} cancelText="关闭" okText="跳转至登陆页面">
               <div>
                 检测到已经在其他窗口退出登录了。

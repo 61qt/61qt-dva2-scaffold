@@ -54,6 +54,9 @@ export default class Component extends React.Component {
         dataIndex: 'gender',
         key: 'gender',
         render: (text) => {
+          if (undefined === text) {
+            return null;
+          }
           return Filters.dict(['student', 'gender'], text);
         },
         width: 100,
@@ -218,6 +221,7 @@ export default class Component extends React.Component {
         onCheck={this.onCheck}
       />
     );
+
     const children = (
       <div>
         <SearchForm handleSubmit={this.handleSubmit} />
