@@ -221,7 +221,7 @@ export default class Component extends React.Component {
             <Upload onUploaded={this.onUploaded} size="small" path={`${this.state.model}?upload`}>批量导入</Upload>
           </Access>
           <Access data-bak-auth={`${this.state.model}.export`}>
-            <Download confirm="true" selectRow={this.columns} size="small" path={`${this.state.model}/export`} query={{ filter: _.get(pageState, 'listState.filter') }}>批量导出</Download>
+            <Download confirm="true" selectRow={this.columns} size="small" path={`${this.state.model}/export`} query={{ filter: JSON.stringify(_.get(pageState, 'listState.filter') || []) }}>批量导出</Download>
           </Access>
           <Access data-bak-auth={`${this.state.model}.store`}>
             <NavLink to={Filters.path(`${this.state.model}_add`, {})}>

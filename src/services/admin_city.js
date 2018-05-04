@@ -19,17 +19,17 @@ const modelFields = [
   'operator',
   'id_number',
   'status',
-  'last_login_at',
-  'created_at',
+  // 'last_login_at',
+  // 'created_at',
   // 'updated_at',
 ];
 
 const modelRelate = [
-  `userRoles {
-    id
-    name
-    city_id
-  }`,
+  // `userRoles {
+  //   id
+  //   name
+  //   city_id
+  // }`,
 ];
 
 const select = {

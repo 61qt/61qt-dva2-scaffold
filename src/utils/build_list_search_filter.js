@@ -35,7 +35,7 @@ function searchFormat(value) {
 export { searchFormat };
 
 // 目前最多两级的数据
-function buildListSearchFilter({ values = {}, rebuildFormFilterName = [], formFilterName = {}, formFilterMethod = {}, rebuildFormValueFunc = {}, stringify = true }) {
+function buildListSearchFilter({ values = {}, rebuildFormFilterName = [], formFilterName = {}, formFilterMethod = {}, rebuildFormValueFunc = {}, stringify = false }) {
   const filters = [];
   for (const [key, value] of Object.entries(values)) {
     if (-1 < rebuildFormFilterName.indexOf(key)) {
@@ -133,11 +133,10 @@ function buildListSearchFilter({ values = {}, rebuildFormFilterName = [], formFi
     }
   }
 
-  if (!stringify) {
-    return filters;
+  if (stringify) {
+    return JSON.stringify(filters);
   }
-
-  return JSON.stringify(filters);
+  return filters;
 }
 
 export default buildListSearchFilter;

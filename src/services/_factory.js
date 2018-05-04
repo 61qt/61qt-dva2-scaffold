@@ -137,17 +137,14 @@ export default function actionFactory({
 
       query = query.join(',');
 
-      const schema = `query List($page: Int, $take: Int, $orderBy: String, $sort: String) {
-        ${table} (page: $page, take: $take, orderBy: $orderBy, sort: $sort ${query ? ',' : ''} ${query}) {
-          data {
+      const schema = `query List($page: Int, $take: Int, $filter: filterInput) {
+        ${table}Pagination (page: $page, take: $take, filterInput: $filter) {
+          items {
             ${select}
           }
-          current_page
-          last_page
-          per_page
+          perPage
           total
-          from
-          to
+          currentPage
         }
       }`;
 
@@ -155,7 +152,9 @@ export default function actionFactory({
         operationName: 'List',
         query: schema,
         variables: {
-          filter: options.filter || '[]',
+          filter: {
+            filter: options.filter || [],
+          },
           page: options.page || 1,
           take: options.pageSize || PAGE_SIZE,
           orderBy: options.orderBy || 'id',
@@ -163,11 +162,15 @@ export default function actionFactory({
         },
       }, options.config || {}).then((res) => {
         // 直接返回 转换后的 data 数据。
-        const data = _.get(res, `data.${table}`);
+        const data = _.get(res, `data.${table}Pagination`);
         const returnData = {
           ...res,
         };
-        returnData.data = data;
+        const { items, ...restData } = data;
+        returnData.data = {
+          ...restData,
+          data: items,
+        };
         return returnData;
       });
     },
