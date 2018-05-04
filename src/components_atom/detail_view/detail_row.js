@@ -41,32 +41,37 @@ export default class Component extends React.Component {
     let columnsIndex = 0;
     let rowColSum = 0;
     const eachRowMaxColSave = {};
+    // 初始化创建一个一维数组，存储每一列的长度。
     _.each(showColumn, (elem, index) => {
       eachRowMaxColSave[index] = col * 2;
     });
 
-    // 计算每一列。
+    // 计算每一列。保存应该存储的 elem 。到时候渲染直接通过 elem 来渲染。
     // let rowColSpanTotal = 0;
     _.each(showColumn, (elem) => {
       tableColumns[columnsIndex] = tableColumns[columnsIndex] || [];
       const colSpan = elem.colSpan || 1;
       let rowSpan = elem.rowSpan || 1;
+      let titleSpan = 1;
+      if (null === elem.title) {
+        titleSpan = 0;
+      }
 
       // if (rowColSpanTotal + 1 + colSpan > eachRowMaxColSave[columnsIndex]) {
       //   colSpan = eachRowMaxColSave[columnsIndex] - rowColSpanTotal - 1;
       // }
-      if (colSpan + 1 >= col * 2) {
+      if (colSpan + titleSpan >= col * 2) {
         rowSpan = 1;
       }
-      if (rowColSum + 1 + colSpan > eachRowMaxColSave[columnsIndex]) {
-        columnsIndex += 1;
-        rowColSum = 1 + colSpan;
+      if (rowColSum + titleSpan + colSpan > eachRowMaxColSave[columnsIndex]) {
+        columnsIndex += titleSpan;
+        rowColSum = titleSpan + colSpan;
         // rowColSpanTotal = 0;
       }
       else {
-        rowColSum += 1 + colSpan;
+        rowColSum += titleSpan + colSpan;
       }
-      // rowColSpanTotal += colSpan + 1;
+      // rowColSpanTotal += colSpan + titleSpan;
       tableColumns[columnsIndex] = tableColumns[columnsIndex] || [];
       tableColumns[columnsIndex].push({
         ...elem,
@@ -102,7 +107,9 @@ export default class Component extends React.Component {
       let colSpanLength = 0;
       _.each(rowElem, (colElem) => {
         colSpanLength += (colElem.colSpan + 1);
-        tdArr.push(<td className={`${this.props.titleClassName || ''}`} rowSpan={colElem.rowSpan} key={`${rowIndex}_${colSpanLength}_1`} style={this.buildLabelStyle()}>{renderTitle(colElem)}</td>);
+        if (null !== colElem.title) {
+          tdArr.push(<td className={`${this.props.titleClassName || ''}`} rowSpan={colElem.rowSpan} key={`${rowIndex}_${colSpanLength}_1`} style={this.buildLabelStyle()}>{renderTitle(colElem)}</td>);
+        }
         tdArr.push(<td rowSpan={colElem.rowSpan} key={`${rowIndex}_${colSpanLength}_2`} colSpan={colElem.colSpan}>{this.getValue(colElem, dataSource)}</td>);
       });
 
