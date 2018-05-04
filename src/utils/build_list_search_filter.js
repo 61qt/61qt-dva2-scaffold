@@ -6,6 +6,9 @@ function searchFormat(value) {
   if ('string' === typeof value) {
     formatedValue = value.trim().replace(/^\t/ig, '').replace(/\t&/ig, '');
   }
+  else if (_.isArray(value) && 1 === value.length) {
+    return '';
+  }
   else if ('number' === typeof value) {
     if (isNaN(value)) {
       formatedValue = '';

@@ -1,4 +1,4 @@
-// import _ from 'lodash';
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'dva';
 import { message, Pagination, Popconfirm, Button } from 'antd';
@@ -14,9 +14,14 @@ import Table from '../../components_atom/table';
 import Services from '../../services';
 import { DICT } from '../../constants';
 import PageLayout from '../../components_atom/page-layout';
+import FilterTree from '../../components_atom/filter_tree';
+import {
+  getFilter,
+} from '../../components_default/search_form';
 
 @connect((state) => {
   return {
+    areaState: state.area,
     loading: !!state.loading.models.admin_city,
     adminCityState: state.admin_city,
   };
@@ -108,6 +113,10 @@ export default class Component extends React.Component {
         },
       },
     ];
+    this.state = {
+      sideSelected: _.get(props, 'adminCityState.listState.sideSelected') || [],
+      defaultFilter: _.get(props, 'adminCityState.listState.defaultFilter') || [],
+    };
   }
 
   componentDidMount = () => {
@@ -128,6 +137,27 @@ export default class Component extends React.Component {
       window.console.log('info', info);
     }
     this.resetPage();
+  }
+
+  onSiderSelect = (selected) => {
+    const filter = getFilter({
+      city_id: selected[0] || selected,
+    }, {
+      stringify: false,
+    });
+    // window.console.log('onSelect', selected, 'filter', filter);
+    this.setState({
+      sideSelected: selected,
+      defaultFilter: filter,
+    });
+    this.props.dispatch({
+      type: 'admin_city/listState',
+      payload: { sideSelected: selected, defaultFilter: filter },
+    });
+  }
+
+  onSiderCheck = (selected) => {
+    window.console.log('onCheck', selected);
   }
 
   resetPage = () => {
@@ -230,9 +260,20 @@ export default class Component extends React.Component {
   }
 
   render() {
-    return (<PageLayout>
+    const cityArr = _.get(this.props.areaState, 'key[620000].children');
+    const Sider = (<FilterTree
+      tree={cityArr}
+      deep="1"
+      onSelect={this.onSiderSelect}
+      onCheck={this.onSiderCheck}
+      checkable={false}
+      multiple={false}
+      defaultValue={this.state.sideSelected}
+    />);
+
+    return (<PageLayout Sider={Sider}>
       <div className={`${styles.normal}`}>
-        <SearchForm handleSubmit={this.handleSubmit} />
+        <SearchForm defaultFilter={this.state.defaultFilter} handleSubmit={this.handleSubmit} />
         <div>
           <Table
             data-bak-size={768 > window.innerWidth ? 'small' : 'default'}

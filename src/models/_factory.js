@@ -200,10 +200,14 @@ export default function modelFactory({
       },
 
       // 存储 index 的搜索状态的。
-      *listState({ payload }, { put }) {
+      *listState({ payload }, { put, select }) {
+        const listState = yield select(state => state[modelName].listState);
         yield put({
           type: 'saveListState',
-          payload,
+          payload: {
+            ...listState,
+            ...payload,
+          },
         });
         return true;
       },

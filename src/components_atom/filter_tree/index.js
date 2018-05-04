@@ -3,6 +3,10 @@ import { Input, Tree } from 'antd';
 import _ from 'lodash';
 
 export default class Component extends React.Component {
+  static defaultProps = {
+    deep: 9999999,
+  }
+
   constructor(props) {
     super(props);
 
@@ -11,7 +15,7 @@ export default class Component extends React.Component {
     this.state = {
       searchValue: '',
       expandedKeys: [],
-      checkedKeys: [],
+      checkedKeys: props.defaultValue || [],
       autoExpandParent: true,
     };
 
@@ -73,7 +77,8 @@ export default class Component extends React.Component {
     });
   }
 
-  recursiveRender = (data, searchValue = this.state.searchValue) => {
+  recursiveRender = (data, deep) => {
+    const searchValue = this.state.searchValue;
     return data.map((node) => {
       const selectable = !this.props.checkable;
       const index = node.name.indexOf(searchValue);
@@ -87,19 +92,11 @@ export default class Component extends React.Component {
         </span>
       ) : <span>{node.name}</span>;
 
-      if (_.isArray(node.children)) {
-        return (
-          <Tree.TreeNode title={title} value={node.value} key={node.value} selectable={selectable}>
-            {
-              this.recursiveRender(node.children)
-            }
-          </Tree.TreeNode>
-        );
-      }
-
-      return (
-        <Tree.TreeNode title={title} value={node.value} key={node.value} selectable={selectable} />
-      );
+      return (<Tree.TreeNode title={title} value={node.value} key={node.value} selectable={selectable}>
+        {
+          deep < 1 * this.props.deep && _.isArray(node.children) ? this.recursiveRender(node.children, 1 + deep) : null
+        }
+      </Tree.TreeNode>);
     });
   }
 
@@ -107,7 +104,7 @@ export default class Component extends React.Component {
     // [ { "id", "name", value", "children"? } ]
     const tree = _.get(this.props, 'tree');
     if (_.isArray(tree)) {
-      return this.recursiveRender(tree);
+      return this.recursiveRender(tree, 1);
     }
     else {
       throw new Error('side_tree component only accept an array\n the struct of array is [ { "id", "name", value", "children"? } ]');

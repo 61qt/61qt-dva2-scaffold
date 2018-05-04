@@ -45,6 +45,7 @@ export default class Component extends React.Component {
       showCount: 3,
       defaultFilter: [],
     };
+    this.triggerHandleSubmit = _.debounce(this.triggerHandleSubmit, 300);
   }
 
   componentWillMount = () => {}
@@ -59,7 +60,7 @@ export default class Component extends React.Component {
     if (!_.isEqual(nextProps.defaultFilter, this.props.defaultFilter)) {
       setTimeout(() => {
         this.triggerHandleSubmit(false);
-      });
+      }, 100);
     }
   }
 
