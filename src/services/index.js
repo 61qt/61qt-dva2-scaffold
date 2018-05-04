@@ -3,6 +3,7 @@ import admin_city from './admin_city';
 import area from './area';
 import common from './common';
 import post from './post';
+import school from './school';
 import specialty from './specialty';
 import student from './student';
 // eslint-disable-next-line camelcase
@@ -31,6 +32,7 @@ export default {
   area,
   common,
   post,
+  school,
   specialty,
   student,
   sys_message,
