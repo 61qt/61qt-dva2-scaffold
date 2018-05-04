@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'dva';
 import { Pagination, Button } from 'antd';
 import { NavLink } from 'dva/router';
@@ -112,7 +113,7 @@ export default class Component extends React.Component {
       },
     ];
     this.state = {
-      defaultFilter: [],
+      defaultFilter: _.get(props, 'studentState.listState.defaultFilter') || [],
     };
   }
 
@@ -176,7 +177,12 @@ export default class Component extends React.Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'student/listState',
-      payload: { filter, searchValues: values, expand },
+      payload: {
+        filter,
+        searchValues: values,
+        expand,
+        defaultFilter: this.state.defaultFilter,
+      },
     });
     dispatch({
       type: 'student/list',
