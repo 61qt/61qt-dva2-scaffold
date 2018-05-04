@@ -26,6 +26,7 @@ export default class Component extends React.Component {
   }
 
   onCheck = (checkedKeys) => {
+    // window.console.log('onCheck checkedKeys', checkedKeys, rest);
     this.setState({
       checkedKeys,
     });
@@ -40,6 +41,7 @@ export default class Component extends React.Component {
   }
 
   onSelect = (selectedId) => {
+    // window.console.log('onSelect selectedId', selectedId, rest);
     if ('function' === typeof this.props.onSelect) {
       this.props.onSelect(selectedId);
     }

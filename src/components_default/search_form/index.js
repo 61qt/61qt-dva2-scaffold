@@ -14,9 +14,8 @@ const formItemLayout = {
   },
 };
 
-export { formItemLayout };
-
-function getFilter(values, options) {
+function getFilter(values, options = {}) {
+  // window.console.log('options.defaultFilter', options.defaultFilter);
   return buildListSearchFilter({
     defaultFilter: options.defaultFilter || [],
     values,
@@ -28,10 +27,17 @@ function getFilter(values, options) {
     },
     formFilterName: {
     },
+    ...options,
   });
 }
 
+export { getFilter, formItemLayout };
+
 export default class Component extends React.Component {
+  static defaultProps = {
+    // 父级默认会传输 defaultFilter。
+    defaultFilter: [],
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -44,16 +50,25 @@ export default class Component extends React.Component {
   componentWillMount = () => {}
 
   componentDidMount = () => {
+    this.triggerHandleSubmit = _.debounce(this.triggerHandleSubmit, 300);
     this.props.form.setFieldsValue(this.props.listState.searchValues || {});
-    this.triggerHandleSubmit();
+    this.triggerHandleSubmit(true);
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (!_.isEqual(nextProps.defaultFilter, this.props.defaultFilter)) {
+      setTimeout(() => {
+        this.triggerHandleSubmit(false);
+      });
+    }
   }
 
   getSearchCol = () => {
     return [];
   }
 
-  triggerHandleSubmit = () => {
-    this.handleSubmit({ loadOldPage: true });
+  triggerHandleSubmit = (loadOldPage = true) => {
+    this.handleSubmit({ loadOldPage });
   }
 
   handleSubmit = (e) => {
@@ -67,7 +82,7 @@ export default class Component extends React.Component {
             values,
             form: this.props.form,
             filter: getFilter(values, {
-              defaultFilter: this.state.defaultFilter,
+              defaultFilter: [].concat(this.state.defaultFilter || []).concat(this.props.defaultFilter || []),
             }),
             e,
             expand: this.state.expand,

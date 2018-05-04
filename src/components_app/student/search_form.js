@@ -24,14 +24,6 @@ export default class Component extends ComponentSearchForm {
     };
   }
 
-  componentWillReceiveProps = () => {
-    this.setState({
-      children: this.getSearchCol({
-        getFieldDecorator: this.props.form.getFieldDecorator,
-      }),
-    });
-  };
-
   getSearchCol = () => {
     const getFieldDecorator = this.props.form.getFieldDecorator;
     const children = [];

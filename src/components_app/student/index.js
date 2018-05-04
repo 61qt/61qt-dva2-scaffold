@@ -12,6 +12,9 @@ import Access from '../../components_atom/access';
 import Table from '../../components_atom/table';
 import PageLayout from '../../components_atom/page-layout';
 import FilterTree from '../../components_atom/filter_tree';
+import {
+  getFilter,
+} from '../../components_default/search_form';
 
 @connect((state) => {
   return {
@@ -108,6 +111,9 @@ export default class Component extends React.Component {
         },
       },
     ];
+    this.state = {
+      defaultFilter: [],
+    };
   }
 
   componentDidMount = () => {
@@ -133,10 +139,20 @@ export default class Component extends React.Component {
     this.resetPage();
   }
 
-  onSelect = () => {
+  onSelect = (selected) => {
+    const filter = getFilter({
+      area_id: selected[0] || selected,
+    }, {
+      stringify: false,
+    });
+    // window.console.log('onSelect', selected, 'filter', filter);
+    this.setState({
+      defaultFilter: filter,
+    });
   }
 
-  onCheck = () => {
+  onCheck = (selected) => {
+    window.console.log('onCheck', selected);
   }
 
   resetPage = () => {
@@ -156,6 +172,7 @@ export default class Component extends React.Component {
   }
 
   handleSubmit = ({ filter, values, expand, loadOldPage }) => {
+    window.console.log('handleSubmit filter', filter);
     const { dispatch } = this.props;
     dispatch({
       type: 'student/listState',
@@ -214,17 +231,17 @@ export default class Component extends React.Component {
   }
 
   render() {
-    const sider = (
-      <FilterTree
-        tree={this.props.area.tree.slice(0, 5)}
-        onSelect={this.onSelect}
-        onCheck={this.onCheck}
-      />
-    );
+    const Sider = (<FilterTree
+      tree={this.props.area.tree.slice(0, 5)}
+      onSelect={this.onSelect}
+      onCheck={this.onCheck}
+      checkable={false}
+      multiple={false}
+    />);
 
     const children = (
       <div>
-        <SearchForm handleSubmit={this.handleSubmit} />
+        <SearchForm defaultFilter={this.state.defaultFilter} handleSubmit={this.handleSubmit} />
         <div>
           <Table
             data-bak-size={768 > window.innerWidth ? 'small' : 'default'}
@@ -243,7 +260,7 @@ export default class Component extends React.Component {
       </div>
     );
     return (
-      <PageLayout Sider={sider}>
+      <PageLayout Sider={Sider}>
         {children}
       </PageLayout>
     );
