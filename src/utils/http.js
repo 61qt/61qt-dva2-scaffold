@@ -8,6 +8,7 @@ const apiBaseUrl = _.get(CONSTANTS, `SYSTEM_CONFIG.CONFIG.${buildModule}.API_BAS
 const http = axios.create({
   // eslint-disable-next-line no-dupe-keys
   baseURL: apiBaseUrl,
+  withCredentials: true,
 });
 
 export {
