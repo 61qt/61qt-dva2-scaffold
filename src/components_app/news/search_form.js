@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'dva';
 import { Form, Input, Col } from 'antd';
-import ComponentSearchForm, { formItemLayout } from '../../components_default/search_form';
+import ComponentSearchForm, { searchFormItemLayout } from '../../components_default/search_form';
 
 @Form.create()
 @connect((state) => {
@@ -27,7 +27,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="title">
-        <Form.Item {...formItemLayout} label="文章标题">
+        <Form.Item {...searchFormItemLayout} label="文章标题">
           {
             getFieldDecorator('title')(<Input size="small" placeholder="文章标题搜索" />)
           }
@@ -36,7 +36,7 @@ export default class Component extends ComponentSearchForm {
     ));
     children.push((
       <Col span={col} key="source">
-        <Form.Item {...formItemLayout} label="文章来源">
+        <Form.Item {...searchFormItemLayout} label="文章来源">
           {
             getFieldDecorator('source')(<Input size="small" placeholder="文章来源搜索" />)
           }
@@ -46,7 +46,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="author">
-        <Form.Item {...formItemLayout} label="作者">
+        <Form.Item {...searchFormItemLayout} label="作者">
           {
             getFieldDecorator('author')(<Input size="small" placeholder="作者搜索" />)
           }

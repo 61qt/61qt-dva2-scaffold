@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import { Form, Input, Col, Select } from 'antd';
 import ComponentsForm from '../../components_form';
 import ComponentSearchForm, {
-  formItemLayout,
+  searchFormItemLayout,
 } from '../../components_default/search_form';
 import Filters from '../../filters';
 
@@ -30,7 +30,7 @@ export default class Component extends ComponentSearchForm {
     const col = 12;
     children.push((
       <Col span={col} key="name">
-        <Form.Item {...formItemLayout} label="教师姓名">
+        <Form.Item {...searchFormItemLayout} label="教师姓名">
           {getFieldDecorator('name')(<Input size="small" placeholder="姓名搜索" />)}
         </Form.Item>
       </Col>
@@ -38,7 +38,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="alias">
-        <Form.Item {...formItemLayout} label="对外尊称">
+        <Form.Item {...searchFormItemLayout} label="对外尊称">
           {getFieldDecorator('alias')(<Input size="small" placeholder="对外尊称搜索" />)}
         </Form.Item>
       </Col>
@@ -46,7 +46,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="phone">
-        <Form.Item {...formItemLayout} label="联系电话">
+        <Form.Item {...searchFormItemLayout} label="联系电话">
           {getFieldDecorator('phone')(<Input size="small" placeholder="联系电话" />)}
         </Form.Item>
       </Col>
@@ -54,7 +54,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="department_id">
-        <Form.Item {...formItemLayout} label="所属部门">
+        <Form.Item {...searchFormItemLayout} label="所属部门">
           {
             getFieldDecorator('department_id')(<ComponentsForm.ForeignSelect
               size="small"
@@ -71,7 +71,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="gender">
-        <Form.Item {...formItemLayout} label="性别">
+        <Form.Item {...searchFormItemLayout} label="性别">
           {
             getFieldDecorator('gender')(<Select
               size="small"

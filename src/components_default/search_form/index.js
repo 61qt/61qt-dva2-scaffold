@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Button, Form, Col, Row, Icon } from 'antd';
 import buildListSearchFilter from '../../utils/build_list_search_filter';
 
-const formItemLayout = {
+const searchFormItemLayout = {
   labelCol: {
     xs: { span: 24 },
     sm: { span: 6 },
@@ -31,7 +31,7 @@ function getFilter(values, options = {}) {
   });
 }
 
-export { getFilter, formItemLayout };
+export { getFilter, searchFormItemLayout };
 
 export default class Component extends React.Component {
   static defaultProps = {

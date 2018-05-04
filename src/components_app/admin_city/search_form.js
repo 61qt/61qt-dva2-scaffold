@@ -6,7 +6,7 @@ import { Form, Input, Col } from 'antd';
 // Select
 // import CitySelect from '../../components_common/city_select';
 import ComponentsForm from '../../components_form';
-import ComponentSearchForm, { formItemLayout } from '../../components_default/search_form';
+import ComponentSearchForm, { searchFormItemLayout } from '../../components_default/search_form';
 // import Filters from '../../filters';
 import { DICT } from '../../constants';
 
@@ -37,7 +37,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="city_id">
-        <Form.Item {...formItemLayout} label="城市">
+        <Form.Item {...searchFormItemLayout} label="城市">
           {
             getFieldDecorator('city_id')(<Input size="small" placeholder="选择城市" />)
           }
@@ -47,7 +47,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="name">
-        <Form.Item {...formItemLayout} label="姓名">
+        <Form.Item {...searchFormItemLayout} label="姓名">
           {
             getFieldDecorator('name')(<Input size="small" placeholder="姓名搜索" />)
           }
@@ -57,7 +57,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="school_id">
-        <Form.Item {...formItemLayout} label="$学校">
+        <Form.Item {...searchFormItemLayout} label="$学校">
           {
             getFieldDecorator('school_id')(<ComponentsForm.ForeignSelectGraphql size="small" placeholder="$学校" table="admin_city" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat options={{ textName: 'username' }} filter={[['user_type', '=', DICT.USER.USER_TYPE.CITY]]} />)
           }
@@ -67,7 +67,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="operator">
-        <Form.Item {...formItemLayout} label="操作人">
+        <Form.Item {...searchFormItemLayout} label="操作人">
           {
             getFieldDecorator('operator')(<Input size="small" placeholder="搜索" />)
           }
@@ -77,7 +77,7 @@ export default class Component extends ComponentSearchForm {
 
     children.push((
       <Col span={col} key="phone">
-        <Form.Item {...formItemLayout} label="手机号码">
+        <Form.Item {...searchFormItemLayout} label="手机号码">
           {
             getFieldDecorator('phone')(<Input size="small" placeholder="手机号码" />)
           }
