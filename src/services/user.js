@@ -1,4 +1,4 @@
-import Factory from '../services/_factory';
+import Factory, { http } from '../services/_factory';
 
 const namespace = 'user';
 // admin city 是对应 user 里面的某个类型的数据，故在同一个表。
@@ -61,5 +61,9 @@ const Service = Factory({
     },
   },
 });
+
+Service.info = () => {
+  return http.get('/user');
+};
 
 export default Service;
