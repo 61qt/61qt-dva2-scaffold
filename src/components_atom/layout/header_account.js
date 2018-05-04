@@ -3,7 +3,7 @@ import jQuery from 'jquery';
 import { connect } from 'dva';
 // import _ from 'lodash';
 import { NavLink } from 'dva/router';
-import { notification, Menu, Dropdown, Icon, Badge } from 'antd';
+import { Avatar, notification, Menu, Dropdown, Icon, Badge } from 'antd';
 import styles from './header_account.less';
 import CONSTANTS from '../../constants';
 import Filters from '../../filters';
@@ -103,8 +103,12 @@ export default class Component extends React.Component {
       </Menu>
     );
 
-    /*
-    */
+    const avatar = User.info.avatar ? (
+      <Avatar src={Filters.qiniuImage(User.info.avatar, { width: 80, height: 80 })} />
+    ) : (
+      <Avatar style={{ backgroundColor: '#fff', color: '#3398dc' }}>{User.info.name ? User.info.name[0] : '用户'}</Avatar>
+    );
+
     return (
       <div className={styles.normal}>
         <Dropdown
@@ -114,7 +118,7 @@ export default class Component extends React.Component {
           visible={this.state.visible}
         >
           <div className="text-white">
-            <img className={`img-1-1-40 ${styles.accountImg}`} src={Filters.qiniuImage(User.info.avatar, { width: 80, height: 80 })} alt={User.info.name} />
+            {avatar}
             <span className={styles.accountName}>
               <span className={768 > window.innerWidth ? 'ant-hide' : ''}>{User.info.name}</span>
               <span className={`header-account-role ${User.info.role_name ? '' : 'ant-hide'}`}>

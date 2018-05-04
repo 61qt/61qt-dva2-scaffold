@@ -23,12 +23,12 @@ export default class Component extends React.Component {
   render() {
     return (
       <div className={styles.normal}>
-        <h1 className={styles.title}>欢迎来到智慧教育云平台</h1>
-        <div className={styles.welcome} />
-        <ul className={styles.list}>
-          <li>这里是管理系统。</li>
-          <li>主要管理智慧教育方面的信息。</li>
-        </ul>
+        <div>
+          <div className={styles.welcome} />
+          <ul className={styles.list}>
+            <li>张掖教育云平台是新一代云端教育信息管理系统，将教师，家长与学生的信息通过系统的统一管理，终端用户可通过系统快速定位，操作具体的个人信息。人性化的系统设定，使终端用户零成本上手使用本系统。</li>
+          </ul>
+        </div>
       </div>
     );
   }

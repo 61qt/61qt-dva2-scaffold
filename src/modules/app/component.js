@@ -41,6 +41,7 @@ export default class Component extends React.Component {
 
   componentWillMount() {
     this.onEnter();
+    this.getUserInfo();
   }
 
   componentDidMount = () => {
@@ -105,6 +106,15 @@ export default class Component extends React.Component {
       breadcrumb={breadcrumb}>
       <Router {...this.props} />
     </Layout>);
+  }
+
+  getUserInfo = () => {
+    Services.user.info().then((res) => {
+      User.info = res;
+      return Promise.resolve(res);
+    }).catch((rej) => {
+      return Promise.reject(rej);
+    });
   }
 
   setLiving = (options = {}) => {
