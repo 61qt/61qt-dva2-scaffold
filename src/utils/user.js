@@ -1,5 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import moment from 'moment';
+import Cookies from 'js-cookie';
 
 const TokenName = 'jwtToken';
 const UserInfoName = 'userInfo';
@@ -52,7 +53,7 @@ export class UserService {
   }
 
   getToken(force = false) {
-    const token = localStorage.getItem(TokenName) || null;
+    const token = Cookies.get(TokenName) || null;
     if (true === force) {
       return token;
     }
@@ -67,7 +68,10 @@ export class UserService {
   setToken(token) {
     if ('string' === typeof token && token && true === this.validToken(token)) {
       this.tokenCache = token;
-      localStorage.setItem(TokenName, token);
+      Cookies.set(TokenName, token, {
+        expires: 300,
+        path: '/',
+      });
       return true;
     }
 
@@ -76,12 +80,12 @@ export class UserService {
 
   unsetToken() {
     this.tokenCache = null;
-    localStorage.removeItem(TokenName);
+    Cookies.remove(TokenName);
     return true;
   }
 
   getInfo() {
-    const userInfoStr = localStorage.getItem(UserInfoName);
+    const userInfoStr = Cookies.get(UserInfoName);
     let info = {};
     try {
       info = JSON.parse(userInfoStr);
@@ -96,7 +100,10 @@ export class UserService {
   setInfo(info) {
     if (info && info.id) {
       this.infoCache = info;
-      localStorage.setItem(UserInfoName, JSON.stringify(info));
+      Cookies.set(UserInfoName, JSON.stringify(info), {
+        expires: 300,
+        path: '/',
+      });
       return true;
     }
 
@@ -105,7 +112,7 @@ export class UserService {
 
   unsetInfo() {
     this.infoCache = null;
-    localStorage.removeItem(UserInfoName);
+    Cookies.remove(UserInfoName);
     return true;
   }
 
