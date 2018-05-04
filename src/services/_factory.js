@@ -138,7 +138,7 @@ export default function actionFactory({
       query = query.join(',');
 
       const schema = `query List($page: Int, $take: Int, $orderBy: String, $sort: String) {
-        ${table} (page: $page, take: $take, orderBy: $orderBy, sort: $sort, ${query ? ',' : ''} ${query}) {
+        ${table} (page: $page, take: $take, orderBy: $orderBy, sort: $sort ${query ? ',' : ''} ${query}) {
           data {
             ${select}
           }
