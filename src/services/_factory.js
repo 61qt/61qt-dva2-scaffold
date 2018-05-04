@@ -122,9 +122,14 @@ export default function actionFactory({
         }
       }
 
-      const query = _.map(filter, (elem) => {
-        return `${elem[0]}: ${elem[2]}`;
-      }).join(',');
+      let query = [];
+      _.each(filter, (elem) => {
+        if (elem[0] && 'user_type' === elem[0]) {
+          query.push(`${elem[0]}: ${elem[2]}`);
+        }
+      });
+
+      query = query.join(',');
 
       const schema = `query List($page: Int, $take: Int, $orderBy: String, $sort: String) {
         ${table} (page: $page, take: $take, orderBy: $orderBy, sort: $sort, ${query ? ',' : ''} ${query}) {

@@ -93,7 +93,17 @@ function fetch({ value, query, props, callback, options = {} }) {
   }
 
   function debunceFakeFetch() {
-    Services[props.table].graphqlMaxList().then((response) => {
+    let filter = [];
+    if (_.isArray(props.filter)) {
+      filter = props.filter;
+    }
+    if (_.isArray(query)) {
+      filter = filter.concat(query);
+    }
+    Services[props.table].graphqlMaxList({
+      ...props,
+      filter: JSON.stringify(filter),
+    }).then((response) => {
       // const data = _.get(response, `data.${props.table}.data`);
       const data = _.get(response, 'data.data');
       // window.console.log('data', data);
@@ -142,6 +152,7 @@ export default class Component extends React.Component {
     force: false,
     allowClear: false,
     table: '',
+    filter: [],
   }
 
   constructor(props) {
