@@ -46,7 +46,7 @@ export default class Component extends React.Component {
       },
       {
         title: '省',
-        dataIndex: 'province_id',
+        dataIndex: '____province_id',
         render: () => {
           return (<FormComponents.AreaSelect areaParentId="1" placeholder="请选择" disabled />);
         },
@@ -57,7 +57,7 @@ export default class Component extends React.Component {
       },
       {
         title: '市',
-        dataIndex: 'city_id',
+        dataIndex: '____city_id',
         render: () => {
           return (<FormComponents.AreaSelect areaParentId="620000" placeholder="请选择" disabled />);
         },
@@ -68,17 +68,19 @@ export default class Component extends React.Component {
       },
       {
         title: '县',
-        dataIndex: 'district_id',
+        dataIndex: '____district_id',
         render: () => {
           return (<FormComponents.AreaSelect areaParentId="620700" placeholder="请选择" allowClear />);
         },
+        hiddenRule: true,
       },
       {
         title: '学校',
-        dataIndex: 'school_id',
+        dataIndex: '____school_id',
         render: () => {
           return (<FormComponents.ForeignSelect placeholder="请选择" url="school" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear />);
         },
+        hiddenRule: true,
       },
       {
         title: '所属部门',
@@ -97,6 +99,9 @@ export default class Component extends React.Component {
       {
         title: '身份证号',
         dataIndex: 'id_number',
+        rules: [{
+          required: true, message: '必填',
+        }],
       },
       {
         title: '手机号码',
@@ -120,6 +125,8 @@ export default class Component extends React.Component {
         title: '密码',
         dataIndex: 'password',
         rules: [{
+          required: !this.editInfo.paramsId, message: this.editInfo.paramsId ? '' : '必填',
+        }, {
           validator: (rule, value, callback) => {
             const form = this.props.form;
             if (value && this.state.confirmDirty) {
@@ -136,6 +143,8 @@ export default class Component extends React.Component {
         title: '确认密码',
         dataIndex: 'password_confirmation',
         rules: [{
+          required: !this.editInfo.paramsId, message: this.editInfo.paramsId ? '' : '必填',
+        }, {
           validator: (rule, value, callback) => {
             const form = this.props.form;
             if (value && value !== form.getFieldValue('password')) {
@@ -376,7 +385,6 @@ export default class Component extends React.Component {
           { this.state.dataSource && !this.state.loading ? this.renderForm() : <div>正在加载</div>}
         </Spin>
       </div>
-    </PageLayout>
-    );
+    </PageLayout>);
   }
 }

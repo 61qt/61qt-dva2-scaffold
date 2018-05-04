@@ -22,19 +22,38 @@ export default class Component extends React.Component {
 
   getRows = (col = this.props.col) => {
     const dataSource = this.props.dataSource;
-    const showColumn = _.filter(this.props.columns, (elem) => {
-      const removeRule = elem.removeRule;
+    const hiddenColumn = [];
+    const showColumn = [];
+    _.filter(this.props.columns, (elem) => {
       const text = _.get(dataSource, elem.dataIndex);
-      let rowIsRemov = false;
 
+      const removeRule = elem.removeRule;
+      let rowIsRemove = false;
       if ('boolean' === typeof removeRule) {
-        rowIsRemov = removeRule;
+        rowIsRemove = removeRule;
       }
       else if ('function' === typeof removeRule) {
-        rowIsRemov = removeRule(text, dataSource);
+        rowIsRemove = removeRule(text, dataSource);
       }
 
-      return !rowIsRemov;
+      const hiddenRule = elem.hiddenRule;
+      let rowIsHide = false;
+      if ('boolean' === typeof hiddenRule) {
+        rowIsHide = hiddenRule;
+      }
+      else if ('function' === typeof hiddenRule) {
+        rowIsHide = hiddenRule(text, dataSource);
+      }
+
+      if (rowIsHide) {
+        hiddenColumn.push(elem);
+      }
+      else if (!rowIsRemove) {
+        showColumn.push(elem);
+      }
+      else {
+        // 隐藏了的 elem 。
+      }
     });
 
     const tableColumns = [];
@@ -102,7 +121,7 @@ export default class Component extends React.Component {
     };
 
     // 渲染已经展开的列。
-    return expandColumn.map((rowElem, rowIndex) => {
+    const trArr = expandColumn.map((rowElem, rowIndex) => {
       const tdArr = [];
       let colSpanLength = 0;
       _.each(rowElem, (colElem) => {
@@ -123,6 +142,18 @@ export default class Component extends React.Component {
         { tdArr }
       </tr>);
     });
+    if (hiddenColumn && hiddenColumn.length) {
+      trArr.push(<tr key="hiddenColumn" className="ant-hide">
+        <td>
+          {
+            _.map(hiddenColumn, (elem) => {
+              return this.getValue(elem, dataSource);
+            })
+          }
+        </td>
+      </tr>);
+    }
+    return trArr;
   }
 
   getShowMoreRow = () => {

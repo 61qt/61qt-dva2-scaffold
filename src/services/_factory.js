@@ -18,7 +18,13 @@ function toBothCamelCase(str) {
 function buildFormDataArr(values) {
   const valueArr = [];
   for (const [key, value] of Object.entries(values)) {
-    if (/phone/.test(key)) {
+    if (/(password|password_confirmation)/.test(key)) {
+      // ignore this value
+    }
+    else if (/_{3,4}/.test(key)) {
+      // ignore this value
+    }
+    else if (/phone/.test(key)) {
       valueArr.push(`${key}: "${value || 0}"`);
     }
     else if (/_id$/.test(key)) {
