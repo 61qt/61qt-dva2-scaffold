@@ -12,14 +12,12 @@ import Upload from '../../components_atom/upload';
 import Access from '../../components_atom/access';
 import Table from '../../components_atom/table';
 import PageLayout from '../../components_atom/page-layout';
-import FilterTree from '../../components_atom/filter_tree';
 import {
   getFilter,
 } from '../../components_default/search_form';
 
 @connect((state) => {
   return {
-    area: state.area,
     loading: !!state.loading.models.student,
     studentState: state.student,
   };
@@ -28,6 +26,9 @@ export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('student', this);
+    this.state = {
+      defaultSearchValue: {},
+    };
     this.columns = [
       {
         title: '学号',
@@ -112,16 +113,10 @@ export default class Component extends React.Component {
         },
       },
     ];
-    this.state = {
-      defaultFilter: _.get(props, 'studentState.listState.defaultFilter') || [],
-    };
   }
 
   componentDidMount = () => {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'area/init',
-    });
     dispatch({
       type: 'breadcrumb/current',
       payload: [
@@ -140,22 +135,6 @@ export default class Component extends React.Component {
     this.resetPage();
   }
 
-  onSelect = (selected) => {
-    const filter = getFilter({
-      area_id: selected[0] || selected,
-    }, {
-      stringify: false,
-    });
-    // window.console.log('onSelect', selected, 'filter', filter);
-    this.setState({
-      defaultFilter: filter,
-    });
-  }
-
-  onCheck = (selected) => {
-    window.console.log('onCheck', selected);
-  }
-
   resetPage = () => {
     this.props.dispatch({
       type: 'student/reset',
@@ -172,17 +151,22 @@ export default class Component extends React.Component {
     });
   }
 
-  handleSubmit = ({ filter, values, expand, loadOldPage }) => {
-    window.console.log('handleSubmit filter', filter);
+  handleSubmit = ({
+    searchValues = _.get(this.props.studentState, 'listState.searchValues') || {},
+    siderValues = _.get(this.props.studentState, 'listState.siderValues') || {},
+    expand = _.get(this.props.studentState, 'listState.expand') || false,
+    loadOldPage = false,
+  }) => {
+    const filter = getFilter({
+      ...searchValues,
+      ...siderValues,
+      ...this.state.defaultSearchValue,
+    });
+
     const { dispatch } = this.props;
     dispatch({
       type: 'student/listState',
-      payload: {
-        filter,
-        searchValues: values,
-        expand,
-        defaultFilter: this.state.defaultFilter,
-      },
+      payload: { filter, siderValues, searchValues, expand },
     });
     dispatch({
       type: 'student/list',
@@ -213,7 +197,6 @@ export default class Component extends React.Component {
           </Access>
           <Download link="true" size="small" path="student/export/template">下载模板</Download>
         </div>
-
       </div>
     );
   }
@@ -237,17 +220,9 @@ export default class Component extends React.Component {
   }
 
   render() {
-    const Sider = (<FilterTree
-      tree={this.props.area.tree.slice(0, 5)}
-      onSelect={this.onSelect}
-      onCheck={this.onCheck}
-      checkable={false}
-      multiple={false}
-    />);
-
     return (
-      <PageLayout Sider={Sider}>
-        <SearchForm defaultFilter={this.state.defaultFilter} handleSubmit={this.handleSubmit} />
+      <PageLayout>
+        <SearchForm handleSubmit={this.handleSubmit} />
         <div>
           <Table
             data-bak-size={768 > window.innerWidth ? 'small' : 'default'}

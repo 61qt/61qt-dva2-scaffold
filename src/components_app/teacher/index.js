@@ -1,4 +1,4 @@
-// import _ from 'lodash';
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'dva';
 import { Pagination, Button } from 'antd';
@@ -7,9 +7,13 @@ import styles from './index.less';
 import Filters from '../../filters';
 import SearchForm from './search_form';
 import Access from '../../components_atom/access';
+import Upload from '../../components_atom/upload';
 import Table from '../../components_atom/table';
 import Download from '../../components_atom/download';
 import PageLayout from '../../components_atom/page-layout';
+import {
+  getFilter,
+} from '../../components_default/search_form';
 
 @connect((state) => {
   return {
@@ -21,7 +25,9 @@ export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('teacher', this);
-
+    this.state = {
+      defaultSearchValue: {},
+    };
     this.columns = [
       {
         title: '编号',
@@ -103,6 +109,21 @@ export default class Component extends React.Component {
     });
   }
 
+  onUploaded = (info) => {
+    if (__DEV__) {
+      window.console.log('info', info);
+    }
+    this.resetPage();
+  }
+
+  resetPage = () => {
+    this.props.dispatch({
+      type: 'teacher/reset',
+    }).then(() => {
+      this.props.history.push(Filters.path('loading', {}));
+    });
+  }
+
   pageChangeHandler = (page = this.props.teacherState.page) => {
     const {
       dispatch,
@@ -114,11 +135,22 @@ export default class Component extends React.Component {
     });
   }
 
-  handleSubmit = ({ filter, values, expand, loadOldPage }) => {
+  handleSubmit = ({
+    searchValues = _.get(this.props.teacherState, 'listState.searchValues') || {},
+    siderValues = _.get(this.props.teacherState, 'listState.siderValues') || {},
+    expand = _.get(this.props.teacherState, 'listState.expand') || false,
+    loadOldPage = false,
+  }) => {
+    const filter = getFilter({
+      ...searchValues,
+      ...siderValues,
+      ...this.state.defaultSearchValue,
+    });
+
     const { dispatch } = this.props;
     dispatch({
       type: 'teacher/listState',
-      payload: { filter, searchValues: values, expand },
+      payload: { filter, siderValues, searchValues, expand },
     });
     dispatch({
       type: 'teacher/list',
@@ -138,15 +170,18 @@ export default class Component extends React.Component {
 
         <div className="table-title-action">
           <Access auth="teacher.store">
+            <Upload onUploaded={this.onUploaded} size="small" path="teacher?upload">批量导入</Upload>
+          </Access>
+          <Access auth="teacher.export">
+            <Download confirm="true" selectRow={this.columns} size="small" path="teacher/export" query={{ filter: teacherState.listState.filter }}>批量导出</Download>
+          </Access>
+          <Access auth="teacher.store">
             <NavLink to={Filters.path('teacher_add', {})} activeClassName="link-active">
               <Button size="small" type="primary" ghost>新增教师</Button>
             </NavLink>
           </Access>
-          <Access auth="teacher.export">
-            <Download confirm="true" size="small" path="teacher/export" query={{ filter: teacherState.listState.filter }}>批量导出</Download>
-          </Access>
+          <Download link="true" size="small" path="student/export/template">下载模板</Download>
         </div>
-
       </div>
     );
   }

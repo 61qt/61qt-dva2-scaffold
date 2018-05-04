@@ -8,7 +8,7 @@ import { Form, Input, Col } from 'antd';
 import ComponentsForm from '../../components_form';
 import ComponentSearchForm, { searchFormItemLayout } from '../../components_default/search_form';
 // import Filters from '../../filters';
-import { DICT } from '../../constants';
+// import { DICT } from '../../constants';
 
 @Form.create()
 @connect((state) => {
@@ -24,9 +24,6 @@ export default class Component extends ComponentSearchForm {
     this.state = {
       expand: props.listState.expand || false,
       showCount: 3,
-      defaultFilter: [
-        ['user_type', '=', DICT.USER.USER_TYPE.CITY],
-      ],
     };
   }
 
@@ -59,7 +56,7 @@ export default class Component extends ComponentSearchForm {
       <Col span={col} key="school_id">
         <Form.Item {...searchFormItemLayout} label="$学校">
           {
-            getFieldDecorator('school_id')(<ComponentsForm.ForeignSelectGraphql size="small" placeholder="$学校" table="admin_city" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat options={{ textName: 'username' }} filter={[['user_type', '=', DICT.USER.USER_TYPE.CITY]]} />)
+            getFieldDecorator('school_id')(<ComponentsForm.ForeignSelectGraphql size="small" placeholder="$学校" table="school" search={{ format: 'filter', name: 'name', method: 'like' }} allowClear numberFormat />)
           }
         </Form.Item>
       </Col>

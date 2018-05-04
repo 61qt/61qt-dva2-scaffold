@@ -30,6 +30,11 @@ export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('admin_city', this);
+    this.state = {
+      defaultSearchValue: {
+        user_type: DICT.USER.USER_TYPE.CITY,
+      },
+    };
     this.columns = [
       {
         title: '编号',
@@ -113,10 +118,6 @@ export default class Component extends React.Component {
         },
       },
     ];
-    this.state = {
-      sideSelected: _.get(props, 'adminCityState.listState.sideSelected') || [],
-      defaultFilter: _.get(props, 'adminCityState.listState.defaultFilter') || [],
-    };
   }
 
   componentDidMount = () => {
@@ -140,19 +141,10 @@ export default class Component extends React.Component {
   }
 
   onSiderSelect = (selected) => {
-    const filter = getFilter({
-      city_id: selected[0] || selected,
-    }, {
-      stringify: false,
-    });
-    // window.console.log('onSelect', selected, 'filter', filter);
-    this.setState({
-      sideSelected: selected,
-      defaultFilter: filter,
-    });
-    this.props.dispatch({
-      type: 'admin_city/listState',
-      payload: { sideSelected: selected, defaultFilter: filter },
+    this.handleSubmit({
+      siderValues: {
+        city_id: selected[0] || selected,
+      },
     });
   }
 
@@ -202,11 +194,22 @@ export default class Component extends React.Component {
     });
   }
 
-  handleSubmit = ({ filter, values, expand, loadOldPage }) => {
+  handleSubmit = ({
+    searchValues = _.get(this.props.adminCityState, 'listState.searchValues') || {},
+    siderValues = _.get(this.props.adminCityState, 'listState.siderValues') || {},
+    expand = _.get(this.props.adminCityState, 'listState.expand') || false,
+    loadOldPage = false,
+  }) => {
+    const filter = getFilter({
+      ...searchValues,
+      ...siderValues,
+      ...this.state.defaultSearchValue,
+    });
+
     const { dispatch } = this.props;
     dispatch({
       type: 'admin_city/listState',
-      payload: { filter, searchValues: values, expand },
+      payload: { filter, siderValues, searchValues, expand },
     });
     dispatch({
       type: 'admin_city/list',
@@ -268,12 +271,12 @@ export default class Component extends React.Component {
       onCheck={this.onSiderCheck}
       checkable={false}
       multiple={false}
-      defaultValue={this.state.sideSelected}
+      defaultValue={_.get(this.props, 'adminCityState.listState.sideSelected') || []}
     />);
 
     return (<PageLayout Sider={Sider}>
       <div className={`${styles.normal}`}>
-        <SearchForm defaultFilter={this.state.defaultFilter} handleSubmit={this.handleSubmit} />
+        <SearchForm handleSubmit={this.handleSubmit} />
         <div>
           <Table
             data-bak-size={768 > window.innerWidth ? 'small' : 'default'}

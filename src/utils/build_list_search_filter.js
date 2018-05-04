@@ -35,8 +35,8 @@ function searchFormat(value) {
 export { searchFormat };
 
 // 目前最多两级的数据
-function buildListSearchFilter({ defaultFilter = [], values = {}, rebuildFormFilterName = [], formFilterName = {}, formFilterMethod = {}, rebuildFormValueFunc = {}, stringify = true }) {
-  const filters = [].concat(defaultFilter);
+function buildListSearchFilter({ values = {}, rebuildFormFilterName = [], formFilterName = {}, formFilterMethod = {}, rebuildFormValueFunc = {}, stringify = true }) {
+  const filters = [];
   for (const [key, value] of Object.entries(values)) {
     if (-1 < rebuildFormFilterName.indexOf(key)) {
       // 二级数据搜索，例如 date_range 返回的对象，就需要使用这个逻辑遍历出来。
