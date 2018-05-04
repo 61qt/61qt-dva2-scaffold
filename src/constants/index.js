@@ -36,6 +36,7 @@ const CONSTANTS = {
     LOGO: require('../assets/logo/logo.png'),
     TEXT: require('../assets/logo/logo_text.png'),
   },
+  LOGIN_HEADER: require('../assets/cas/login_header.png'),
 };
 
 export { DICT };

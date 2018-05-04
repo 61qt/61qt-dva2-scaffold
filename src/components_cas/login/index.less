@@ -13,7 +13,6 @@
   box-shadow: 0px 4px 8px 0px rgba(204,204,204,0.50);
   border-radius: 6px;
   background-color: #ffffff;
-  background-image: url(../../assets/cas/login_border_top.png);
   background-repeat: no-repeat;
   background-position: top center;
   padding: 50px 34px;
@@ -21,8 +20,18 @@
 }
 
 :global {
+  .w260-center {
+    margin: 0 auto;
+    width: 260px;
+  }
+
+  .cas-login-form {
+    .w260-center;
+  }
+  
   .cas-reg-form {
     .ant-form-item {
+      .w260-center;
       margin-bottom: 8px;
     }
   }

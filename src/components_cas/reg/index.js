@@ -133,7 +133,7 @@ export default class Component extends React.Component {
 
   getVerifyCodeTipComp = () => {
     return (<div className={styles.smsExtra} onClick={this.sms}>
-      <a>获取短信验证码</a>
+      <a>获取验证码</a>
     </div>);
   }
 
