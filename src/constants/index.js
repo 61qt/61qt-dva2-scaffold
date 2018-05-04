@@ -33,9 +33,10 @@ const CONSTANTS = {
   NOTIFICATION_DURATION: 10,
   LOGO: {
     LOGO: require('../assets/logo/logo.png'),
+    LOGO_WHITE: require('../assets/logo/logo_white.png'),
     TEXT: require('../assets/logo/logo_text.png'),
+    TEXT_WHITE: require('../assets/logo/logo_text_white.png'),
   },
-  LOGIN_HEADER: require('../assets/cas/login_header.png'),
 };
 
 export { DICT };

@@ -72,7 +72,7 @@ export default class Component extends React.Component {
 
   getVerifyCodeTipComp = () => {
     return (<div className={styles.smsExtra} onClick={this.sms}>
-      <a>获取短信验证码</a>
+      <a>获取验证码</a>
     </div>);
   }
 
@@ -175,7 +175,7 @@ export default class Component extends React.Component {
       <div className={styles.normal}>
         <Spin spinning={this.state.submitting}>
           <div className={styles.form}>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit} className="cas-form cas-forget-form">
               {
                 formItem.map((elem) => {
                   return elem.render();

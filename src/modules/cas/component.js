@@ -85,7 +85,8 @@ export default class Component extends React.Component {
           <br /><br />
           <h1 className={styles.title}>智慧教育云平台</h1>
           <div>
-            <img src={CONSTANTS.LOGIN_HEADER} alt="login_header_img" />
+            <img src={CONSTANTS.LOGO.LOGO} alt="logo" style={{ marginRight: 10 }} />
+            <img src={CONSTANTS.LOGO.TEXT} alt="logo_text" />
           </div>
         </div>
         <Router {...this.props} />

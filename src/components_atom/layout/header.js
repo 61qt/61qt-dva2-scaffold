@@ -20,8 +20,8 @@ export default class Component extends React.Component {
       <Layout.Header className={`globalHeader ${styles.normal}`}>
         <div className={`mainLayoutHeaderLogoContainer ${styles.headerLogoContainer} clearfix`}>
           <div className={styles.headerCenter}>
-            <img className={styles.headerLogoImg} src={CONSTANTS.LOGO.LOGO} alt="智慧教育云平台 logo" />
-            <img className={styles.headerLogoImgText} src={CONSTANTS.LOGO.TEXT} alt="智慧教育云平台" />
+            <img className={styles.headerLogoImg} src={CONSTANTS.LOGO.LOGO_WHITE} alt="智慧教育云平台 logo" />
+            <img className={styles.headerLogoImgText} src={CONSTANTS.LOGO.TEXT_WHITE} alt="智慧教育云平台" />
             {
               /*
                 <span className={styles.headerName}>管理系统</span>
