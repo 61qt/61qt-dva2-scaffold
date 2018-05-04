@@ -111,6 +111,13 @@ export default [
     // resourceKey: '文章管理',
   },
   {
+    name: '$雪碧图',
+    key: 'sprite',
+    icon: 'sprite',
+    url: 'sprite',
+    // resourceKey: '雪碧图',
+  },
+  {
     name: '$基础数据管理',
     key: 'base',
     icon: 'base',

@@ -10,6 +10,13 @@ const baseUrl = '/app';
 
 /* eslint-disable import/first, import/newline-after-import */
 routeArr.push({
+  name: 'sprite',
+  path: '/sprite',
+  exact: true,
+  component: require('../../components_common/sprite').default,
+});
+
+routeArr.push({
   name: 'loading',
   path: '/loading',
   exact: true,
