@@ -96,7 +96,7 @@ export default class Component extends React.Component {
           <div>
             <a>
               <Icon type="logout" />
-              <span>退出登录</span>
+              <span>退出登录(未做)</span>
             </a>
           </div>
         </Menu.Item>
