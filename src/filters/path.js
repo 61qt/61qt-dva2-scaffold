@@ -24,7 +24,9 @@ export default function (name, options, module = buildModule) {
   }
   else {
     if (window.console && window.console.error) {
-      window.console.log('elem', elem, elem.url);
+      if (elem) {
+        window.console.log('filter path elem', elem, elem.url);
+      }
       window.console.error(`[filters path] build path error, please check name: ${name}, options: ${options}, module: ${module}`);
     }
     return '';
