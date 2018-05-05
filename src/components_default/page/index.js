@@ -127,6 +127,10 @@ export default class Component extends React.Component {
     return null;
   }
 
+  getFooter = () => {
+    return null;
+  }
+
   getSider = () => {
     if (this.getSiderTree()) {
       return (<FilterTree
@@ -259,6 +263,7 @@ export default class Component extends React.Component {
       <div className="page-content">
         { this.getSearchForm() }
         { this.getTable() }
+        { this.getFooter() }
       </div>
     </PageLayout>);
   }
