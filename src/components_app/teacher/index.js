@@ -1,34 +1,122 @@
-import _ from 'lodash';
 import React from 'react';
 import { connect } from 'dva';
-import { Pagination, Button } from 'antd';
+import { Col, Form, Input, Select } from 'antd';
 import { NavLink } from 'dva/router';
 import styles from './index.less';
 import Filters from '../../filters';
-import SearchForm from './search_form';
 import Access from '../../components_atom/access';
-import Upload from '../../components_atom/upload';
-import Table from '../../components_atom/table';
-import Download from '../../components_atom/download';
-import PageLayout from '../../components_atom/page-layout';
-import {
-  getFilter,
-} from '../../components_default/search_form';
+import PageList from '../../components_default/page_list';
+import { searchFormItemLayout } from '../../components_atom/search_form';
+import ComponentsForm from '../../components_form';
 
+@Form.create()
 @connect((state) => {
   return {
     loading: !!state.loading.models.teacher,
-    teacherState: state.teacher,
+    pageState: state.teacher,
   };
 })
-export default class Component extends React.Component {
+export default class Component extends PageList {
   constructor(props) {
     super(props);
+
     debugAdd('teacher', this);
-    this.state = {
+    Object.assign(this.state, {
+      searchCol: 12,
+      filterTreeDeep: 1,
+      model: 'teacher',
+      modeLabel: '教师管理',
       defaultSearchValue: {},
-    };
-    this.columns = [
+    });
+  }
+
+  componentDidMount = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'breadcrumb/current',
+      payload: [
+        {
+          name: '教师管理',
+          url: Filters.path('teacher', {}),
+        },
+      ],
+    });
+  }
+
+  getSearchColumn = () => {
+    const getFieldDecorator = this.props.form.getFieldDecorator;
+    const children = [];
+
+    children.push((
+      <Col span={this.state.searchCol} key="name">
+        <Form.Item {...searchFormItemLayout} label="教师姓名">
+          {getFieldDecorator('name')(<Input size="small" placeholder="姓名搜索" />)}
+        </Form.Item>
+      </Col>
+    ));
+
+    children.push((
+      <Col span={this.state.searchCol} key="alias">
+        <Form.Item {...searchFormItemLayout} label="对外尊称">
+          {getFieldDecorator('alias')(<Input size="small" placeholder="对外尊称搜索" />)}
+        </Form.Item>
+      </Col>
+    ));
+
+    children.push((
+      <Col span={this.state.searchCol} key="phone">
+        <Form.Item {...searchFormItemLayout} label="联系电话">
+          {getFieldDecorator('phone')(<Input size="small" placeholder="联系电话" />)}
+        </Form.Item>
+      </Col>
+    ));
+
+    children.push((
+      <Col span={this.state.searchCol} key="department_id">
+        <Form.Item {...searchFormItemLayout} label="所属部门">
+          {
+            getFieldDecorator('department_id')(<ComponentsForm.ForeignSelect
+              size="small"
+              placeholder="所属部门"
+              url="department"
+              search={{ format: 'filter', name: 'name', method: 'like' }}
+              allowClear
+              numberFormat
+              />)
+          }
+        </Form.Item>
+      </Col>
+    ));
+
+    children.push((
+      <Col span={this.state.searchCol} key="gender">
+        <Form.Item {...searchFormItemLayout} label="性别">
+          {
+            getFieldDecorator('gender')(<Select
+              size="small"
+              allowClear
+              placeholder="选择">
+              {Filters.dict(['teacher', 'gender']).map((elem) => {
+                return (
+                  <Select.Option
+                    value={`${elem.value}`}
+                    key={`gender_${elem.value}`}
+                  >
+                    {elem.label}
+                  </Select.Option>
+                );
+              })}
+            </Select>)
+          }
+        </Form.Item>
+      </Col>
+    ));
+
+    return children;
+  }
+
+  getTableColumns = () => {
+    const columns = [
       {
         title: '编号',
         dataIndex: 'id',
@@ -94,136 +182,7 @@ export default class Component extends React.Component {
         },
       },
     ];
-  }
 
-  componentDidMount = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'breadcrumb/current',
-      payload: [
-        {
-          name: '教师管理',
-          url: Filters.path('teacher', {}),
-        },
-      ],
-    });
-  }
-
-  onUploaded = (info) => {
-    if (__DEV__) {
-      window.console.log('info', info);
-    }
-    this.resetPage();
-  }
-
-  resetPage = () => {
-    this.props.dispatch({
-      type: 'teacher/reset',
-    }).then(() => {
-      this.props.history.push(Filters.path('loading', {}));
-    });
-  }
-
-  pageChangeHandler = (page = this.props.teacherState.page) => {
-    const {
-      dispatch,
-      teacherState,
-    } = this.props;
-    dispatch({
-      type: 'teacher/list',
-      payload: { page, filter: teacherState.listState.filter },
-    });
-  }
-
-  handleSubmit = ({
-    searchValues = _.get(this.props.teacherState, 'listState.searchValues') || {},
-    siderValues = _.get(this.props.teacherState, 'listState.siderValues') || {},
-    expand = _.get(this.props.teacherState, 'listState.expand') || false,
-    loadOldPage = false,
-  }) => {
-    const filter = getFilter({
-      ...searchValues,
-      ...siderValues,
-      ...this.state.defaultSearchValue,
-    });
-
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'teacher/listState',
-      payload: { filter, siderValues, searchValues, expand },
-    });
-    dispatch({
-      type: 'teacher/list',
-      payload: { page: loadOldPage ? this.props.teacherState.page : 1, filter },
-
-    });
-  }
-
-  title = () => {
-    const { teacherState } = this.props;
-    return (
-      <div className="clearfix">
-        <h3 className="table-title">
-          教师列表
-          { teacherState.total ? <small>（共{teacherState.total}条）</small> : null }
-        </h3>
-
-        <div className="table-title-action">
-          <Access auth="teacher.store">
-            <Upload onUploaded={this.onUploaded} size="small" path="teacher?upload">批量导入</Upload>
-          </Access>
-          <Access auth="teacher.export">
-            <Download confirm="true" selectRow={this.columns} size="small" path="teacher/export" query={{ filter: teacherState.listState.filter }}>批量导出</Download>
-          </Access>
-          <Access auth="teacher.store">
-            <NavLink to={Filters.path('teacher_add', {})} activeClassName="link-active">
-              <Button size="small" type="primary" ghost>新增教师</Button>
-            </NavLink>
-          </Access>
-          <Download link="true" size="small" path="student/export/template">下载模板</Download>
-        </div>
-      </div>
-    );
-  }
-
-  footer = () => {
-    const { teacherState } = this.props;
-    return (
-      <div className="clearfix">
-        <div className="ant-table-pagination-info">当前显示{teacherState.start} - {teacherState.end}条记录，共 {teacherState.total} 条数据</div>
-        <Pagination
-          showQuickJumper={false}
-          className="ant-table-pagination ant-table-pagination-hide-last"
-          total={teacherState.total}
-          current={teacherState.page}
-          pageSize={teacherState.pageSize}
-          size="small"
-          onChange={this.pageChangeHandler}
-        />
-      </div>
-    );
-  }
-
-  render() {
-    return (<PageLayout>
-      <div className={`${styles.normal}`}>
-        <SearchForm handleSubmit={this.handleSubmit} />
-        <div>
-          <Table
-            size={768 > window.innerWidth ? 'small' : 'default'}
-            bordered
-            columns={this.columns}
-            dataSource={this.props.teacherState.list}
-            loading={this.props.loading}
-            scroll={{ x: this.columns.reduce((a, b) => (a.width || a.minWidth || a || 0) + (b.width || b.minWidth || 0), 0), y: 300 > window.innerHeight - 310 ? 300 : window.innerHeight - 310 }}
-            rowKey={record => record.id}
-            pagination={false}
-            title={this.title}
-            footer={this.footer}
-          />
-        </div>
-      </div>
-    </PageLayout>
-    );
+    return columns;
   }
 }
