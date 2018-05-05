@@ -58,7 +58,7 @@ routeArr.push({
   name: 'admin_city_detail',
   path: '/admin_city/:id',
   exact: true,
-  component: require('../../components_app/student_detail').default,
+  component: require('../../components_app/admin_city_detail').default,
 });
 // 需要重新写。 end
 routeArr.push({

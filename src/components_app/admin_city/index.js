@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Popconfirm, Form, Input, Col } from 'antd';
 import { NavLink } from 'dva/router';
+
 import Filters from '../../filters';
 import Access from '../../components_atom/access';
 import Area from '../../components_atom/area';
@@ -111,6 +112,16 @@ export default class Component extends Page {
         key: 'id',
         fixed: 'left',
         width: 100,
+        render: (text, record) => {
+          return (<span>
+            <Access data-bak-auth="student.show">
+              <NavLink to={Filters.path('student_detail', { id: record.id })} activeClassName="link-active">{record.id}</NavLink>
+            </Access>
+            <Access data-bak-auth="!student.show">
+              <span>{record.id}</span>
+            </Access>
+          </span>);
+        },
       },
       // {
       //   title: '名称',
@@ -123,6 +134,16 @@ export default class Component extends Page {
         dataIndex: 'username',
         key: 'username',
         width: 130,
+        render: (text, record) => {
+          return (<span>
+            <Access data-bak-auth="admin_city.show">
+              <NavLink to={Filters.path('admin_city_detail', { id: record.id })} activeClassName="link-active">{record.username}</NavLink>
+            </Access>
+            <Access data-bak-auth="!admin_city.show">
+              <span>{record.username}</span>
+            </Access>
+          </span>);
+        },
       },
       {
         title: '市',
