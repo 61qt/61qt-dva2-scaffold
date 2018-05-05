@@ -32,8 +32,6 @@ export default class Component extends React.Component {
       // 当前初始化就要使用到的查询条件。
       defaultSearchValue: {},
     };
-
-    this.constructorExtend(props);
   }
 
   componentDidMount = () => {
@@ -146,12 +144,6 @@ export default class Component extends React.Component {
       />);
     }
     return null;
-  }
-
-  constructorExtend = () => {
-    if (__DEV__) {
-      window.console.log('[constructorExtend] 需要在子类重新定义该方法，接收 props 参数');
-    }
   }
 
   resetPage = () => {
