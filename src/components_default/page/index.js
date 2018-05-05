@@ -2,7 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import { message, Pagination, Button } from 'antd';
 import { NavLink } from 'dva/router';
-import styles from './index.less';
 import Filters from '../../filters';
 import Download from '../../components_atom/download';
 import Upload from '../../components_atom/upload';
@@ -14,6 +13,8 @@ import SearchForm, {
 } from '../../components_atom/search_form';
 import FilterTree from '../../components_atom/filter_tree';
 import PageLayout from '../../components_atom/page-layout';
+
+import './index.less';
 
 export default class Component extends React.Component {
   constructor(props) {
@@ -255,7 +256,7 @@ export default class Component extends React.Component {
 
   render() {
     return (<PageLayout Sider={this.getSider()}>
-      <div className={`${styles.normal}`}>
+      <div className="page-content">
         { this.getSearchForm() }
         { this.getTable() }
       </div>
