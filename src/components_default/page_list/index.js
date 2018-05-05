@@ -47,19 +47,6 @@ export default class Component extends React.Component {
     this.resetPage();
   }
 
-  onSiderSelect = (selected) => {
-    // todo add every node filter type
-    this.handleSubmit({
-      siderValues: {
-        city_id: selected[0] || selected,
-      },
-    });
-  }
-
-  onSiderCheck = (selected) => {
-    window.console.log('onCheck', selected);
-  }
-
   getTableColumns = () => {
     if (__DEV__) {
       window.console.log('[getTableColumns] 如果需要配置页面 table，需要在子类重新定义该方法');
@@ -136,14 +123,27 @@ export default class Component extends React.Component {
       return (<FilterTree
         tree={this.getSiderTree()}
         deep={this.state.filterTreeDeep}
-        onSelect={this.onSiderSelect}
-        onCheck={this.onSiderCheck}
+        onSelect={this.handleSiderSelect}
+        onCheck={this.handleSiderCheck}
         checkable={false}
         multiple={false}
         defaultValue={_.get(this.props, 'pageState.listState.sideSelected') || []}
       />);
     }
     return null;
+  }
+
+  handleSiderSelect = (selected) => {
+    // todo add every node filter type
+    this.handleSubmit({
+      siderValues: {
+        city_id: selected[0] || selected,
+      },
+    });
+  }
+
+  handleSiderCheck = (selected) => {
+    window.console.log('onCheck', selected);
   }
 
   resetPage = () => {
