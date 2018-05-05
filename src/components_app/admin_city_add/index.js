@@ -14,7 +14,8 @@ import PageAdd from '../../components_default/page_add';
   return {};
 })
 export default class Component extends PageAdd {
-  constructorExtend = () => {
+  constructor(props) {
+    super(props);
     debugAdd('admin_city_add', this);
     Object.assign(this.state, {
       confirmDirty: false,
@@ -22,6 +23,8 @@ export default class Component extends PageAdd {
       model: 'admin_city',
       // 当前页面的展示的表(service 或者是 schema)的中文可读名称。
       modeLabel: '市级管理员',
+      formMode: 'DetailView',
+      // formMode: 'Well',
     });
   }
 

@@ -1,15 +1,39 @@
 // import moment from 'moment';
 import React from 'react';
 import _ from 'lodash';
-import { message, Spin, Button, Form } from 'antd';
+import { message, Spin, Button, Form, Row, Icon } from 'antd';
 import Filters from '../../filters';
 import formErrorMessageShow from '../../utils/form_error_message_show';
 import buildColumnFormItem from '../../utils/build_column_form_item';
 import formatFormValue from '../../utils/format_form_value';
+import Well from '../../components_atom/well';
 import DetailView from '../../components_atom/detail_view';
 import PageLayout from '../../components_atom/page-layout';
 
 import './index.less';
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 6 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 14 },
+  },
+};
+
+const formTailItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 6 },
+  },
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 14, offset: 6 },
+  },
+};
+
 
 export default class Component extends React.Component {
   constructor(props) {
@@ -26,14 +50,19 @@ export default class Component extends React.Component {
       model: 'admin_city',
       // 当前页面的展示的表(service 或者是 schema)的中文可读名称。
       modeLabel: '市级管理员',
-      col: 24,
+      // 当前是不是展开所以的列。
+      formExpand: true,
+      // 收起时候展示的行数。
+      formShowCount: 99999,
+      formCol: 24,
       formValidate: {},
       submitting: false,
       loading: true,
       dataSource: false,
-    };
+      // 目前只能是 [Well, DetailView]
+      formMode: 'Well',
 
-    this.constructorExtend(props);
+    };
   }
 
   componentDidMount = () => {
@@ -72,15 +101,28 @@ export default class Component extends React.Component {
     return [];
   }
 
+  getBuildFormCol = (options = {}) => {
+    const formCol = buildColumnFormItem({
+      ...this.props,
+      ...this.state,
+      columns: this.getFormColumn(),
+      shouldInitialValue: this.editInfo.paramsId,
+      defaultValueSet: this.state.dataSource,
+      formItemLayout: options.formItemLayout || {},
+      formValidate: this.state.formValidate,
+      col: this.state.formCol,
+      warpCol: options.warpCol || false,
+      label: options.label || false,
+    });
+
+    return formCol;
+  }
+
   componentDidMountExtend = () => {
     if (__DEV__) {
       window.console.log('[constructorExtend] 如果需要配置导航条，需要在子类重新定义该方法');
       window.console.log('[constructorExtend] 如果需要获取页面详情，需要在子类重新定义该方法');
     }
-  }
-
-  constructorExtend = () => {
-    // constructor 的拓展
   }
 
   resetFormValidate = () => {
@@ -205,20 +247,34 @@ export default class Component extends React.Component {
     this.props.form.resetFields();
   }
 
-  renderForm = () => {
-    const children = buildColumnFormItem({
-      ...this.props,
-      ...this.state,
-      columns: this.getFormColumn(),
-      shouldInitialValue: this.editInfo.paramsId,
-      defaultValueSet: this.state.dataSource,
-      formItemLayout: {},
-      formValidate: this.state.formValidate,
-      col: this.state.col,
+  toggleFormExpand = () => {
+    const { formExpand } = this.state;
+    this.setState({ formExpand: !formExpand });
+  }
+
+  renderWellForm = () => {
+    const formCol = this.getBuildFormCol({
+      warpCol: true,
+      label: true,
+      formItemLayout,
+    });
+    return (<Well title={`${this.editInfo.text}资料`}>
+      <Row gutter={40}>
+        {formCol.slice(0, this.state.formShowCount)}
+      </Row>
+      <Row
+        className={`${this.state.formExpand ? '' : 'ant-hide'}`}
+        gutter={40}>
+        {formCol.slice(this.state.formShowCount)}
+      </Row>
+    </Well>);
+  }
+
+  renderDetailViewForm = () => {
+    const formCol = this.getBuildFormCol({
       warpCol: false,
       label: false,
     });
-
     const renderTitle = (elem) => {
       const isRequired = _.find(elem.rules, {
         required: true,
@@ -226,32 +282,61 @@ export default class Component extends React.Component {
       return (<label htmlFor={elem.dataIndex} className={`${isRequired ? 'ant-form-item-required' : ''}`} title={elem.title}>{elem.title}</label>);
     };
 
+    return (<DetailView
+      titleClassName="text-align-right"
+      className="small"
+      col={1}
+      labelWidth="10em"
+      dataSource={{}}
+      columns={formCol}
+      renderTitle={renderTitle}
+      title={`${this.editInfo.text}资料`} />);
+  }
+  renderForm = () => {
     return (
       <Spin spinning={this.state.submitting}>
-        <Form
-          className="app-edit-form"
-          onSubmit={this.handleSubmit}
-        >
-          <DetailView
-            titleClassName="text-align-right"
-            className="small"
-            col={1}
-            labelWidth="10em"
-            dataSource={{}}
-            columns={children}
-            renderTitle={renderTitle}
-            title={`${this.editInfo.text}资料`} />
+        <Form className="app-edit-form" onSubmit={this.handleSubmit} >
+          {
+            'Well' === this.state.formMode ? this.renderWellForm() : null
+          }
 
-          <br />
-          <div>
-            <Button size="default" type="primary" htmlType="submit" disabled={this.state.submitting} loading={this.state.submitting}>保存</Button>
-            <Button size="default" style={{ marginLeft: 8 }} onClick={this.handleReset}>
-              重置
-            </Button>
+          {
+            'DetailView' === this.state.formMode ? this.renderDetailViewForm() : null
+          }
+
+          <Well holderplace className={`${'Well' === this.state.formMode ? '' : 'ant-hide'}`}>
+            <Row gutter={40}>
+              <Form.Item {...formTailItemLayout}>
+                { this.renderFormAction() }
+              </Form.Item>
+            </Row>
+          </Well>
+          <div className={`${'DetailView' === this.state.formMode ? '' : 'ant-hide'}`}>
+            { this.renderFormAction() }
           </div>
         </Form>
       </Spin>
     );
+  }
+
+  renderFormAction = () => {
+    let showToggle = false;
+    const column = this.getFormColumn();
+    if (_.isArray(column) && column.length > this.state.formShowCount) {
+      showToggle = true;
+    }
+
+    return (<span className="page-add-action">
+      <Button size="default" type="primary" htmlType="submit" disabled={this.state.submitting} loading={this.state.submitting}>保存</Button>
+      <Button size="default" onClick={this.handleReset}>
+        重置
+      </Button>
+
+      <a className={`${showToggle ? '' : 'ant-hide'}`} onClick={this.toggleFormExpand}>
+        { this.state.formExpand ? '收起' : '展开' }
+        <Icon type={this.state.formExpand ? 'up' : 'down'} />
+      </a>
+    </span>);
   }
 
   render() {
