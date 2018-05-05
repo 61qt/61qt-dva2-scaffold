@@ -39,12 +39,14 @@ export default class Component extends React.Component {
   constructor(props) {
     super(props);
     debugAdd('page_add', this);
+
     const paramsId = _.get(props, 'match.params.id') * 1 || false;
     this.editInfo = {
       paramsId,
       text: false === paramsId ? '新增' : '编辑',
       method: false === paramsId ? 'create' : 'update',
     };
+
     this.state = {
       // 当前页面的展示的表(service 或者是 schema)的名称。
       model: 'admin_city',
@@ -61,7 +63,6 @@ export default class Component extends React.Component {
       dataSource: false,
       // 目前只能是 [Well, DetailView]
       formMode: 'Well',
-
     };
   }
 
@@ -292,6 +293,7 @@ export default class Component extends React.Component {
       renderTitle={renderTitle}
       title={`${this.editInfo.text}资料`} />);
   }
+
   renderForm = () => {
     return (
       <Spin spinning={this.state.submitting}>

@@ -19,12 +19,11 @@ export default class Component extends PageAdd {
     debugAdd('admin_city_add', this);
     Object.assign(this.state, {
       confirmDirty: false,
-      // 当前页面的展示的表(service 或者是 schema)的名称。
       model: 'admin_city',
-      // 当前页面的展示的表(service 或者是 schema)的中文可读名称。
       modeLabel: '市级管理员',
-      formMode: 'DetailView',
-      // formMode: 'Well',
+      // formMode: 'DetailView',
+      formMode: 'Well',
+      formShowCount: 3,
     });
   }
 

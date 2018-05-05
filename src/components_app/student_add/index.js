@@ -224,6 +224,7 @@ export default class Component extends React.Component {
         zeroEmptyFlag: true,
       });
     });
+
     columns.push({
       title: null,
       dataIndex: '____parent_add',
