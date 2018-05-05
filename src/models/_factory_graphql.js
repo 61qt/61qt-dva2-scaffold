@@ -103,8 +103,8 @@ export default function modelFactory({
         try {
           const data = yield call(Service.graphqlList, { page, filter, query, pageSize, orderBy, sort });
           const modelData = _.get(data, 'data');
-          window.listData = data;
-          window.listModelData = modelData;
+          // window.listData = data;
+          // window.listModelData = modelData;
           const start = modelData.perPage * 1 * (modelData.currentPage * 1 - 1) * 1 + 1;
           const length = _.get(modelData, 'data.length') * 1 || 0;
           yield put({

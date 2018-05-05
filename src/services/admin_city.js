@@ -25,6 +25,10 @@ const modelFields = [
 ];
 
 const modelRelate = [
+  // `school {
+  //   id
+  //   name
+  // }`
   // `userRoles {
   //   id
   //   name
