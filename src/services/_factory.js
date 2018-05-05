@@ -61,6 +61,7 @@ export default function actionFactory({
   PAGE_SIZE = CONSTANTS.PAGE_SIZE,
   PAGE_SIZE_MAX = CONSTANTS.PAGE_SIZE_MAX,
   mutation = {},
+  defaultFilter = {},
   ...rest
 }) {
   if (!table) {
@@ -153,7 +154,7 @@ export default function actionFactory({
         query: schema,
         variables: {
           filter: {
-            filter: options.filter || [],
+            filter: [].concat(options.filter || []).concat(defaultFilter.list || []),
           },
           page: options.page || 1,
           take: options.pageSize || PAGE_SIZE,

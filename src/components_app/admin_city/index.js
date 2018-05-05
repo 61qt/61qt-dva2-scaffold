@@ -29,9 +29,7 @@ export default class Component extends PageList {
       filterTreeDeep: 1,
       model: 'admin_city',
       modeLabel: '市级管理员',
-      defaultSearchValue: {
-        user_type: DICT.USER.USER_TYPE.CITY,
-      },
+      defaultSearchValue: {},
     };
   }
 

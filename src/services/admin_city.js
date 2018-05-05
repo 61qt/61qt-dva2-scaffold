@@ -1,3 +1,4 @@
+import { DICT } from '../constants';
 import Factory from '../services/_factory';
 
 const namespace = 'user';
@@ -50,6 +51,9 @@ const Service = Factory({
   namespace,
   table: namespace,
   select,
+  defaultFilter: {
+    list: [['user_type', '=', DICT.USER.USER_TYPE.CITY]],
+  },
   mutation: {
     update: {
       name: 'updateCityAdmin',
