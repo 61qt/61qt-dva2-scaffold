@@ -14,22 +14,14 @@ import PageDetail from '../../components_default/page_detail';
 export default class Component extends PageDetail {
   constructor(props) {
     super(props);
-    this.state = {
-      // detailView 展示的多少列
-      detailViewCol: 1,
-      // detail view 中的 label 宽度
-      detailViewLabelWidth: '10em',
-      // detail view 中的 展示行数
-      detailViewExpand: 9999,
-      // 当前页面的展示的表(service 或者是 schema)的名称。
-      model: 'admin_city',
-      // 当前页面的展示的表(service 或者是 schema)的中文可读名称。
-      modeLabel: '市级管理员',
-    };
     debugAdd('admin_city_detail', this);
+    Object.assign(this.state, {
+      model: 'admin_city',
+      modeLabel: '市级管理员',
+    });
   }
 
-  componentDidMount = () => {
+  componentDidMountExtend = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'breadcrumb/current',

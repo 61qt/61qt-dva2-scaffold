@@ -27,10 +27,7 @@ export default class Component extends React.Component {
   }
 
   componentDidMount = () => {
-    if (__DEV__) {
-      window.console.log('[componentDidMount] 如果需要配置导航条，需要在子类重新定义该方法');
-      window.console.log('[componentDidMount] 如果需要获取页面详情，需要在子类重新定义该方法');
-    }
+    this.componentDidMountExtend();
   }
 
   getPageTitle = () => {
@@ -63,6 +60,13 @@ export default class Component extends React.Component {
 
   getDataSource = () => {
     return this.props.pageDetail;
+  }
+
+  componentDidMountExtend = () => {
+    if (__DEV__) {
+      window.console.log('[componentDidMountExtend] 如果需要配置导航条，需要在子类重新定义该方法');
+      window.console.log('[componentDidMountExtend] 如果需要获取页面详情，需要在子类重新定义该方法');
+    }
   }
 
   renderFooter = () => {
