@@ -37,13 +37,16 @@ export default class Component extends React.Component {
     if (__DEV__) {
       window.console.log('[getPageTitle] 如果需要配置页面标题，需要在子类重新定义该方法');
     }
-    return (<h2>{_.get(this.props, 'pageDetail.name' || '')} - {this.state.modeLabel}信息详情</h2>);
+    return (<h2>{_.get(this.props, 'pageDetail.name') || _.get(this.props, 'pageDetail.username') || ''} - {this.state.modeLabel}详情</h2>);
   }
 
   getDetailViewTitle = () => {
     return (<div>
-      <span>{ `${this.state.modeLabel}（${_.get(this.props, 'pageDetail.name' || '')}） 详情` }</span>
-      <span className="float-right">
+      <span>{ `${this.state.modeLabel}（${_.get(this.props, 'pageDetail.name') || _.get(this.props, 'pageDetail.username') || ''}） 详情` }</span>
+      <span className="float-right page-detail-well-title-right">
+        <Access data-bak-auth={`${this.state.model}.index`}>
+          <NavLink to={Filters.path(`${this.state.model}`, {})} activeClassName="link-active">返回列表</NavLink>
+        </Access>
         <Access data-bak-auth={`${this.state.model}.update`}>
           <NavLink to={Filters.path(`${this.state.model}_edit`, { id: _.get(this.props, 'match.params.id') })} activeClassName="link-active">编辑</NavLink>
         </Access>
