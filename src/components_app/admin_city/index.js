@@ -117,9 +117,13 @@ export default class Component extends Page {
             <Access data-bak-auth="student.show">
               <NavLink to={Filters.path('student_detail', { id: record.id })} activeClassName="link-active">{record.id}</NavLink>
             </Access>
-            <Access data-bak-auth="!student.show">
-              <span>{record.id}</span>
-            </Access>
+            {
+              /*
+                <Access data-bak-auth="!student.show">
+                  <span>{record.id}</span>
+                </Access>
+              */
+            }
           </span>);
         },
       },
@@ -139,9 +143,14 @@ export default class Component extends Page {
             <Access data-bak-auth="admin_city.show">
               <NavLink to={Filters.path('admin_city_detail', { id: record.id })} activeClassName="link-active">{record.username}</NavLink>
             </Access>
-            <Access data-bak-auth="!admin_city.show">
-              <span>{record.username}</span>
-            </Access>
+
+            {
+              /*
+                <Access data-bak-auth="!admin_city.show">
+                  <span>{record.username}</span>
+                </Access>
+              */
+            }
           </span>);
         },
       },
