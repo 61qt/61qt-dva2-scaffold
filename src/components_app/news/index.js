@@ -1,26 +1,90 @@
 import React from 'react';
 // import _ from 'lodash';
 import { connect } from 'dva';
-import { Modal, Pagination, Button } from 'antd';
+import { Col, Form, Input, Modal } from 'antd';
 import { NavLink } from 'dva/router';
 import styles from './index.less';
-import SearchForm from './search_form';
 import Access from '../../components_atom/access';
 import QRCode from '../../components_atom/qrcode';
-import Table from '../../components_atom/table';
 import Filters from '../../filters';
-import PageLayout from '../../components_atom/page-layout';
+import PageList from '../../components_default/page_list';
+import { searchFormItemLayout } from '../../components_atom/search_form';
 
+@Form.create()
 @connect((state) => {
   return {
-    postState: state.post,
+    loading: !!state.loading.models.post,
+    pageState: state.post,
   };
 })
-export default class Component extends React.Component {
+export default class Component extends PageList {
   constructor(props) {
     super(props);
     debugAdd('news', this);
-    this.columns = [
+
+    Object.assign(this.state, {
+      searchCol: 12,
+      filterTreeDeep: 1,
+      model: 'post',
+      modeLabel: '文章列表',
+      defaultSearchValue: {
+      },
+      modalVisible: false,
+      modelText: '',
+    });
+  }
+
+  componentDidMount = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'breadcrumb/current',
+      payload: [
+        {
+          name: '文章管理',
+          url: Filters.path('news', {}),
+        },
+      ],
+    });
+  }
+
+  getSearchColumn = () => {
+    const getFieldDecorator = this.props.form.getFieldDecorator;
+    const children = [];
+
+    children.push((
+      <Col span={this.state.searchCol} key="title">
+        <Form.Item {...searchFormItemLayout} label="文章标题">
+          {
+            getFieldDecorator('title')(<Input size="small" placeholder="文章标题搜索" />)
+          }
+        </Form.Item>
+      </Col>
+    ));
+    children.push((
+      <Col span={this.state.searchCol} key="source">
+        <Form.Item {...searchFormItemLayout} label="文章来源">
+          {
+            getFieldDecorator('source')(<Input size="small" placeholder="文章来源搜索" />)
+          }
+        </Form.Item>
+      </Col>
+    ));
+
+    children.push((
+      <Col span={this.state.searchCol} key="author">
+        <Form.Item {...searchFormItemLayout} label="作者">
+          {
+            getFieldDecorator('author')(<Input size="small" placeholder="作者搜索" />)
+          }
+        </Form.Item>
+      </Col>
+    ));
+
+    return children;
+  }
+
+  getTableColumns = () => {
+    const columns = [
       {
         title: '编号',
         dataIndex: 'id',
@@ -91,31 +155,8 @@ export default class Component extends React.Component {
         ),
       },
     ];
-    this.state = {
-      modalVisible: false,
-      modelText: '',
-    };
-  }
 
-  componentDidMount = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'breadcrumb/current',
-      payload: [
-        {
-          name: '文章管理',
-          url: Filters.path('news', {}),
-        },
-      ],
-    });
-  }
-
-  pageChangeHandler = (page = this.props.postState.page) => {
-    const { dispatch, postState } = this.props;
-    dispatch({
-      type: 'post/list',
-      payload: { page, filter: postState.listState.filter },
-    });
+    return columns;
   }
 
   handleModelClose = () => {
@@ -131,85 +172,15 @@ export default class Component extends React.Component {
     });
   }
 
-  handleSubmit = ({ filter, values, expand, loadOldPage }) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'post/listState',
-      payload: { filter, searchValues: values, expand },
-    });
-    dispatch({
-      type: 'post/list',
-      payload: { page: loadOldPage ? this.props.postState.page : 1, filter },
-    });
-  }
-
-  title = () => {
-    const { postState } = this.props;
+  getFooter = () => {
     return (
-      <div className="clearfix">
-        <h3 className="table-title">
-          文章列表
-          { postState.total ? <small>（共{postState.total}条）</small> : null }
-        </h3>
-
-        <div className="table-title-action">
-          <Access auth="mobile.post.store">
-            <NavLink to={Filters.path('news_add', {})} activeClassName="link-active">
-              <Button size="small" type="primary" ghost>新增文章</Button>
-            </NavLink>
-          </Access>
+      <Modal visible={this.state.modalVisible} onCancel={this.handleModelClose} footer={null}>
+        <div style={{ textAlign: 'center' }}>
+          <p>链接： <a href={this.state.modelText} rel="noopener noreferrer" target="_blank">{this.state.modelText}</a></p>
+          <br />
+          <QRCode value={this.state.modelText} size={250} />
         </div>
-
-      </div>
-    );
-  }
-
-  footer = () => {
-    const { postState } = this.props;
-    return (
-      <div className="clearfix">
-        <div className="ant-table-pagination-info">当前显示{postState.start} - {postState.end}条记录，共 {postState.total} 条数据</div>
-        <Pagination
-          showQuickJumper={false}
-          className="ant-table-pagination ant-table-pagination-hide-last"
-          total={postState.total}
-          current={postState.page}
-          pageSize={postState.pageSize}
-          size="small"
-          onChange={this.pageChangeHandler}
-        />
-      </div>
-    );
-  }
-
-  render() {
-    return (<PageLayout>
-      <div className={`${styles.normal}`}>
-        <SearchForm handleSubmit={this.handleSubmit} />
-        <div>
-          <Table
-            size={768 > window.innerWidth ? 'small' : 'default'}
-            bordered
-            columns={this.columns}
-            dataSource={this.props.postState.list}
-            loading={this.props.loading}
-            scroll={{ x: this.columns.reduce((a, b) => (a.width || a.minWidth || a || 0) + (b.width || b.minWidth || 0), 0), y: 300 > window.innerHeight - 310 ? 300 : window.innerHeight - 310 }}
-            rowKey={record => record.id}
-            pagination={false}
-            title={this.title}
-            footer={this.footer}
-          />
-        </div>
-
-        <Modal visible={this.state.modalVisible} onCancel={this.handleModelClose} footer={null}>
-          <div style={{ textAlign: 'center' }}>
-            <p>链接： <a href={this.state.modelText} rel="noopener noreferrer" target="_blank">{this.state.modelText}</a></p>
-            <br />
-            <QRCode value={this.state.modelText} size={250} />
-          </div>
-        </Modal>
-      </div>
-    </PageLayout>
+      </Modal>
     );
   }
 }
