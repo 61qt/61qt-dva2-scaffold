@@ -8,7 +8,7 @@ import Filters from '../../filters';
 import Access from '../../components_atom/access';
 import Area from '../../components_atom/area';
 import { DICT } from '../../constants';
-import Page from '../../components_default/page';
+import Page from '../../components_default/page_list';
 import ComponentsForm from '../../components_form';
 import { searchFormItemLayout } from '../../components_atom/search_form';
 
