@@ -181,7 +181,7 @@ export default function actionFactory({
         select = options.select || '';
       }
 
-      const schema = `query Detail($id: Int!) {
+      const schema = `query Detail($id: ID!) {
         ${table} (id: $id) {
           ${select}
         }
