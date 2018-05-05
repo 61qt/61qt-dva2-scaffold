@@ -181,11 +181,9 @@ export default function actionFactory({
         select = options.select || '';
       }
 
-      const schema = `query Detail($id: ID) {
+      const schema = `query Detail($id: Int!) {
         ${table} (id: $id) {
-          data {
-            ${select}
-          }
+          ${select}
         }
       }`;
       return http.post(`/graphql?f=${table}`, {

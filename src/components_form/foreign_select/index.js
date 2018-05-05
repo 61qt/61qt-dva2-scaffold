@@ -137,7 +137,7 @@ function fetch({ value, query, url, props, force = false, dispatch }, callback, 
     http.get(urlRequest).then((response) => {
       const data = response.data.data;
       const searchList = [];
-      data.forEach((elem) => {
+      _.each(data, (elem) => {
         // 获取 elem 的 value 和 text 的 存储 index 。
         searchList.push({
           ...elem,

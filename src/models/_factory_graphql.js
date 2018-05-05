@@ -182,7 +182,7 @@ export default function modelFactory({
       *detail({ payload: values }, { call, put }) {
         try {
           const data = yield call(Service.graphqlDetail, values);
-          const detail = _.get(data, 'data.data[0]');
+          const detail = _.get(data, 'data');
           if (!detail) {
             return Promise.reject('找不到该资源');
           }
