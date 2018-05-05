@@ -24,7 +24,6 @@ export default class Component extends PageList {
 
     Object.assign(this.state, {
       searchCol: 12,
-      filterTreeDeep: 1,
       model: 'post',
       modeLabel: '文章列表',
       defaultSearchValue: {

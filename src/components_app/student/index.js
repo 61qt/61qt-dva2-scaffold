@@ -24,7 +24,6 @@ export default class Component extends PageList {
     debugAdd('student', this);
     Object.assign(this.state, {
       searchCol: 12,
-      filterTreeDeep: 1,
       model: 'student',
       modeLabel: '学生管理',
       defaultSearchValue: {
