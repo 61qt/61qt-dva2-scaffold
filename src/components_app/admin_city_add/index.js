@@ -1,42 +1,49 @@
 // import moment from 'moment';
+// import _ from 'lodash';
 import React from 'react';
-import _ from 'lodash';
 import { connect } from 'dva';
-import { message, Input, Spin, Button, Form } from 'antd';
+import { Input, Form } from 'antd';
 // Select, Radio, DatePicker
-import styles from './index.less';
 import FormComponents from '../../components_form';
 import Filters from '../../filters';
-import formErrorMessageShow from '../../utils/form_error_message_show';
-import buildColumnFormItem from '../../utils/build_column_form_item';
-import formatFormValue from '../../utils/format_form_value';
-import DetailView from '../../components_atom/detail_view';
-import PageLayout from '../../components_atom/page-layout';
+import PageAdd from '../../components_default/page_add';
+
 
 @Form.create()
 @connect(() => {
   return {};
 })
-export default class Component extends React.Component {
-  constructor(props) {
-    super(props);
+export default class Component extends PageAdd {
+  constructorExtend = () => {
     debugAdd('admin_city_add', this);
-    const paramsId = _.get(props, 'match.params.id') * 1 || false;
-    this.editInfo = {
-      paramsId,
-      text: false === paramsId ? '新增' : '编辑',
-      method: false === paramsId ? 'create' : 'update',
-    };
-    this.state = {
-      expand: !!paramsId,
-      col: 24,
-      formValidate: {},
-      submitting: false,
-      loading: true,
-      dataSource: false,
+    Object.assign(this.state, {
       confirmDirty: false,
-    };
-    this.columns = [
+      // 当前页面的展示的表(service 或者是 schema)的名称。
+      model: 'admin_city',
+      // 当前页面的展示的表(service 或者是 schema)的中文可读名称。
+      modeLabel: '市级管理员',
+    });
+  }
+
+  componentDidMountExtend = () => {
+    const paramsId = this.editInfo.paramsId;
+    this.props.dispatch({
+      type: 'breadcrumb/current',
+      payload: [
+        {
+          name: '市级管理员管理',
+          url: Filters.path('admin_city', {}),
+        },
+        {
+          name: `${paramsId ? '编辑' : '新增'}市级管理员`,
+          url: paramsId ? Filters.path('admin_city_edit', { id: paramsId }) : Filters.path('admin_city_add', {}),
+        },
+      ],
+    });
+  }
+
+  getFormColumn = () => {
+    const columns = [
       {
         title: '登录账号',
         dataIndex: 'username',
@@ -165,226 +172,6 @@ export default class Component extends React.Component {
         },
       },
     ];
-  }
-
-  componentDidMount = () => {
-    const paramsId = this.editInfo.paramsId;
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'breadcrumb/current',
-      payload: [
-        {
-          name: '市级管理员管理',
-          url: Filters.path('admin_city', {}),
-        },
-        {
-          name: `${paramsId ? '编辑' : '新增'}市级管理员`,
-          url: paramsId ? Filters.path('admin_city_edit', { id: paramsId }) : Filters.path('admin_city_add', {}),
-        },
-      ],
-    });
-
-    if (paramsId) {
-      // 编辑状态
-      dispatch({
-        type: 'admin_city/detail',
-        payload: { id: paramsId },
-      }).then((data) => {
-        this.setState({
-          loading: false,
-          dataSource: data,
-        });
-      }).catch((rej) => {
-        message.error(rej.msg || '找不到该数据');
-        this.setState({
-          loading: false,
-        });
-      });
-    }
-    else {
-      // 新增状态
-      this.setState({
-        loading: false,
-        dataSource: {},
-      });
-    }
-  }
-
-  resetFormValidate = () => {
-    const formValidate = {};
-    this.columns.forEach((elem) => {
-      const dataIndex = elem.key || elem.dataIndex;
-      formValidate[dataIndex] = {};
-    });
-
-    this.setState({
-      formValidate,
-    });
-  }
-
-  // 提交表单正确时候的处理。
-  successCallback = () => {
-    this.setState({
-      submitting: false,
-    });
-  }
-
-  // 提交表单错误时候的处理。
-  errorCallback = (value) => {
-    window.console.log('value', value);
-    const formValidate = this.state.formValidate;
-    for (const [k] of Object.entries(formValidate)) {
-      formValidate[k] = {};
-    }
-
-    for (const [k, v] of Object.entries(value)) {
-      formValidate[k] = {
-        validateStatus: 'error',
-        help: _.get(v, '[0]') || v,
-      };
-    }
-    this.setState({
-      formValidate,
-    });
-    this.setState({
-      submitting: false,
-    });
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-    if (this.state.submitting) {
-      message.info('正在提交');
-      return;
-    }
-    this.resetFormValidate();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (err) {
-        return formErrorMessageShow(err);
-      }
-      if (!err) {
-        const formattedValues = {
-          ...values,
-        };
-        if (values.birthday) {
-          formattedValues.birthday = values.birthday
-            .clone()
-            .hour(0)
-            .minute(0)
-            .second(0)
-            .unix();
-        }
-        for (const [key, value] of Object.entries(formattedValues)) {
-          formattedValues[key] = formatFormValue(value);
-        }
-        this.state.submitting = true;
-        this.setState({
-          submitting: true,
-        });
-        this.handleSubmitRun({
-          values: formattedValues,
-        });
-      }
-    });
-  }
-
-  handleSubmitRun = ({ values }) => {
-    const formData = {
-      ...values,
-    };
-    let promise;
-    if ('update' === this.editInfo.method) {
-      promise = this.props.dispatch({
-        type: 'admin_city/update',
-        payload: {
-          id: this.editInfo.paramsId,
-          values: formData,
-        },
-      });
-    }
-    else {
-      promise = this.props.dispatch({
-        type: 'admin_city/create',
-        payload: {
-          values: formData,
-        },
-      });
-    }
-    promise.then(() => {
-      message.success(`${this.editInfo.text}成功`);
-      this.successCallback();
-      this.props.history.push(Filters.path('admin_city', {}));
-    }).catch((rej) => {
-      formErrorMessageShow(rej);
-      let rejData = {};
-      try {
-        rejData = JSON.parse(_.get(rej, 'data.errors[0].debugMessage'));
-      }
-      catch (e) {
-        // do nothing
-      }
-
-      this.errorCallback(rejData);
-    });
-  }
-
-  handleReset = () => {
-    this.props.form.resetFields();
-  }
-
-  toggle = () => {
-    const { expand } = this.state;
-    this.setState({ expand: !expand });
-  }
-
-  renderForm = () => {
-    const children = buildColumnFormItem({
-      ...this.props,
-      ...this.state,
-      columns: this.columns,
-      shouldInitialValue: this.editInfo.paramsId,
-      defaultValueSet: this.state.dataSource,
-      formItemLayout: {},
-      formValidate: this.state.formValidate,
-      col: this.state.col,
-      warpCol: false,
-      label: false,
-    });
-
-    const renderTitle = (elem) => {
-      const isRequired = _.find(elem.rules, {
-        required: true,
-      });
-      return (<label htmlFor={elem.dataIndex} className={`${isRequired ? 'ant-form-item-required' : ''}`} title={elem.title}>{elem.title}</label>);
-    };
-
-    return (
-      <Spin spinning={this.state.submitting}>
-        <Form
-          className="app-edit-form"
-          onSubmit={this.handleSubmit}
-        >
-          <DetailView titleClassName="text-align-right" className="small" col={1} labelWidth="10em" expand={99999} dataSource={{}} columns={children} renderTitle={renderTitle} title={`${this.editInfo.text}资料`} />
-
-          <br />
-          <div>
-            <Button size="default" type="primary" htmlType="submit" disabled={this.state.submitting} loading={this.state.submitting}>保存</Button>
-            <Button size="default" style={{ marginLeft: 8 }} onClick={this.handleReset}>
-              重置
-            </Button>
-          </div>
-        </Form>
-      </Spin>
-    );
-  }
-
-  render() {
-    return (<PageLayout>
-      <div className={styles.normal}>
-        <Spin spinning={this.state.loading}>
-          { this.state.dataSource && !this.state.loading ? this.renderForm() : <div>正在加载</div>}
-        </Spin>
-      </div>
-    </PageLayout>);
+    return columns;
   }
 }
